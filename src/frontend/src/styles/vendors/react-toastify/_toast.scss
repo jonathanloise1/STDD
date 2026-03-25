@@ -1,0 +1,100 @@
+.#{$rt-namespace}__toast {
+	position: relative;
+
+	/* webkit only issue #791 */
+	z-index: 0;
+	box-sizing: border-box;
+	margin-bottom: 1rem;
+	cursor: default;
+	direction: ltr;
+
+	// Override Bootstrap .toast { opacity: 0 } and .toast:not(.show) { display: none }
+	// so react-toastify can manage visibility through its own enter/exit
+	// animations instead of relying on the Bootstrap .show class (which
+	// caused toggle errors during route transitions).
+	&.toast {
+		display: block;
+		opacity: 1;
+		font-size: 1rem;
+	}
+
+	// ─── MyApp Premium toast styling ───────────────────
+	// Left accent border per type — inspired by Linear / Vercel / Notion.
+	// The default built-in icon is hidden; callers can pass custom icons
+	// via showNotification's 4th parameter instead.
+	border-left: 4px solid transparent;
+	border-radius: 8px !important;
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+	overflow: hidden;
+
+	// Show default react-toastify type icons (checkmark, X, warning, info)
+	.#{$rt-namespace}__toast-icon {
+		display: flex;
+		align-items: center;
+		margin-inline-end: 10px;
+		flex-shrink: 0;
+		width: 20px;
+	}
+
+	&-theme--light,
+	&-theme--dark {
+		// Type-specific left border color
+		&.#{$rt-namespace}__toast--success {
+			border-left-color: var(--toastify-color-success);
+		}
+
+		&.#{$rt-namespace}__toast--error {
+			border-left-color: var(--toastify-color-error);
+		}
+
+		&.#{$rt-namespace}__toast--warning {
+			border-left-color: var(--toastify-color-warning);
+		}
+
+		&.#{$rt-namespace}__toast--info {
+			border-left-color: var(--toastify-color-info);
+		}
+
+		&.#{$rt-namespace}__toast--default {
+			border-left-color: var(--bs-primary, #1b4d6e);
+		}
+	}
+	// ─── End Premium styling ─────────────────────────────
+
+	&--rtl {
+		direction: rtl;
+	}
+
+	&--close-on-click {
+		cursor: pointer;
+
+		.toast-header {
+			padding-right: 2.5rem;
+		}
+	}
+
+	.btn-close {
+		position: absolute;
+		top: var(--bs-toast-padding-y);
+		right: var(--bs-toast-padding-x);
+	}
+}
+
+.#{$rt-namespace}--animate {
+	animation-duration: 0.7s;
+	animation-fill-mode: both;
+}
+
+.#{$rt-namespace}--animate-icon {
+	animation-duration: 0.3s;
+	animation-fill-mode: both;
+}
+
+// stylelint-disable media-query-no-invalid
+@media #{$rt-mobile} {
+	.#{$rt-namespace}__toast {
+		margin-bottom: 0;
+		border-radius: 0;
+	}
+}
+// stylelint-enable media-query-no-invalid

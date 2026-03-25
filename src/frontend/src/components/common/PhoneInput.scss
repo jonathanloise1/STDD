@@ -1,0 +1,201 @@
+// PhoneInput.scss - Follows the EditableField pattern from ProfileHeader
+// Click-to-edit phone input with flag selector
+
+// Form mode: full-width rendering for use in standard forms (e.g. onboarding wizard)
+.editable-phone--form-mode {
+	width: 100%;
+
+	.editable-field,
+	.editable-field.editable-field--editing {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		min-height: calc(3.5rem + 2px); // match form-floating height
+		padding: 0.75rem 1rem;
+		margin: 0;
+		background-color: var(--bs-tertiary-bg);
+		border: 1px solid var(--bs-border-color);
+		border-radius: 1rem; // match app's input border-radius
+		font-size: 0.875rem;
+		cursor: text;
+		transition: border-color 0.15s ease, box-shadow 0.15s ease;
+		gap: 0.5rem;
+
+		&:hover {
+			background-color: var(--bs-tertiary-bg);
+		}
+
+		&:focus-within {
+			border-color: var(--bs-primary);
+			box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
+		}
+
+		&.is-invalid {
+			border-color: var(--bs-danger);
+
+			&:focus-within {
+				box-shadow: 0 0 0 0.2rem rgba(var(--bs-danger-rgb), 0.15);
+			}
+		}
+	}
+
+	.editable-phone__country-btn {
+		padding: 0.25rem 0.375rem;
+		margin: 0;
+		border-radius: 0.375rem;
+	}
+
+	.editable-phone__dial-code {
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: var(--bs-body-color);
+	}
+
+	.editable-phone__input {
+		width: auto !important;
+		flex: 1;
+		font-size: 0.875rem;
+		font-weight: 600;
+		min-width: 100px;
+		background: transparent !important;
+		border: none !important;
+		outline: none !important;
+		box-shadow: none !important;
+		color: inherit;
+		padding: 0;
+
+		&::placeholder {
+			font-weight: 400;
+			color: var(--bs-secondary-color);
+		}
+
+		&:focus {
+			background: transparent !important;
+			border: none !important;
+			outline: none !important;
+			box-shadow: none !important;
+		}
+	}
+
+	.editable-phone__dropdown {
+		border-radius: 1rem;
+		margin-top: 0.5rem;
+		max-height: 240px;
+	}
+}
+
+// Editable phone - extends .editable-field styles
+.editable-phone {
+	gap: 0.375rem;
+
+	&__flag {
+		border-radius: 2px;
+		flex-shrink: 0;
+	}
+
+	&__number {
+		white-space: nowrap;
+	}
+
+	// Edit mode
+	&--editing {
+		position: relative;
+		gap: 0.25rem;
+	}
+
+	// Country selector button (in edit mode)
+	&__country-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		padding: 0.125rem 0.25rem;
+		margin: -0.125rem 0;
+		background: transparent;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: background 0.15s ease;
+
+		&:hover {
+			background: rgba(var(--bs-primary-rgb), 0.15);
+		}
+
+		img {
+			border-radius: 2px;
+		}
+	}
+
+	&__arrow {
+		font-size: 0.625rem;
+		color: var(--bs-secondary-color);
+		line-height: 1;
+	}
+
+	&__dial-code {
+		color: var(--bs-secondary-color);
+		font-size: 0.875rem;
+		white-space: nowrap;
+	}
+
+	&__input {
+		width: 100px !important;
+		text-align: left !important;
+	}
+
+	// Country dropdown
+	&__dropdown {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		z-index: 1050;
+		min-width: 220px;
+		max-height: 200px;
+		overflow-y: auto;
+		margin-top: 0.25rem;
+		padding: 0.25rem 0;
+		background: var(--bs-body-bg);
+		border: 1px solid var(--bs-border-color);
+		border-radius: 0.5rem;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+	}
+
+	&__dropdown-item {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		width: 100%;
+		padding: 0.5rem 0.75rem;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		text-align: left;
+		transition: background 0.1s ease;
+
+		&:hover {
+			background: var(--bs-tertiary-bg);
+		}
+
+		&--selected {
+			background: rgba(var(--bs-primary-rgb), 0.1);
+		}
+
+		img {
+			border-radius: 2px;
+			flex-shrink: 0;
+		}
+	}
+
+	&__dropdown-name {
+		flex: 1;
+		font-size: 0.85rem;
+		color: var(--bs-body-color);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	&__dropdown-code {
+		font-size: 0.8rem;
+		color: var(--bs-secondary-color);
+	}
+}

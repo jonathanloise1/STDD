@@ -1,0 +1,83 @@
+//
+//  Tables
+//
+
+//  stylelint-disable custom-property-pattern
+.table {
+	--#{$prefix}table-color: #{$table-color};
+	--#{$prefix}table-border-color: #{$table-border-color};
+	--#{$prefix}table-bg: #{$table-bg};
+	--#{$prefix}table-striped-color: #{$table-striped-color};
+	--#{$prefix}table-striped-bg: #{$table-striped-bg};
+	--#{$prefix}table-active-color: #{$table-active-color};
+	--#{$prefix}table-active-bg: #{$table-active-bg};
+	--#{$prefix}table-hover-color: #{$table-hover-color};
+	--#{$prefix}table-hover-bg: #{$table-hover-bg};
+
+	@include dark-mode {
+		--#{$prefix}table-color: #{$dark-table-color};
+		--#{$prefix}table-border-color: #{$dark-table-border-color};
+		--#{$prefix}table-bg: #{$dark-table-bg};
+		--#{$prefix}table-striped-color: #{$dark-table-striped-color};
+		--#{$prefix}table-striped-bg: #{$dark-table-striped-bg};
+		--#{$prefix}table-active-color: #{$dark-table-active-color};
+		--#{$prefix}table-active-bg: #{$dark-table-active-bg};
+		--#{$prefix}table-hover-color: #{$dark-table-hover-color};
+		--#{$prefix}table-hover-bg: #{$dark-table-hover-bg};
+	}
+
+	border-color: var(--#{$prefix}table-border-color);
+	color: var(--#{$prefix}table-color);
+}
+//  stylelint-enable custom-property-pattern
+
+//  stylelint-disable selector-max-compound-selectors
+//  stylelint-disable selector-no-qualifying-type
+thead > tr > th svg.ascending {
+	transform: rotate(180deg);
+}
+//  stylelint-enable selector-max-compound-selectors
+//  stylelint-enable selector-no-qualifying-type
+
+//  Modern-design
+//
+//  Rounded corners
+
+.table-modern {
+	//  stylelint-disable scss/at-extend-no-missing-placeholder
+	//  stylelint-disable  at-rule-disallowed-list
+	@extend .table-borderless;
+	@extend .table-striped;
+	//  stylelint-enable scss/at-extend-no-missing-placeholder
+
+	%table-modern-row {
+		@include padding($table-modern-cell-padding-y $table-modern-cell-padding-x);
+
+		vertical-align: $table-modern-cell-vertical-align;
+
+		&:first-child {
+			@include border-start-radius($table-modern-border-radius);
+		}
+
+		&:last-child {
+			@include border-end-radius($table-modern-border-radius);
+		}
+	}
+
+	//  stylelint-disable selector-max-compound-selectors
+	> thead > tr > * {
+		//  stylelint-disable custom-property-pattern
+		--#{$prefix}table-accent-bg: var(--#{$prefix}table-striped-bg);
+		//  stylelint-enable custom-property-pattern
+
+		@extend %table-modern-row;
+
+		color: var(--#{$prefix}table-striped-color);
+	}
+
+	> tbody > tr > * {
+		@extend %table-modern-row;
+	}
+	//  stylelint-enable at-rule-disallowed-list
+	//  stylelint-enable selector-max-compound-selectors
+}

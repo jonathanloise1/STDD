@@ -1,0 +1,51 @@
+// stylelint-disable meowtec/no-px
+@keyframes #{$rt-namespace}__flipIn {
+	0% {
+		animation-timing-function: ease-in;
+		opacity: 0;
+		transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+	}
+
+	40% {
+		animation-timing-function: ease-in;
+		transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+	}
+
+	60% {
+		opacity: 1;
+		transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+	}
+
+	80% {
+		transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+	}
+
+	100% {
+		transform: perspective(400px);
+	}
+}
+
+@keyframes #{$rt-namespace}__flipOut {
+	0% {
+		transform: perspective(400px);
+	}
+
+	30% {
+		opacity: 1;
+		transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+	}
+
+	100% {
+		opacity: 0;
+		transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+	}
+}
+
+.#{$rt-namespace}__flip-enter {
+	animation-name: #{$rt-namespace}__flipIn;
+}
+
+.#{$rt-namespace}__flip-exit {
+	animation-name: #{$rt-namespace}__flipOut;
+}
+// stylelint-enable meowtec/no-px

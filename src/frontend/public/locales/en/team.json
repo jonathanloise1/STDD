@@ -1,0 +1,93 @@
+﻿{
+"title": "Team Management",
+"Members": "Members",
+"searchPlaceholder": "Search team members...",
+"noMembers": "No team members found",
+"noMatchingMembers": "No team members match your search",
+"inviteButton": "Invite",
+"pending": "Pending Invitation",
+"inviteSent": "Invitation sent successfully",
+"updateSuccess": "Member updated successfully",
+"removeSuccess": "Member removed successfully",
+"legendLabel": "Legend",
+"canSign": "Can Sign",
+"cannotSign": "Cannot Sign",
+"confirmRemoveTitle": "Confirm Removal",
+"pendingInvitations": "Pending Invitations",
+"errorResending": "Failed to resend invitation",
+"errorLoading": "Unable to load team members. Please try again.",
+"errorInviting": "Unable to send invitation. Please try again.",
+"errorUpdating": "Unable to update member. Please try again.",
+"errorRemoving": "Unable to remove member. Please try again.",
+"edit": "Edit",
+"remove": "Remove",
+"sending": "Sending...",
+"resend": "Resend",
+"status": {
+"pending": "Pending Invite"
+},
+"columns": {
+"name": "Name",
+"email": "Email",
+"role": "Role",
+"permissions": "Permissions",
+"signing": "Signing",
+"actions": "Actions",
+"sentAt": "Sent On"
+},
+"edit": {
+"title": "Edit Team Member",
+"memberName": "Name",
+"memberEmail": "Email",
+"role": "Role",
+"permissions": "Permissions",
+"signingAuthority": "Signing Authority",
+"demotionWarning": "You are removing your own Admin privileges. This action cannot be undone by yourself.",
+"confirmDemotion": "Confirm Demotion"
+},
+"invite": {
+"title": "Invite Team Member",
+"fullName": "Full Name",
+"fullNamePlaceholder": "e.g. John Smith",
+"email": "Email",
+"emailPlaceholder": "e.g. john.smith@company.com",
+"role": "Role",
+"permissions": "Permissions",
+"permissionsHint": "select at least one",
+"signingAuthority": "Signing Authority",
+"signingWarning": "This person will be able to sign contracts on behalf of the organization.",
+"submit": "Send Invitation"
+},
+"roles": {
+"admin": "Admin",
+"admin.description": "Full access to all features and organization settings. Can manage team members.",
+"member": "Member",
+"member.description": "Limited access based on assigned permissions."
+},
+"validation": {
+"fullNameRequired": "Full name is required",
+"emailRequired": "Email address is required",
+"emailInvalid": "Please enter a valid email address",
+"atLeastOnePermission": "Members must have at least one permission"
+},
+"permissions": {
+"talents": "Talents",
+"talents.description": "Search, AI Search, Messages, Saved Searches",
+"projects": "Projects",
+"projects.description": "Projects, Milestones, Timesheets",
+"quotes": "Quotes",
+"quotes.description": "Manage quotes, quote requests, and contract types",
+"finance": "Finance",
+"finance.description": "Financial reports"
+},
+"common": {
+"cancel": "Cancel",
+"goBack": "Go Back",
+"saving": "Saving...",
+"save": "Save",
+"sending": "Sending..."
+},
+"team": {
+"confirmRemoveMessage": "Are you sure you want to remove {{name}} from the team? This action cannot be undone."
+}
+}

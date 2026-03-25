@@ -1,0 +1,26 @@
+//
+// Color contrast
+// See https://github.com/twbs/bootstrap/pull/30168
+//
+
+@use 'sass:color';
+
+// Set color
+@function shadow-color($color, $value: 10%) {
+	@if color-contrast($color) == $black {
+		// @return darken($color, $value);
+		@return color.adjust($color, $lightness: -$value);
+	} @else {
+		// @return lighten($color, $value);
+		@return color.adjust($color, $lightness: $value);
+	}
+}
+
+// Shade or tint color
+@function auto-shade-tint($color, $weight: 10%) {
+	@if luminance($color) >= 0.5 {
+		@return shade-color($color, $weight);
+	} @else {
+		@return tint-color($color, $weight);
+	}
+}

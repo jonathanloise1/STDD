@@ -1,0 +1,33 @@
+@keyframes #{$rt-namespace}__zoomIn {
+	0% {
+		opacity: 0;
+		transform: scale3d(0.3, 0.3, 0.3);
+	}
+
+	50% {
+		opacity: 1;
+	}
+}
+
+@keyframes #{$rt-namespace}__zoomOut {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+		transform: scale3d(0.3, 0.3, 0.3);
+	}
+
+	100% {
+		opacity: 0;
+	}
+}
+
+.#{$rt-namespace}__zoom-enter {
+	animation-name: #{$rt-namespace}__zoomIn;
+}
+
+.#{$rt-namespace}__zoom-exit {
+	animation-name: #{$rt-namespace}__zoomOut;
+}

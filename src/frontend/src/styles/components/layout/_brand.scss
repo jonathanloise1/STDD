@@ -1,0 +1,181 @@
+//
+//  Brand
+//
+
+@use 'sass:map';
+
+// Desktop-only white background for aside header (light mode only)
+.bg-white-desktop {
+	@include media-breakpoint-up(md) {
+		background-color: #fff;
+	}
+	
+	// Dark mode: transparent background
+	@include dark-mode {
+		background-color: transparent !important;
+	}
+}
+
+.brand {
+	display: flex;
+	height: map.get($header, height);
+	align-items: center;
+	justify-content: space-between;
+	color: color-contrast(shadow-color(map.get($aside, background-color)));
+
+	// Mobile: Apple-style - left aligned, same padding as nav items, with separator
+	@include media-breakpoint-down(md) {
+		height: auto;
+		justify-content: flex-start;
+		padding: 1rem map.get($navigation, padding-x);
+		margin-bottom: 0.5rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	@include aside-close {
+		justify-content: center;
+	}
+
+	&-logo {
+		@include aside-close {
+			display: none;
+		}
+	}
+
+	&-title {
+		@include font-size(1.5rem);
+
+		margin: 0;
+		background-color: transparent;
+		color: color-contrast(shadow-color(map.get($aside, background-color)));
+		font-weight: 900;
+
+		a {
+			background-color: inherit;
+			color: inherit;
+			text-decoration: none;
+		}
+
+		// Desktop: ensure logo displays normally
+		img {
+			filter: none;
+		}
+
+		// Mobile: white logo, properly sized
+		@include media-breakpoint-down(md) {
+			img {
+				height: 28px !important;
+				width: auto !important;
+				// Invert logo to white on colored background
+				filter: brightness(0) invert(1) !important;
+			}
+		}
+	}
+
+	// &-shadow-color {
+	//    $bg-color: shade-color(map-get($aside, background-color), 10%);
+	//
+	//    background-color: $bg-color;
+	//    color: color-contrast($bg-color);
+	// }
+
+	&-aside-toggle {
+		@include font-size(1.5rem);
+
+		padding: 0.5rem 0.625rem;
+		border-radius: 8px;
+		cursor: pointer;
+		line-height: 0;
+		background-color: transparent;
+		transition: background-color 0.2s ease, transform 0.15s ease;
+		// Ensure consistent sizing
+		flex-shrink: 0;
+		// Add spacing from logo
+		margin-left: 8px;
+
+		// Mobile Status
+		@include media-breakpoint-down(map.get($aside, mobile-breakpoint)) {
+			display: none;
+		}
+
+		svg {
+			color: rgba(255, 255, 255, 0.5);
+			transition: color 0.2s ease;
+		}
+
+		&:hover {
+			background-color: rgba(255, 255, 255, 0.08);
+			
+			svg {
+				color: rgba(255, 255, 255, 0.85);
+			}
+		}
+
+		&:active {
+			transform: scale(0.95);
+			background-color: rgba(255, 255, 255, 0.12);
+		}
+
+		&:focus {
+			box-shadow: none;
+		}
+
+		// Desktop light mode: toggle on white background (primary color icon)
+		@include media-breakpoint-up(md) {
+			svg {
+				color: var(--bs-primary);
+				opacity: 0.6;
+			}
+
+			&:hover {
+				background-color: rgba(108, 93, 211, 0.1);
+
+				svg {
+					opacity: 1;
+				}
+			}
+
+			&:active {
+				background-color: rgba(108, 93, 211, 0.15);
+			}
+
+			// Desktop dark mode: white icon on dark background
+			@include dark-mode {
+				svg {
+					color: rgba(255, 255, 255, 0.5);
+					opacity: 1;
+				}
+
+				&:hover {
+					background-color: rgba(255, 255, 255, 0.08);
+
+					svg {
+						color: rgba(255, 255, 255, 0.85);
+					}
+				}
+
+				&:active {
+					background-color: rgba(255, 255, 255, 0.12);
+				}
+			}
+		}
+
+		// Collapsed state - ensure same styling
+		@include aside-close {
+			padding: 0.5rem 0.625rem;
+			border-radius: 8px;
+		}
+	}
+
+	&-aside-toggle-close {
+		@at-root .aside:not(.open) & {
+			display: none;
+		}
+	}
+
+	&-aside-toggle-open {
+		@at-root .aside.open & {
+			display: none;
+		}
+	}
+}

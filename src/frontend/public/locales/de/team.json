@@ -1,0 +1,67 @@
+{
+"title": "Teamverwaltung",
+"Members": "Mitglieder",
+"searchPlaceholder": "Teammitglieder suchen...",
+"noMembers": "Keine Teammitglieder gefunden",
+"noMatchingMembers": "Keine Teammitglieder entsprechen Ihrer Suche",
+"inviteButton": "Einladen",
+"pending": "Ausstehende Einladung",
+"inviteSent": "Einladung erfolgreich gesendet",
+"updateSuccess": "Mitglied erfolgreich aktualisiert",
+"removeSuccess": "Mitglied erfolgreich entfernt",
+"legendLabel": "Legende",
+"canSign": "Kann unterschreiben",
+"cannotSign": "Kann nicht unterschreiben",
+"confirmRemoveTitle": "Entfernung bestätigen",
+"pendingInvitations": "Ausstehende Einladungen",
+"errorResending": "Einladung konnte nicht erneut gesendet werden",
+"errorLoading": "Teammitglieder konnten nicht geladen werden. Bitte versuchen Sie es erneut.",
+"errorInviting": "Einladung konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+"errorUpdating": "Mitglied konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
+"errorRemoving": "Mitglied konnte nicht entfernt werden. Bitte versuchen Sie es erneut.",
+"edit": "Bearbeiten",
+"remove": "Entfernen",
+"sending": "Senden...",
+"resend": "Erneut senden",
+"status": {
+  "pending": "Ausstehende Einladung"
+},
+"columns": {
+  "name": "Name",
+  "email": "E-Mail",
+  "role": "Rolle",
+  "permissions": "Berechtigungen",
+  "signing": "Unterschrift",
+  "actions": "Aktionen",
+  "sentAt": "Gesendet am"
+},
+"edit": {
+  "title": "Teammitglied bearbeiten",
+  "memberName": "Name",
+  "memberEmail": "E-Mail",
+  "role": "Rolle",
+  "permissions": "Berechtigungen",
+  "signingAuthority": "Unterschriftsberechtigung",
+  "demotionWarning": "Sie entziehen sich selbst die Admin-Berechtigung. Diese Aktion kann nicht von Ihnen rückgängig gemacht werden.",
+  "confirmDemotion": "Herabstufung bestätigen"
+},
+"invite": {
+  "title": "Teammitglied einladen",
+  "fullName": "Vollständiger Name",
+  "fullNamePlaceholder": "z.B. Max Mustermann",
+  "email": "E-Mail",
+  "emailPlaceholder": "z.B. max.mustermann@firma.de",
+  "role": "Rolle",
+  "permissions": "Berechtigungen",
+  "permissionsHint": "mindestens eine auswählen",
+  "signingAuthority": "Unterschriftsberechtigung",
+  "signingWarning": "Diese Person wird in der Lage sein, Verträge im Namen der Organisation zu unterzeichnen.",
+  "submit": "Einladung senden"
+},
+"roles": {
+  "admin": "Administrator",
+  "admin.description": "Vollzugriff auf alle Funktionen und Organisationseinstellungen. Kann Teammitglieder verwalten.",
+  "member": "Mitglied",
+  "member.description": "Zugriff auf zugewiesene Funktionen basierend auf Berechtigungen."
+}
+}

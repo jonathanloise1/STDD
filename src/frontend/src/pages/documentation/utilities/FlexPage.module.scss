@@ -1,0 +1,11 @@
+.example {
+	&,
+	* {
+		background-color: rgba(108, 93, 211, 0.15);
+		border: 1px solid rgba(108, 93, 211, 0.15);
+	}
+
+	& > * {
+		padding: 0.5rem;
+	}
+}

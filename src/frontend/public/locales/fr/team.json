@@ -1,0 +1,67 @@
+{
+"title": "Gestion d'équipe",
+"Members": "Membres",
+"searchPlaceholder": "Rechercher des membres...",
+"noMembers": "Aucun membre d'équipe trouvé",
+"noMatchingMembers": "Aucun membre ne correspond à votre recherche",
+"inviteButton": "Inviter",
+"pending": "Invitation en attente",
+"inviteSent": "Invitation envoyée avec succès",
+"updateSuccess": "Membre mis à jour avec succès",
+"removeSuccess": "Membre supprimé avec succès",
+"legendLabel": "Légende",
+"canSign": "Peut signer",
+"cannotSign": "Ne peut pas signer",
+"confirmRemoveTitle": "Confirmer la suppression",
+"pendingInvitations": "Invitations en attente",
+"errorResending": "Impossible de renvoyer l'invitation",
+"errorLoading": "Impossible de charger les membres de l'équipe. Veuillez réessayer.",
+"errorInviting": "Impossible d'envoyer l'invitation. Veuillez réessayer.",
+"errorUpdating": "Impossible de mettre à jour le membre. Veuillez réessayer.",
+"errorRemoving": "Impossible de supprimer le membre. Veuillez réessayer.",
+"edit": "Modifier",
+"remove": "Supprimer",
+"sending": "Envoi...",
+"resend": "Renvoyer",
+"status": {
+  "pending": "Invitation en attente"
+},
+"columns": {
+  "name": "Nom",
+  "email": "E-mail",
+  "role": "Rôle",
+  "permissions": "Permissions",
+  "signing": "Signature",
+  "actions": "Actions",
+  "sentAt": "Envoyé le"
+},
+"edit": {
+  "title": "Modifier le membre",
+  "memberName": "Nom",
+  "memberEmail": "E-mail",
+  "role": "Rôle",
+  "permissions": "Permissions",
+  "signingAuthority": "Autorité de signature",
+  "demotionWarning": "Vous supprimez vos propres privilèges d'administrateur. Cette action ne peut pas être annulée par vous-même.",
+  "confirmDemotion": "Confirmer la rétrogradation"
+},
+"invite": {
+  "title": "Inviter un membre",
+  "fullName": "Nom complet",
+  "fullNamePlaceholder": "ex. Jean Dupont",
+  "email": "E-mail",
+  "emailPlaceholder": "ex. jean.dupont@entreprise.fr",
+  "role": "Rôle",
+  "permissions": "Permissions",
+  "permissionsHint": "sélectionnez au moins une",
+  "signingAuthority": "Autorité de signature",
+  "signingWarning": "Cette personne pourra signer des contrats au nom de l'organisation.",
+  "submit": "Envoyer l'invitation"
+},
+"roles": {
+  "admin": "Administrateur",
+  "admin.description": "Accès complet à toutes les fonctionnalités et paramètres de l'organisation. Peut gérer les membres de l'équipe.",
+  "member": "Membre",
+  "member.description": "Accès aux fonctionnalités assignées selon les permissions."
+}
+}

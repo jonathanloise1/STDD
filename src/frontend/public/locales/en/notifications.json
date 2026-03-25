@@ -1,0 +1,8 @@
+{
+	"title": "Notifications",
+	"empty": "No notifications",
+	"emptyDescription": "You have no notifications yet.",
+	"unread": "New",
+	"read": "Read",
+	"markAllRead": "Mark all as read"
+}

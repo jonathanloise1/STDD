@@ -1,0 +1,22 @@
+//
+//	Functions
+//
+
+@use 'sass:math';
+@use 'sass:meta';
+
+@function strip-unit($number) {
+	@if meta.type-of($number) == 'number' and not math.is-unitless($number) {
+		@return math.div($number, $number * 0 + 1);
+	}
+
+	@return $number;
+}
+
+@function rem-to-px($values, $base-em: false) {
+	@if $base-em {
+		@return strip-unit($values) * 16 * 1px;
+	} @else {
+		@return strip-unit($values) * strip-unit($font-size-root * 16) * 1px;
+	}
+}

@@ -1,0 +1,19 @@
+{
+"title": "Audit-Protokoll",
+"entityType": "Entitätstyp",
+"entityId": "Entitäts-ID",
+"action": "Aktion",
+"user": "Benutzer",
+"timestamp": "Datum/Uhrzeit",
+"details": "Details",
+"correlationId": "Korrelations-ID",
+"empty": "Keine Audit-Protokolle gefunden.",
+"emptyDescription": "Benutzeraktionen werden hier aufgezeichnet.",
+"filterByEntity": "Nach Entität filtern",
+"allEntities": "Alle Entitäten",
+"dateFrom": "Von",
+"dateTo": "Bis",
+"changedProperties": "Geänderte Eigenschaften",
+"oldValues": "Vorherige Werte",
+"newValues": "Neue Werte"
+}

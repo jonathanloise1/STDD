@@ -1,0 +1,53 @@
+//
+// Theme: Facit Default (Legacy)
+//
+// Original template colors from the Facit era.
+// Kept as reference and fallback.
+//
+// NOTE: This file is loaded BEFORE Bootstrap functions via Vite additionalData.
+//       Do NOT use Bootstrap SCSS functions (shade-color, tint-color, etc.) here.
+//       Use pre-computed hex values only.
+//
+
+// ─── Core Semantic Colors ────────────────────────────────────────────────────
+
+$primary:   #6c5dd3;  // Violet
+$secondary: #5d7a8c;  // Blue-grey
+$success:   #46bcaa;  // Teal
+$info:      #4d69fa;  // Blue
+$warning:   #e6a700;  // Amber
+$danger:    #dc3545;  // Red
+$light:     #e7eef8;  // Light blue-grey
+$dark:      #1f2128;  // Near black
+
+// ─── Brand Colors ────────────────────────────────────────────────────────────
+
+$brand:     #ffcd02;  // Yellow (legacy)
+$brand-two: #323232;  // Dark grey
+
+// ─── Body (Light Mode) ──────────────────────────────────────────────────────
+
+$body-color: #323232;
+
+// ─── Dark Mode Overrides ────────────────────────────────────────────────────
+
+$dark-body-bg:    #1f2128;
+$dark-body-color: #e7eef8;  // = $light
+$dark-card-bg:    #242731;
+$dark-border-color: #495057; // gray-700
+
+// ─── Aside Sidebar ──────────────────────────────────────────────────────────
+
+$aside-bg-color:      #6c5dd3;  // = $primary (violet)
+$aside-border-color:  #060509;  // pre-computed shade-color($primary, 95%)
+
+// ─── Navigation Icon Colors (optimized for violet sidebar) ──────────────────
+
+$nav-color-blue:   #64b5f6;
+$nav-color-amber:  #ffb74d;
+$nav-color-green:  #81c784;
+$nav-color-purple: #ce93d8;
+$nav-color-teal:   #4db6ac;
+$nav-color-cyan:   #4dd0e1;
+$nav-color-rose:   #f06292;
+$nav-color-gray:   #90a4ae;

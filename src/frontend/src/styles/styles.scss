@@ -1,0 +1,22 @@
+/**
+ *	Styles
+ */
+
+ // External styles
+@import 'react-toastify/dist/ReactToastify.css';
+@import 'react-quill-new/dist/quill.snow.css';
+
+// Internal styles
+@import 'settings/index';
+@import 'tools/index';
+@import 'generic/index';
+@import 'elements/index';
+@import 'objects/index';
+@import 'components/index';
+@import 'vendors/index';
+@import 'utilities/index';
+
+// Utilities
+@import 'bootstrap/scss/utilities/api';
+
+@import 'custom/index';

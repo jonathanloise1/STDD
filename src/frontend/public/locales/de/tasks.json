@@ -1,0 +1,23 @@
+{
+  "title": "Aufgaben",
+  "createTask": "Aufgabe erstellen",
+  "editTask": "Aufgabe bearbeiten",
+  "deleteTask": "Aufgabe löschen",
+  "taskTitle": "Titel",
+  "taskDescription": "Beschreibung",
+  "taskStatus": "Status",
+  "taskDueDate": "Fälligkeitsdatum",
+  "statusTodo": "Offen",
+  "statusInProgress": "In Bearbeitung",
+  "statusDone": "Erledigt",
+  "statusCancelled": "Abgebrochen",
+  "noTasks": "Keine Aufgaben vorhanden",
+  "assignedTo": "Zugewiesen an",
+  "actions": "Aktionen",
+  "update": "Aktualisieren",
+  "newTask": "Neue Aufgabe",
+  "noTasksDescription": "Erstellen Sie Ihre erste Aufgabe, um loszulegen.",
+  "save": "Speichern",
+  "cancel": "Abbrechen",
+  "confirmDelete": "Möchten Sie diese Aufgabe wirklich löschen?"
+}

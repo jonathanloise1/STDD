@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#1f2128" />
+		<meta name="description" content="" id="meta-description" />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="" id="og-url" />
+		<meta property="og:title" content="" id="og-title" />
+		<meta property="og:description" content="" id="og-description" />
+		<meta property="og:image" content="/MyApp-shield.svg" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="MyApp Logo" />
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:url" content="" id="tw-url" />
+		<meta property="twitter:title" content="" id="tw-title" />
+		<meta property="twitter:description" content="" id="tw-description" />
+		<meta property="twitter:image" content="/MyApp-shield.svg" />
+		<meta property="twitter:image:alt" content="MyApp Logo" />
+
+		<link rel="apple-touch-icon" href="/logo192.png" />
+		<link rel="manifest" href="/manifest.json" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+		<title>MyApp</title>
+	</head>
+	<body>
+		<div id="root" class="d-flex flex-column flex-grow-1 flex-shrink-1"></div>
+		<div id="portal-root"></div>
+		<div id="portal-notification"></div>
+		<script type="module" src="/src/index.tsx"></script>
+		<script>
+			// Hydrate meta tags from env vars injected by Vite at build time
+			(function () {
+				var metaDesc = '%VITE_META_DESC%' !== '' ? '%VITE_META_DESC%' : 'MyApp';
+				var siteUrl = '%VITE_AZURE_AD_B2C_REDIRECT_URI%' !== '' ? '%VITE_AZURE_AD_B2C_REDIRECT_URI%' : '';
+				var siteName = '%VITE_SITE_NAME%' !== '' ? '%VITE_SITE_NAME%' : 'MyApp';
+
+				document.getElementById('meta-description')?.setAttribute('content', metaDesc);
+				document.getElementById('og-url')?.setAttribute('content', siteUrl);
+				document.getElementById('og-title')?.setAttribute('content', siteName);
+				document.getElementById('og-description')?.setAttribute('content', metaDesc);
+				document.getElementById('tw-url')?.setAttribute('content', siteUrl);
+				document.getElementById('tw-title')?.setAttribute('content', siteName);
+				document.getElementById('tw-description')?.setAttribute('content', metaDesc);
+				document.title = siteName;
+			})();
+		</script>
+	</body>
+</html>

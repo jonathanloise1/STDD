@@ -1,0 +1,76 @@
+//
+//  List Group
+//
+
+@use 'sass:color';
+@use 'sass:math';
+
+// Individual list items
+//
+// Use on `li`s or `div`s within the `.list-group` parent.
+// .list-group-item {}
+
+// Flush list items
+//
+// Remove borders and border-radius to keep list group items edge-to-edge. Most
+// useful within other components (e.g., cards).
+.list-group-flush {
+	> .list-group-item {
+		@include dark-mode {
+			--#{$prefix}list-group-bg: transparent;
+		}
+	}
+}
+
+// List group contextual variants
+//
+// Add modifier classes to change text and background color on individual items.
+// Organizationally, this must come after the `:hover` states.
+@each $state, $value in $theme-colors {
+	$list-group-variant-bg: rgba($value, 0.2);
+	$list-group-variant-color: shift-color($value, $list-group-item-color-scale);
+	@if $state == 'dark' {
+		$list-group-variant-color: $light;
+	} @else if
+		contrast-ratio($list-group-variant-bg, $list-group-variant-color) <
+		$min-contrast-ratio
+	{
+		$list-group-variant-color: color.mix(
+			$value,
+			$list-group-variant-bg,
+			math.abs($dark-list-group-item-color-scale)
+		);
+	}
+
+	// stylelint-disable order/order
+	@include dark-mode(true) {
+		// @include list-group-item-variant($state, $list-group-variant-bg, $list-group-variant-color);
+
+		.list-group-item-#{$state} {
+			--#{$prefix}#{$state}-text: #{$list-group-variant-color};
+			--#{$prefix}#{$state}-bg-subtle: #{$list-group-variant-bg};
+			--#{$prefix}#{$state}-bg-subtle-hover: #{shade-color($list-group-variant-bg, 10%)};
+			--#{$prefix}#{$state}-border-subtle: #{$state};
+			--#{$prefix}list-group-color: var(--#{$prefix}#{$state}-text);
+			--#{$prefix}list-group-bg: var(--#{$prefix}#{$state}-bg-subtle);
+			--#{$prefix}list-group-border-color: var(--#{$prefix}#{$state}-border-subtle);
+
+			&.list-group-item-action {
+				&:hover,
+				&:focus {
+					--#{$prefix}list-group-action-hover-color: var(--#{$prefix}#{$state}-text);
+					--#{$prefix}list-group-action-hover-bg: var(
+						--#{$prefix}#{$state}-bg-subtle-hover
+					);
+				}
+
+				&:active {
+					--#{$prefix}list-group-active-color: var(--#{$prefix}emphasis-color);
+					--#{$prefix}list-group-active-bg: var(--#{$prefix}#{$state}-text);
+					--#{$prefix}list-group-active-border-color: var(--#{$prefix}#{$state}-text);
+				}
+			}
+		}
+	}
+	// stylelint-enable order/order
+}

@@ -1,0 +1,317 @@
+// App component styles
+// ===================================
+
+// ─── Layout overrides: hide old Facit aside, use SlimSidebar + BottomTabBar ─
+
+// Hide the old Facit aside completely (keep in DOM so sibling selectors still match)
+.aside {
+  display: none !important;
+}
+
+// Hide the entire Facit mobile header (not just the toggle)
+.mobile-header {
+  display: none !important;
+}
+
+// Hide mobile-header toggle (old hamburger)
+.mobile-header-toggle {
+  display: none !important;
+}
+
+// ─── Wrapper offset ─────────────────────────────────────────────
+// Override ALL Facit .aside ~ .wrapper padding rules.
+// SlimSidebar: 60px collapsed, 220px pinned.
+@media (min-width: 768px) {
+  .wrapper {
+    padding-left: 60px !important;
+    transition: padding-left 200ms ease;
+  }
+  // When sidebar is pinned open, offset wrapper by full width
+  body.sidebar-pinned .wrapper {
+    padding-left: 220px !important;
+  }
+}
+// On mobile, no sidebar → no padding
+@media (max-width: 767.98px) {
+  .wrapper {
+    padding-left: 0 !important;
+  }
+}
+
+// ─── Content mobile padding for BottomTabBar ────────────────────
+@media (max-width: 767.98px) {
+  .content {
+    padding-bottom: 72px; // 56px tab bar + 16px spacing
+  }
+}
+
+// ─── Card & button radius (per frontend.md spec) ─────────────────
+// Note: these are global overrides applied at the component level
+
+.card {
+  border-radius: 16px !important;
+}
+
+.btn {
+  border-radius: 12px !important;
+}
+
+.form-control,
+.form-select {
+  border-radius: 10px !important;
+}
+
+// ─── Card shadow per spec ─────────────────────────────────────────
+
+.card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+}
+
+// Typing indicator dots animation
+@keyframes typingPulse {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+// Badge pulse (≤30 days)
+@keyframes expiryPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.expiry-badge-pulse {
+  animation: expiryPulse 2s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+// Skeleton shimmer effect
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    background: #f0f0f0;
+  }
+}
+
+// Task card hover
+.task-card {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-1px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+// Drop zone active state
+.upload-dropzone {
+  &.dropzone-active {
+    border-color: #00b4d8 !important;
+    background-color: rgba(0, 180, 216, 0.05) !important;
+  }
+}
+
+// Notification card
+.notification-card {
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+}
+
+// Bottom tab bar safe area
+.bottom-tab-bar {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+// Slim sidebar items
+.sidebar-item {
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(30, 58, 95, 0.08);
+  }
+}
+
+// Chat bubble styles
+.chat-bubble-ai {
+  .chat-bubble-content {
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    ul,
+    ol {
+      padding-left: 1.25rem;
+    }
+  }
+}
+
+// Mobile spacing — add bottom padding to main content for tab bar
+@media (max-width: 767.98px) {
+  .page-content-with-tabs {
+    padding-bottom: 72px; // 56px tab bar + 16px spacing
+  }
+}
+
+// ─── AppHeader (top bar) ───────────────────────────────────
+// Spec: 52px mobile, 56px desktop, $surface bg, bottom border
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1025; // below sidebar (1040) so sidebar brand isn't covered
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  height: 52px;
+
+  @media (min-width: 768px) {
+    height: 56px;
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    padding: 0 12px;
+
+    @media (min-width: 768px) {
+      padding: 0 20px;
+    }
+  }
+
+
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    @media (min-width: 768px) {
+      gap: 8px;
+    }
+  }
+
+  &__icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    border-radius: 10px;
+    color: #1e3a5f;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: rgba(30, 58, 95, 0.08);
+    }
+  }
+
+  &__lang-code {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #1e3a5f;
+  }
+
+  &__badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    color: #fff;
+    background: #ef4444;
+    border-radius: 9px;
+    pointer-events: none;
+  }
+
+  &__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    background: #1e3a5f;
+    padding: 0;
+    transition: box-shadow 0.15s ease;
+
+    &:hover {
+      box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.4);
+    }
+  }
+
+  &__avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__avatar-initials {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+}
+
+// Hide Facit's default header when app header is active
+.header {
+  display: none !important;
+}

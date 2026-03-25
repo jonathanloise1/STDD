@@ -1,0 +1,93 @@
+﻿{
+"title": "Gestione Team",
+"Members": "Membri",
+"searchPlaceholder": "Cerca membri del team...",
+"noMembers": "Nessun membro del team trovato",
+"noMatchingMembers": "Nessun membro del team corrisponde alla ricerca",
+"inviteButton": "Invita",
+"pending": "Invito in attesa",
+"inviteSent": "Invito inviato con successo",
+"updateSuccess": "Membro aggiornato con successo",
+"removeSuccess": "Membro rimosso con successo",
+"legendLabel": "Legenda",
+"canSign": "Può Firmare",
+"cannotSign": "Non Può Firmare",
+"confirmRemoveTitle": "Conferma Rimozione",
+"pendingInvitations": "Inviti in Attesa",
+"errorResending": "Errore nel reinviare l'invito",
+"errorLoading": "Impossibile caricare i membri del team. Riprova.",
+"errorInviting": "Impossibile inviare l'invito. Riprova.",
+"errorUpdating": "Impossibile aggiornare il membro. Riprova.",
+"errorRemoving": "Impossibile rimuovere il membro. Riprova.",
+"edit": "Modifica",
+"remove": "Rimuovi",
+"sending": "Invio in corso...",
+"resend": "Reinvia",
+"status": {
+"pending": "Invito in attesa"
+},
+"columns": {
+"name": "Nome",
+"email": "Email",
+"role": "Ruolo",
+"permissions": "Permessi",
+"signing": "Firma",
+"actions": "Azioni",
+"sentAt": "Inviato il"
+},
+"edit": {
+"title": "Modifica Membro del Team",
+"memberName": "Nome",
+"memberEmail": "Email",
+"role": "Ruolo",
+"permissions": "Permessi",
+"signingAuthority": "Autorità di Firma",
+"demotionWarning": "Stai rimuovendo i tuoi privilegi di Admin. Questa azione non può essere annullata da te stesso.",
+"confirmDemotion": "Conferma Declassamento"
+},
+"invite": {
+"title": "Invita Membro del Team",
+"fullName": "Nome Completo",
+"fullNamePlaceholder": "es. Mario Rossi",
+"email": "Email",
+"emailPlaceholder": "es. mario.rossi@azienda.com",
+"role": "Ruolo",
+"permissions": "Permessi",
+"permissionsHint": "seleziona almeno uno",
+"signingAuthority": "Autorità di Firma",
+"signingWarning": "Questa persona potrà firmare contratti per conto dell'organizzazione.",
+"submit": "Invia Invito"
+},
+"roles": {
+"admin": "Admin",
+"admin.description": "Accesso completo a tutte le funzionalità e impostazioni dell'organizzazione. Può gestire i membri del team.",
+"member": "Membro",
+"member.description": "Accesso limitato in base ai permessi assegnati."
+},
+"validation": {
+"fullNameRequired": "Il nome completo è obbligatorio",
+"emailRequired": "L'indirizzo email è obbligatorio",
+"emailInvalid": "Inserisci un indirizzo email valido",
+"atLeastOnePermission": "I membri devono avere almeno un permesso"
+},
+"permissions": {
+"talents": "Talenti",
+"talents.description": "Ricerca, Ricerca AI, Messaggi, Ricerche Salvate",
+"projects": "Progetti",
+"projects.description": "Progetti, Milestone, Timesheet",
+"quotes": "Preventivi",
+"quotes.description": "Gestione preventivi, richieste di preventivo e tipi di contratto",
+"finance": "Finanza",
+"finance.description": "Report finanziari"
+},
+"common": {
+"cancel": "Annulla",
+"goBack": "Torna indietro",
+"saving": "Salvataggio...",
+"save": "Salva",
+"sending": "Invio in corso..."
+},
+"team": {
+"confirmRemoveMessage": "Sei sicuro di voler rimuovere {{name}} dal team? Questa azione non può essere annullata."
+}
+}

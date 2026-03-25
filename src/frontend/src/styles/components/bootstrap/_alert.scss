@@ -1,0 +1,56 @@
+//
+//  Alert
+//
+
+@use 'sass:map';
+
+.alert {
+	// Generate contextual modifier classes for colorizing the alert
+	@each $state in map.keys($theme-colors) {
+		&.alert-#{$state} {
+			--#{$prefix}alert-bg: var(--#{$prefix}#{$state});
+			@include dark-mode {
+				--#{$prefix}alert-bg: var(--#{$prefix}#{$state}-border-subtle);
+				--#{$prefix}alert-border-color: var(--#{$prefix}#{$state});
+			}
+		}
+	}
+
+	// Light
+	@each $state in map.keys($theme-colors) {
+		&.alert-light-#{$state} {
+			--#{$prefix}alert-color: var(--#{$prefix}#{$state}-text-emphasis);
+			--#{$prefix}alert-bg: var(--#{$prefix}#{$state}-bg-subtle);
+			--#{$prefix}alert-border-color: var(--#{$prefix}#{$state}-border-subtle);
+			--#{$prefix}alert-link-color: var(--#{$prefix}#{$state}-text-emphasis);
+		}
+	}
+
+	//  Outline
+	@each $state in map.keys($theme-colors) {
+		&.alert-outline-#{$state} {
+			--#{$prefix}alert-color: var(--#{$prefix}#{$state}-text-emphasis);
+			--#{$prefix}alert-bg: var(--#{$prefix}-transparent);
+			--#{$prefix}alert-border-color: var(--#{$prefix}#{$state}-border-subtle);
+			--#{$prefix}alert-link-color: var(--#{$prefix}#{$state}-text-emphasis);
+		}
+	}
+
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+
+	//  Bootstrap Alert Heading
+	&-heading {
+		flex: 1 0 100%;
+	}
+
+	&-icon {
+		margin-right: $alert-padding-x;
+		font-size: $alert-icon-size;
+	}
+}
+
+.alert[class*='shadow-3d-'] {
+	margin-bottom: 2.5rem;
+}

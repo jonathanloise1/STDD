@@ -1,0 +1,12 @@
+// stylelint-disable meowtec/no-px
+.#{$rt-namespace}__spinner {
+	width: 20px;
+	height: 20px;
+	box-sizing: border-box;
+	border: 2px solid;
+	animation: #{$rt-namespace}__spin 0.65s linear infinite;
+	border-color: var(--toastify-spinner-color-empty-area);
+	border-radius: 100%;
+	border-right-color: var(--toastify-spinner-color);
+}
+// stylelint-enable meowtec/no-px

@@ -1,0 +1,632 @@
+//
+//  Navigation
+//
+
+@use 'sass:map';
+
+.navigation {
+	$self: &;
+
+	@mixin menu-item-visible($count) {
+		.navigation.navigation-menu .navigation-item-more .navigation &:nth-child(-n + #{$count}),
+		.navigation.navigation-menu > &:nth-child(n + #{$count + 1}) {
+			display: none;
+		}
+
+		// stylelint-disable selector-max-specificity
+		// stylelint-disable selector-max-class
+		.navigation.navigation-menu > &.navigation-item-more {
+			display: none;
+			// stylelint-disable no-duplicate-selectors
+			&:nth-child(n + #{$count + 2}) {
+				display: list-item;
+			}
+			// stylelint-enable no-duplicate-selectors
+		}
+		// stylelint-enable selector-max-specificity
+		// stylelint-enable selector-max-class
+	}
+
+	padding: 0;
+	margin: 0;
+	list-style: none;
+
+	// Header menu
+	&-menu {
+		display: flex;
+		flex-wrap: wrap;
+
+		#{ $self } {
+			@include padding((map.get($navigation, padding-y) * 0.5) 0);
+
+			width: map-deep-get($header, dropdown, width);
+			border: none;
+			border-radius: map-deep-get($header, dropdown, border-radius);
+			box-shadow: $box-shadow;
+		}
+
+		// stylelint-disable no-duplicate-selectors
+		#{ $self }-link-extra {
+			@include margin-left(map.get($navigation, margin-x));
+		}
+		// stylelint-enable no-duplicate-selectors
+	}
+
+	//  Item
+	&-item {
+		@include padding(map.get($navigation, margin-y) map.get($navigation, margin-x));
+
+		transition: $transition-base;
+
+		@include media-breakpoint-only(md) {
+			@include menu-item-visible(2);
+		}
+
+		@include media-breakpoint-only(lg) {
+			@include menu-item-visible(2);
+		}
+
+		@include media-breakpoint-only(xl) {
+			@include menu-item-visible(3);
+		}
+
+		@include media-breakpoint-only(xxl) {
+			@include menu-item-visible(4);
+		}
+
+		//  Sub Menu Item
+		// stylelint-disable no-duplicate-selectors
+		#{ $self } #{ $self } & {
+			@include padding(map.get($navigation, margin-y) 0 0 map.get($navigation, margin-x));
+
+			@include aside-close {
+				@include padding(map.get($navigation, margin-y) 0 0 0);
+			}
+		}
+
+		// Header sub menu item
+
+		#{ $self }#{ $self }-menu #{ $self } & {
+			@include padding(
+				(map.get($navigation, padding-y) * 0.5) map.get($navigation, padding-x)
+			);
+		}
+
+		#{ $self }#{ $self }-menu > &:first-child {
+			@include padding-left(0);
+		}
+		// stylelint-enable no-duplicate-selectors
+	}
+
+	// Title
+	&-title {
+		@include padding(0 map.get($navigation, padding-x));
+
+		display: block;
+		color: rgba(
+			color-contrast(
+				auto-shade-tint(map-deep-get($aside, background-color), 1%),
+				map-deep-get($navigation, item, color-dark),
+				map-deep-get($navigation, item, color-light)
+			),
+			0.6
+		);
+		font-size: 0.8rem;
+		font-weight: 600;
+		line-height: 1rem;
+
+		@include aside-close {
+			overflow: hidden;
+			width: 3rem;
+			height: 0.2rem;
+			margin-top: 0.4rem;
+			margin-bottom: 0.4rem;
+			background-color: rgba(
+				color-contrast(
+					auto-shade-tint(map-deep-get($aside, background-color), 1%),
+					map-deep-get($navigation, item, color-dark),
+					map-deep-get($navigation, item, color-light)
+				),
+				0.6
+			);
+			border-radius: 10rem;
+			color: transparent;
+			content: ' ';
+			text-align: center;
+			white-space: nowrap;
+		}
+	}
+
+	//  Link
+	&-link {
+		@include font-size(map-deep-get($navigation, item, font-size));
+		@include padding(map.get($navigation, padding-y) map.get($navigation, padding-x));
+
+		position: relative;
+		display: flex;
+		height: map-deep-get($navigation, item, height);
+		align-items: center;
+		justify-content: space-between;
+		background-color: map-deep-get($navigation, item, background-color);
+		color: if(
+			map.get($header, color),
+			map.get($header, color),
+			color-contrast(map.get($header, background-color), map.get($header, color-dark))
+		);
+		font-weight: 600;
+		outline: none;
+		text-decoration: none;
+		transition: $transition-base;
+
+		@include aside-elements {
+			// color: if(
+			// 	map-deep-get($navigation, item, background-color) == null,
+			// 	color-contrast(
+			// 		auto-shade-tint(map-deep-get($aside, background-color), 8%),
+			// 		map-deep-get($navigation, item, color-dark),
+			// 		map-deep-get($navigation, item, color-light)
+			// 	),
+			// 	color-contrast(
+			// 		map-deep-get($navigation, item, background-color),
+			// 		map-deep-get($navigation, item, color-dark),
+			// 		map-deep-get($navigation, item, color-light)
+			// 	)
+			// );
+			// color: $white;
+			color: map-deep-get($navigation, item, color-white);
+		}
+
+		@include aside-close {
+			justify-content: center;
+		}
+
+		// stylelint-disable no-duplicate-selectors
+		#{ $self }-menu & {
+			color: if(
+				map.get($header, color),
+				map.get($header, color),
+				color-contrast(map.get($header, background-color), map.get($header, color-dark))
+			);
+		}
+
+		#{ $self }#{ $self }-menu & {
+			@include padding(0.625rem 1rem);
+		}
+
+		//  Status
+		#{$self} &-pill {
+			border-radius: map-deep-get($navigation, item, border-radius);
+		}
+		// stylelint-enable no-duplicate-selectors
+
+		// Active Link
+		&.active {
+			background-color: tint-color(
+				map-deep-get($navigation, item, active, background-color),
+				85%
+			);
+			color: shade-color(map-deep-get($navigation, item, active, background-color), 15%);
+
+			@include aside-elements {
+				background-color: auto-shade-tint(map-deep-get($aside, background-color), 8%);
+				// color: color-contrast(
+				// 	auto-shade-tint(map-deep-get($aside, background-color), 8%),
+				// 	map-deep-get($navigation, item, color-dark),
+				// 	map-deep-get($navigation, item, color-light)
+				// );
+				// color: $white;
+				color: map-deep-get($navigation, item, color-white);
+			}
+
+			// stylelint-disable no-duplicate-selectors
+			#{$self}-icon {
+				// color: $primary;
+			}
+
+			#{ $self }#{ $self }-menu & {
+				@include dark-mode {
+					background-color: rgba-to-rgb(
+						rgba(map-deep-get($navigation, item, active, background-color), 0.1),
+						$dark
+					);
+					color: map-deep-get($navigation, item, active, background-color);
+				}
+
+				background-color: tint-color(
+					map-deep-get($navigation, item, active, background-color),
+					85%
+				);
+				color: shade-color(map-deep-get($navigation, item, active, background-color), 15%);
+			}
+			// stylelint-enable no-duplicate-selectors
+		}
+
+		//  Submenu open
+		&[aria-expanded='true'] {
+			background-color: tint-color(
+				map-deep-get($navigation, item, active, background-color),
+				85%
+			);
+			color: shade-color(map-deep-get($navigation, item, active, background-color), 15%);
+
+			@include aside-elements {
+				background-color: auto-shade-tint(map-deep-get($aside, background-color), 12%);
+				// color: color-contrast(
+				// 	auto-shade-tint(map-deep-get($aside, background-color), 12%),
+				// 	map-deep-get($navigation, item, color-dark),
+				// 	map-deep-get($navigation, item, color-light)
+				// );
+				// color: $white;
+				color: map-deep-get($navigation, item, color-white);
+			}
+
+			// stylelint-disable no-duplicate-selectors
+			#{ $self }#{ $self }-menu & {
+				@include dark-mode {
+					background-color: rgba-to-rgb(
+						rgba(map-deep-get($navigation, item, active, background-color), 0.1),
+						$dark
+					);
+					color: map-deep-get($navigation, item, active, background-color);
+				}
+
+				background-color: tint-color(
+					map-deep-get($navigation, item, active, background-color),
+					85%
+				);
+				color: shade-color(map-deep-get($navigation, item, active, background-color), 15%);
+			}
+
+			#{$self}-arrow {
+				transform: rotate(90deg);
+			}
+			// stylelint-enable no-duplicate-selectors
+		}
+
+		//  Hover
+		&:hover {
+			background-color: tint-color(
+				map-deep-get($navigation, item, active, background-color),
+				90%
+			);
+			color: shade-color(map-deep-get($navigation, item, active, background-color), 0%);
+
+			@include aside-elements {
+				background-color: auto-shade-tint(map-deep-get($aside, background-color), 12%);
+				// color: color-contrast(
+				// 	auto-shade-tint(map-deep-get($aside, background-color), 12%),
+				// 	map-deep-get($navigation, item, color-dark),
+				// 	map-deep-get($navigation, item, color-light)
+				// );
+				// color: $white;
+				color: map-deep-get($navigation, item, color-white);
+			}
+
+			// stylelint-disable no-duplicate-selectors
+			#{ $self }#{ $self }-menu & {
+				@include dark-mode {
+					background-color: rgba-to-rgb(
+						rgba(map-deep-get($navigation, item, active, background-color), 0.05),
+						$dark
+					);
+					color: map-deep-get($navigation, item, active, background-color);
+				}
+
+				background-color: tint-color(
+					map-deep-get($navigation, item, active, background-color),
+					90%
+				);
+				color: shade-color(map-deep-get($navigation, item, active, background-color), 0%);
+			}
+			// stylelint-enable no-duplicate-selectors
+		}
+	}
+
+	&-link-info {
+		display: flex;
+		overflow: hidden;
+		align-items: center;
+	}
+
+	&-link-extra {
+		display: flex;
+		align-items: center;
+
+		@include aside-close {
+			position: absolute;
+			right: 0;
+		}
+	}
+
+	//  Text
+	&-text {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+
+		@include aside-close {
+			font-size: 0;
+		}
+	}
+
+	//  Icon
+	&-icon {
+		@include font-size(map-deep-get($navigation, item, icon, size));
+		@include margin-right(map-deep-get($navigation, item, icon, space));
+
+		display: flex;
+		flex: 1 0 auto;
+
+		@include aside-close {
+			@include margin-right(0);
+		}
+	}
+
+	&-arrow {
+		@include font-size(map-deep-get($navigation, item, arrow, size));
+
+		transition: $transition-base;
+
+		@include aside-close {
+			@include font-size(1rem);
+		}
+	}
+
+	&-notification {
+		@include aside-close {
+			position: relative;
+			top: -0.5rem;
+			right: 0.5rem;
+		}
+	}
+
+	// Line
+	&-line {
+		@include margin((map.get($navigation, margin-y) * 2) 0);
+
+		border-bottom-color: if(
+			map-deep-get($navigation, item, background-color) == null,
+			color-contrast(auto-shade-tint(map-deep-get($aside, background-color), 8%)),
+			color-contrast(
+				map-deep-get($navigation, item, background-color),
+				map-deep-get($navigation, item, color-dark),
+				map-deep-get($navigation, item, color-light)
+			)
+		);
+		border-bottom-style: solid;
+		border-bottom-width: 1px; // stylelint-disable-line declaration-block-no-redundant-longhand-properties
+		opacity: 0.15;
+	}
+
+	&.dropdown-menu {
+		overflow: auto;
+		max-height: 70vh;
+	}
+}
+
+//
+// Navigation Icon Color-Coding
+// Semantic colors for sidebar sections — improves visual hierarchy and scannability
+//
+
+// Color palette — sourced from theme preset variables (see src/styles/themes/).
+// Each theme defines $nav-color-* values optimized for its sidebar background.
+$nav-colors: (
+	'nav-c-blue':   $nav-color-blue,
+	'nav-c-amber':  $nav-color-amber,
+	'nav-c-green':  $nav-color-green,
+	'nav-c-purple': $nav-color-purple,
+	'nav-c-teal':   $nav-color-teal,
+	'nav-c-cyan':   $nav-color-cyan,
+	'nav-c-rose':   $nav-color-rose,
+	'nav-c-gray':   $nav-color-gray,
+);
+
+// Force TwoTone icons to appear filled in sidebar navigation
+// TwoTone icons have inner paths with opacity: 0.3 — making them near-invisible on dark bg
+.aside .navigation-icon svg path[opacity] {
+	opacity: 0.8 !important;
+}
+
+// Apply semantic colors to nav icons (sidebar only)
+// Color shows on default state, intensifies on hover/active
+// Uses descendant selector to also color submenu item icons
+.aside {
+	@each $class, $color in $nav-colors {
+		.#{$class} .navigation-icon {
+			color: $color;
+		}
+	}
+}
+
+//
+// Apple-style Navigation Enhancements
+// Hover effects, press states, and smooth transitions
+//
+
+// Apply to all sidebar navigation menus
+#settings-menu,
+#company-dashboard,
+#company-settings,
+#talent-dashboard,
+#talent-settings-menu {
+	.navigation-link {
+		position: relative;
+		transition: all 0.15s ease;
+
+		// Left indicator bar (Apple-style)
+		&::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 50%;
+			transform: translateY(-50%) scaleY(0);
+			width: 3px;
+			height: 60%;
+			background: var(--bs-primary);
+			border-radius: 0 2px 2px 0;
+			transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+		}
+
+		// Icon opacity hierarchy: dimmed default → brighter hover → full active
+		.navigation-icon {
+			opacity: 0.55;
+			transition: opacity 0.15s ease, color 0.15s ease;
+		}
+
+		// Hover state
+		&:hover {
+			background-color: rgba(var(--bs-primary-rgb), 0.12);
+
+			&::before {
+				transform: translateY(-50%) scaleY(1);
+			}
+
+			.navigation-icon {
+				opacity: 0.85;
+			}
+		}
+
+		// Active/pressed state
+		&:active {
+			transform: scale(0.98);
+			transition: transform 0.1s ease;
+		}
+
+		// Selected state
+		&.active {
+			background-color: rgba(var(--bs-primary-rgb), 0.18);
+
+			&::before {
+				transform: translateY(-50%) scaleY(1);
+				height: 80%;
+			}
+
+			.navigation-icon {
+				opacity: 1;
+			}
+		}
+	}
+}
+
+// Light mode specific adjustments - sidebar has purple background
+// Need white indicator and white-based hover states
+.aside {
+	#settings-menu,
+	#company-dashboard,
+	#company-settings,
+	#talent-dashboard,
+	#talent-settings-menu {
+		.navigation-link {
+			// White indicator bar for light mode (purple sidebar)
+			&::before {
+				background: rgba(255, 255, 255, 0.95);
+			}
+
+			// Hover state with white overlay
+			&:hover {
+				background-color: rgba(255, 255, 255, 0.15);
+
+				&::before {
+					transform: translateY(-50%) scaleY(1);
+				}
+			}
+
+			// Selected state
+			&.active {
+				background-color: rgba(255, 255, 255, 0.2);
+
+				&::before {
+					transform: translateY(-50%) scaleY(1);
+					height: 80%;
+				}
+			}
+		}
+	}
+
+	// Back button - white text on purple sidebar
+	.settings-back-button {
+		color: rgba(255, 255, 255, 0.9) !important;
+		font-weight: 600;
+
+		&:hover {
+			color: #fff !important;
+		}
+	}
+}
+
+// Dark mode overrides - sidebar has dark background
+html[data-bs-theme='dark'] .aside {
+	#settings-menu,
+	#company-dashboard,
+	#company-settings,
+	#talent-dashboard,
+	#talent-settings-menu {
+		.navigation-link {
+			// Primary color indicator for dark mode
+			&::before {
+				background: var(--bs-primary);
+			}
+
+			// Hover state with primary overlay
+			&:hover {
+				background-color: rgba(var(--bs-primary-rgb), 0.12);
+			}
+
+			// Selected state
+			&.active {
+				background-color: rgba(var(--bs-primary-rgb), 0.18);
+			}
+		}
+	}
+
+	// Back button in dark mode
+	.settings-back-button {
+		color: rgba(255, 255, 255, 0.85) !important;
+
+		&:hover {
+			color: var(--bs-primary) !important;
+		}
+	}
+}
+
+// Locked navigation items (feature disabled)
+.navigation-link-locked {
+	opacity: 0.5;
+	cursor: not-allowed !important;
+
+	&:hover {
+		opacity: 0.5;
+		background-color: transparent !important;
+
+		&::before {
+			transform: translateY(-50%) scaleY(0) !important;
+		}
+	}
+
+	.navigation-text {
+		color: var(--bs-gray-500) !important;
+	}
+
+	.navigation-icon {
+		color: var(--bs-gray-500) !important;
+	}
+}
+
+// Accessibility: Respect user's motion preferences
+@media (prefers-reduced-motion: reduce) {
+	.navigation-link,
+	.navigation-link::before,
+	.settings-back-button,
+	.settings-back-button .icon {
+		transition: none !important;
+	}
+
+	// Disable Framer Motion animations
+	[data-framer-motion],
+	[style*='transform'],
+	[style*='opacity'] {
+		animation: none !important;
+		transition: none !important;
+	}
+}

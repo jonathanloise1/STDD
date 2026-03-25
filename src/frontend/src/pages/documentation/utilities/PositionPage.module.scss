@@ -1,0 +1,11 @@
+.example {
+	height: 200px;
+	background-color: #f5f5f5;
+
+	.position-absolute {
+		width: 2em;
+		height: 2em;
+		background-color: #212529;
+		border-radius: 0.25rem;
+	}
+}

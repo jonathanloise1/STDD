@@ -1,0 +1,15 @@
+//
+//  Blur Mixin
+//
+
+// stylelint-disable property-no-vendor-prefix
+@mixin backdrop-filter-blur($value) {
+	@if $enable-blur {
+		-webkit-backdrop-filter: blur($value);
+		backdrop-filter: blur($value);
+		will-change: backdrop-filter;
+	} @else {
+		backdrop-filter: none;
+	}
+}
+// stylelint-enable property-no-vendor-prefix

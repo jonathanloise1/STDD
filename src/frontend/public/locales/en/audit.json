@@ -1,0 +1,19 @@
+{
+  "title": "Audit Log",
+  "entityType": "Entity Type",
+  "entityId": "Entity ID",
+  "action": "Action",
+  "user": "User",
+  "timestamp": "Date/Time",
+  "details": "Details",
+  "correlationId": "Correlation ID",
+  "empty": "No audit logs found.",
+  "emptyDescription": "User actions will be recorded here.",
+  "filterByEntity": "Filter by entity",
+  "allEntities": "All Entities",
+  "dateFrom": "From",
+  "dateTo": "To",
+  "changedProperties": "Changed Properties",
+  "oldValues": "Old Values",
+  "newValues": "New Values"
+}

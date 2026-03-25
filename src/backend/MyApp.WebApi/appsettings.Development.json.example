@@ -1,0 +1,24 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost,1433;Database=MyApp_LOCAL;User Id=sa;Password=YOUR_PASSWORD_HERE;TrustServerCertificate=True;"
+  },
+  "MyApp": {
+    "FrontendBaseUrl": "http://localhost:3147",
+    "Impersonation": {
+      "Enabled": true,
+      "HeaderName": "X-MyApp-Impersonate-UserId"
+    }
+  },
+  "AzureAd": {
+    "Instance": "https://YOUR_TENANT_ID.ciamlogin.com/",
+    "TenantId": "YOUR_TENANT_ID",
+    "ClientId": "YOUR_API_CLIENT_ID",
+    "KnownAuthorities": [ "YOUR_KNOWN_AUTHORITY" ]
+  }
+}

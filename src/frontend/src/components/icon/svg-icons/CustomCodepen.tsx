@@ -1,0 +1,15 @@
+import * as React from 'react';
+import type { SVGProps } from 'react';
+const SvgCustomCodepen = (props: SVGProps<SVGSVGElement>) => (
+	<svg
+		xmlns='http://www.w3.org/2000/svg'
+		fill='currentColor'
+		viewBox='0 0 24 24'
+		width='1em'
+		height='1em'
+		className='svg-icon'
+		{...props}>
+		<path d='M8.21 12 6.88 9h-.45v3H5V5h2.54a2.28 2.28 0 0 1 2.38 2.25 2.17 2.17 0 0 1-1.19 2L10.28 12zm-.8-5.83h-.98v1.67h.98a.84.84 0 1 0 0-1.67m7.38 5.81h-3.92V5h3.87v1.21H12.3v1.61h2.27v1.2H12.3v1.75h2.49V12m2.83-5.79A3.37 3.37 0 0 1 21 9.5a3.35 3.35 0 0 1-3.38 3.5 3.37 3.37 0 0 1-3.38-3.5 3.39 3.39 0 0 1 3.38-3.79m0 5.92c1.12 0 1.88-.94 1.88-2.13s-.76-2.43-1.88-2.43-1.9.93-1.9 2.43.78 2.13 1.9 2.13M5 13h14v2H5zm0 3h14v2H5zm0 3h14v2H5z' />
+	</svg>
+);
+export default SvgCustomCodepen;

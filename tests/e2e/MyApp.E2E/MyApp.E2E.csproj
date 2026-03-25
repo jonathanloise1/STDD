@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>MyApp.E2E</RootNamespace>
+    <!-- Always use .runsettings for sequential test execution -->
+    <RunSettingsFilePath>$(MSBuildProjectDirectory)\.runsettings</RunSettingsFilePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Test infrastructure -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageReference Include="NUnit" Version="4.5.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="6.1.0" />
+    <!-- Playwright with NUnit integration -->
+    <PackageReference Include="Microsoft.Playwright.NUnit" Version="1.58.0" />
+    <!-- Excel generation for import tests -->
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <!-- Configuration -->
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.e2e.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update=".runsettings">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update=".runsettings.ci">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

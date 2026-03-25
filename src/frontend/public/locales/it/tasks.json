@@ -1,0 +1,23 @@
+{
+  "title": "Attività",
+  "createTask": "Crea attività",
+  "editTask": "Modifica attività",
+  "deleteTask": "Elimina attività",
+  "taskTitle": "Titolo",
+  "taskDescription": "Descrizione",
+  "taskStatus": "Stato",
+  "taskDueDate": "Scadenza",
+  "statusTodo": "Da fare",
+  "statusInProgress": "In corso",
+  "statusDone": "Completata",
+  "statusCancelled": "Annullata",
+  "noTasks": "Nessuna attività",
+  "assignedTo": "Assegnato a",
+  "actions": "Azioni",
+  "update": "Aggiorna",
+  "newTask": "Nuova Attività",
+  "noTasksDescription": "Crea la tua prima attività per iniziare.",
+  "save": "Salva",
+  "cancel": "Annulla",
+  "confirmDelete": "Sei sicuro di voler eliminare questa attività?"
+}

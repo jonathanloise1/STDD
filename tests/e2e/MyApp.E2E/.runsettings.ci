@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Playwright .NET Test Configuration: CI/CD Profile
+  Optimized for headless, fast execution in pipelines.
+  
+  Usage:
+    dotnet test (with settings flag .runsettings.ci)
+-->
+<RunSettings>
+
+  <Playwright>
+    <BrowserName>chromium</BrowserName>
+    
+    <LaunchOptions>
+      <!-- Headless: no visible window, faster execution -->
+      <Headless>true</Headless>
+      
+      <!-- No delay between actions — full speed -->
+      <SlowMo>0</SlowMo>
+      
+      <Args>["--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage", "--disable-extensions"]</Args>
+    </LaunchOptions>
+    
+    <ExpectTimeout>10000</ExpectTimeout>
+  </Playwright>
+
+  <NUnit>
+    <NumberOfTestWorkers>1</NumberOfTestWorkers>
+  </NUnit>
+
+  <RunConfiguration>
+    <MaxCpuCount>1</MaxCpuCount>
+    <ResultsDirectory>./TestResults</ResultsDirectory>
+  </RunConfiguration>
+
+</RunSettings>

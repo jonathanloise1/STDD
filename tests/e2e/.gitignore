@@ -1,0 +1,16 @@
+# Build outputs
+bin/
+obj/
+
+# Test results
+TestResults/
+
+# Auth state (sensitive - contains tokens)
+.auth/
+
+# IDE
+.vs/
+*.user
+
+# Screenshots from failed tests
+screenshots/

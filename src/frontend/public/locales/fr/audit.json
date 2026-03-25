@@ -1,0 +1,19 @@
+{
+"title": "Journal d'audit",
+"entityType": "Type d'entité",
+"entityId": "ID d'entité",
+"action": "Action",
+"user": "Utilisateur",
+"timestamp": "Date/Heure",
+"details": "Détails",
+"correlationId": "ID de corrélation",
+"empty": "Aucun journal d'audit trouvé.",
+"emptyDescription": "Les actions des utilisateurs seront enregistrées ici.",
+"filterByEntity": "Filtrer par entité",
+"allEntities": "Toutes les entités",
+"dateFrom": "De",
+"dateTo": "À",
+"changedProperties": "Propriétés modifiées",
+"oldValues": "Anciennes valeurs",
+"newValues": "Nouvelles valeurs"
+}

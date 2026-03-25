@@ -1,0 +1,22 @@
+//
+// Color Type Change
+//
+
+@use 'sass:color';
+
+@function hex-to-rgb($color) {
+	$red: color.channel($color, 'red', $space: rgb);
+	$green: color.channel($color, 'green', $space: rgb);
+	$blue: color.channel($color, 'blue', $space: rgb);
+
+	@return $red, $green, $blue;
+}
+
+@function rgba-to-rgb($rgba, $background: #fff) {
+	$red: color.channel($rgba, 'red');
+	$green: color.channel($rgba, 'green');
+	$blue: color.channel($rgba, 'blue');
+	$alpha: color.alpha($rgba);
+
+	@return color.mix(rgb($red, $green, $blue), $background, $alpha * 100%);
+}

@@ -1,0 +1,195 @@
+.intro {
+	z-index: 200;
+	overflow: hidden;
+}
+
+.introImageWrapper {
+	z-index: 1;
+}
+
+.introImage {
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	height: 100%;
+
+	@media (min-width: 992px) {
+		background-position: center right;
+		transform: translateX(10vw);
+	}
+}
+
+.introContentWrapper {
+	z-index: 2;
+}
+
+.animation {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	overflow: hidden;
+	width: 100%;
+	height: 100vh;
+	align-items: flex-start;
+	justify-content: center;
+}
+
+.item {
+	position: relative;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	transform-style: preserve-3d;
+	will-change: transform;
+}
+
+.item1 {
+	top: 10%;
+	width: 20px;
+	height: 20px;
+}
+
+.item2 {
+	top: 15%;
+	width: 55px;
+	height: 55px;
+}
+
+.item3 {
+	top: 37%;
+	left: -30%;
+	width: 45px;
+	height: 45px;
+}
+
+.item4 {
+	width: 15px;
+	height: 15px;
+	margin: auto 10px;
+}
+
+.item5 {
+	top: 78%;
+	right: 24%;
+	bottom: auto;
+	left: auto;
+	width: 12px;
+	height: 12px;
+}
+
+.item6 {
+	top: 53%;
+	right: 20%;
+	bottom: auto;
+	left: auto;
+	width: 10px;
+	height: 10px;
+}
+
+.item7 {
+	top: 60%;
+	right: 0%;
+	bottom: auto;
+	left: 0%;
+	width: 25px;
+	height: 25px;
+}
+
+.item8 {
+	position: absolute;
+	top: auto;
+	right: 8%;
+	bottom: 14%;
+	width: 44px;
+	height: 44px;
+}
+
+.item9 {
+	top: 32%;
+	bottom: auto;
+	left: 16%;
+	width: 10px;
+	height: 10px;
+}
+
+.item10 {
+	top: 32%;
+	right: -35%;
+	width: 32px;
+	height: 32px;
+}
+
+.item11 {
+	top: 71%;
+	right: auto;
+	bottom: auto;
+	left: 38%;
+	width: 20px;
+	height: 20px;
+}
+
+.item12 {
+	top: 73%;
+	right: auto;
+	bottom: auto;
+	left: -44%;
+	width: 18px;
+	height: 18px;
+}
+
+.item13 {
+	top: 56%;
+	right: auto;
+	bottom: auto;
+	left: 30%;
+	width: 12px;
+	height: 12px;
+}
+
+.item14 {
+	top: 93%;
+	right: -22%;
+	bottom: auto;
+	left: 0%;
+	width: 18px;
+	height: 18px;
+}
+
+.logoWrapper {
+	height: 300px;
+
+	@media (min-width: 992px) {
+		height: 450px;
+	}
+}
+
+.bootstrapLogo {
+	height: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.storybookLogo {
+	height: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.formikLogo {
+	height: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.apexLogo {
+	height: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}

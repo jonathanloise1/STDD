@@ -1,0 +1,504 @@
+# MyApp — Wireframes
+
+> All wireframes are mobile-first (375px viewport).
+> Desktop adaptations are shown where the layout differs significantly.
+> Reference: [frontend.md](./frontend.md) for design system details.
+
+---
+
+## Table of Contents
+
+1. [Dashboard (Home)](#1-dashboard-home)
+2. [Task List](#2-task-list)
+3. [Task Detail / Edit](#3-task-detail--edit)
+4. [Create Task](#4-create-task)
+5. [Onboarding](#5-onboarding)
+6. [Settings](#6-settings)
+7. [Audit Trail (Admin)](#7-audit-trail-admin)
+8. [Desktop Layout](#8-desktop-layout)
+9. [Navigation Map](#9-navigation-map)
+
+---
+
+## 1. Dashboard (Home)
+
+### Mobile (375px)
+
+```
+┌─────────────────────────────────────┐
+│ 📋 MyApp          🔔(2) 👤  │ ← top bar (52px)
+├─────────────────────────────────────┤
+│                                     │
+│  Good morning, Marco 👋            │ ← greeting (time-aware)
+│  Here is your task overview         │    subtitle, $text-muted
+│                                     │
+│  ┌─[KPI card carousel]───────────┐  │
+│  │ ┌──────────┐  ┌──────────┐    │  │
+│  │ │    12    │  │     5    │    │  │ ← swipe to see more
+│  │ │  Total   │  │   Todo   │    │  │    gradient top border
+│  │ │  Tasks   │  │          │    │  │    primary→accent
+│  │ └──────────┘  └──────────┘    │  │
+│  │           · ○ ○               │  │ ← page dots
+│  └───────────────────────────────┘  │
+│                                     │
+│  📋 Recent Tasks                    │ ← section title
+│  ┌─────────────────────────────────┐│
+│  │ Fix login bug          🟢 Done ││ ← status badge
+│  ├─────────────────────────────────┤│
+│  │ Write docs          🟡 In Prog ││
+│  ├─────────────────────────────────┤│
+│  │ Deploy v2              🔴 Todo ││
+│  └─────────────────────────────────┘│
+│                                     │
+│  [ View All Tasks →]                │ ← link to task list
+│                                     │
+│  ░░░░ 24px bottom padding ░░░░░░   │
+│                                     │
+├─────────┬─────────┬─────────────────┤
+│  🏠    │  📋    │      ⚙️        │ ← bottom tab bar
+│  Home   │  Tasks  │   Settings      │    52px + safe-area
+└─────────┴─────────┴─────────────────┘
+```
+
+### Desktop Adaptation (≥992px)
+
+```
+┌──────┬──────────────────────────────────────────────────────────┐
+│      │ 📋 MyApp              🌐DE  🔔(2)  👤            │
+│ 🏠  ├──────────────────────────────────────────────────────────┤
+│ 📋  │                                                          │
+│ ⚙️  │  Good morning, Marco 👋                                 │
+│      │                                                          │
+│      │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐   │
+│      │  │    12    │ │     5    │ │     4    │ │     3    │   │
+│      │  │  Total   │ │   Todo   │ │ In Prog  │ │   Done   │   │
+│      │  │  Tasks   │ │          │ │          │ │          │   │
+│      │  └──────────┘ └──────────┘ └──────────┘ └──────────┘   │
+│      │                                                          │
+│      │  📋 Recent Tasks                         [View All →]   │
+│      │  ┌──────────────────────────────────────────────────┐   │
+│      │  │ Fix login bug           Due: 15 Jan    🟢 Done  │   │
+│      │  ├──────────────────────────────────────────────────┤   │
+│      │  │ Write docs              Due: 20 Jan  🟡 In Prog │   │
+│      │  ├──────────────────────────────────────────────────┤   │
+│      │  │ Deploy v2               Due: 25 Jan    🔴 Todo  │   │
+│      │  └──────────────────────────────────────────────────┘   │
+│      │                                                          │
+└──────┴──────────────────────────────────────────────────────────┘
+```
+
+Notes:
+- KPI cards display in a single row (all 4 visible)
+- Recent tasks show as a flat list with due date visible
+- All 4 KPI are visible at once (no carousel needed)
+
+---
+
+## 2. Task List
+
+### Mobile (375px)
+
+```
+┌─────────────────────────────────────┐
+│ ← Tasks                    [＋]    │ ← top bar + add button
+├─────────────────────────────────────┤
+│                                     │
+│  🔍 Search tasks...                │ ← search with debounce
+│                                     │
+│  [All] [Todo] [In Progress] [Done]  │ ← filter chips, scroll
+│                                     │
+│  ┌─────────────────────────────────┐│
+│  │ 📋 Fix login bug               ││
+│  │ Due: 15 Jan 2026     🟢 Done   ││ ← status badge
+│  │ Created by Marco               ││
+│  └─────────────────────────────────┘│
+│                                     │
+│  ┌─────────────────────────────────┐│
+│  │ 📋 Write documentation         ││
+│  │ Due: 20 Jan 2026  🟡 In Prog   ││
+│  │ Assigned to Luca               ││
+│  └─────────────────────────────────┘│
+│                                     │
+│  ┌─────────────────────────────────┐│
+│  │ 📋 Deploy v2                   ││
+│  │ Due: 25 Jan 2026     🔴 Todo   ││
+│  │ Assigned to Sara               ││
+│  └─────────────────────────────────┘│
+│                                     │
+│  ░░░░ scroll for more ░░░░░░░░░░   │
+│                                     │
+├─────────┬─────────┬─────────────────┤
+│  🏠    │  📋    │      ⚙️        │
+│  Home   │  Tasks  │   Settings      │
+└─────────┴─────────┴─────────────────┘
+```
+
+### Empty State
+
+```
+┌─────────────────────────────────────┐
+│ ← Tasks                    [＋]    │
+├─────────────────────────────────────┤
+│                                     │
+│                                     │
+│           ┌─────────┐              │
+│           │  📋     │              │ ← line-art illustration
+│           │  ___    │              │    muted color, 120px
+│           └─────────┘              │
+│                                     │
+│       No tasks yet                  │ ← title
+│   Create your first task to         │ ← subtitle, $text-muted
+│   get started.                      │
+│                                     │
+│      ┌──────────────────┐          │
+│      │   + Create Task   │          │ ← primary CTA
+│      └──────────────────┘          │
+│                                     │
+├─────────┬─────────┬─────────────────┤
+│  🏠    │  📋    │      ⚙️        │
+│  Home   │  Tasks  │   Settings      │
+└─────────┴─────────┴─────────────────┘
+```
+
+Notes:
+- Cards, NOT tables (per frontend.md § 6.1)
+- Tap card → navigates to task detail
+- Filter chips scroll horizontally on mobile
+- Search debounce: 300ms
+- Skeleton loading: 3 placeholder cards with shimmer
+
+---
+
+## 3. Task Detail / Edit
+
+### Mobile (375px)
+
+```
+┌─────────────────────────────────────┐
+│ ← Task Detail          [✏️] [🗑️] │ ← back, edit, delete
+├─────────────────────────────────────┤
+│                                     │
+│  Fix login bug                      │ ← H1 title
+│  Status: 🟢 Done                   │ ← status badge
+│                                     │
+│  ┌─────────────────────────────────┐│
+│  │ Description                     ││
+│  │                                 ││
+│  │ Users reported intermittent     ││
+│  │ login failures on mobile        ││
+│  │ browsers. Root cause was        ││
+│  │ session cookie not set.         ││
+│  └─────────────────────────────────┘│
+│                                     │
+│  ┌───────────────┬─────────────────┐│
+│  │ Due Date      │ 15 Jan 2026    ││
+│  ├───────────────┼─────────────────┤│
+│  │ Priority      │ High           ││
+│  ├───────────────┼─────────────────┤│
+│  │ Assigned to   │ Marco          ││
+│  ├───────────────┼─────────────────┤│
+│  │ Created       │ 10 Jan 2026    ││
+│  └───────────────┴─────────────────┘│
+│                                     │
+│  ░░░░ 24px bottom padding ░░░░░░   │
+│                                     │
+├─────────┬─────────┬─────────────────┤
+│  🏠    │  📋    │      ⚙️        │
+│  Home   │  Tasks  │   Settings      │
+└─────────┴─────────┴─────────────────┘
+```
+
+Notes:
+- Edit button → navigates to edit form (same layout as create)
+- Delete button → confirmation modal (see frontend.md § 8.5)
+- Back arrow returns to task list
+
+---
+
+## 4. Create Task
+
+### Mobile (375px)
+
+```
+┌─────────────────────────────────────┐
+│ ← New Task                         │
+├─────────────────────────────────────┤
+│                                     │
+│  Title *                            │
+│  ┌─────────────────────────────────┐│
+│  │ Enter task title                ││ ← text input
+│  └─────────────────────────────────┘│
+│                                     │
+│  Description                        │
+│  ┌─────────────────────────────────┐│
+│  │                                 ││ ← textarea, 4 rows
+│  │                                 ││
+│  └─────────────────────────────────┘│
+│                                     │
+│  Status *                           │
+│  ┌─────────────────────────────────┐│
+│  │ Todo                       ▼   ││ ← dropdown
+│  └─────────────────────────────────┘│
+│                                     │
+│  Due Date                           │
+│  ┌─────────────────────────────────┐│
+│  │ Select date                 📅 ││ ← date picker
+│  └─────────────────────────────────┘│
+│                                     │
+│  Priority                           │
+│  ┌─────────────────────────────────┐│
+│  │ Medium                     ▼   ││ ← dropdown
+│  └─────────────────────────────────┘│
+│                                     │
+│  ┌─────────────────────────────────┐│
+│  │         Save Task               ││ ← primary CTA
+│  └─────────────────────────────────┘│
+│                                     │
+├─────────┬─────────┬─────────────────┤
+│  🏠    │  📋    │      ⚙️        │
+│  Home   │  Tasks  │   Settings      │
+└─────────┴─────────┴─────────────────┘
+```
+
+Notes:
+- Labels above inputs, one field per row (per frontend.md § 6.4)
+- Inline validation: red text below field on blur + on submit
+- Save button sticky-bottom on mobile (above safe area)
+- Cancel → if form is dirty, confirmation modal
+- Title is required, Status is required
+- Default status: Todo
+- Default priority: Medium
+
+---
+
+## 5. Onboarding
+
+### Step 1 — Welcome (375px)
+
+```
+┌─────────────────────────────────────┐
+│                                     │
+│                                     │
+│           📋                        │ ← app icon, 64px
+│                                     │
+│       Welcome to MyApp              │ ← H1
+│                                     │
+│  Let's get your workspace           │ ← subtitle
+│  set up in 2 minutes.              │
+│                                     │
+│  ┌─────────────────────────────────┐│
+│  │       Get Started               ││ ← primary CTA
+│  └─────────────────────────────────┘│
+│                                     │
+│  ○───────○───────○                  │ ← progress dots (3 steps)
+│                                     │
+└─────────────────────────────────────┘
+```
+
+### Step 2 — Organisation Setup
+
+```
+┌─────────────────────────────────────┐
+│ ← Back                      2/3    │
+├─────────────────────────────────────┤
+│                                     │
+│  Set up your organisation           │ ← H2
+│                                     │
+│  Organisation name *                │
+│  ┌─────────────────────────────────┐│
+│  │ Enter name                      ││
+│  └─────────────────────────────────┘│
+│                                     │
+│  ┌─────────────────────────────────┐│
+│  │         Continue                 ││ ← primary CTA
+│  └─────────────────────────────────┘│
+│                                     │
+│  ○───●───○                          │ ← step 2 active
+│                                     │
+└─────────────────────────────────────┘
+```
+
+### Step 3 — Complete
+
+```
+┌─────────────────────────────────────┐
+│                                     │
+│                                     │
+│           ✅                        │ ← success icon
+│                                     │
+│     You're all set!                 │ ← H1
+│                                     │
+│  Your workspace is ready.           │
+│  Start by creating your first task. │
+│                                     │
+│  ┌─────────────────────────────────┐│
+│  │     Go to Dashboard             ││ ← primary CTA
+│  └─────────────────────────────────┘│
+│                                     │
+│  ○───○───●                          │ ← step 3 active
+│                                     │
+└─────────────────────────────────────┘
+```
+
+Notes:
+- Wizard with 3 steps, progress dots at bottom
+- Back navigation available from step 2+
+- Organisation name is the only required input
+- On completion, redirect to Dashboard
+
+---
+
+## 6. Settings
+
+### Mobile (375px)
+
+```
+┌─────────────────────────────────────┐
+│ Settings                            │
+├─────────────────────────────────────┤
+│                                     │
+│  👤 Profile                         │ ← section header
+│  ┌─────────────────────────────────┐│
+│  │ Name          Marco Rossi    → ││
+│  ├─────────────────────────────────┤│
+│  │ Email     marco@example.com  → ││
+│  └─────────────────────────────────┘│
+│                                     │
+│  🎨 Appearance                      │
+│  ┌─────────────────────────────────┐│
+│  │ Theme         Light / Dark   🔘││ ← toggle
+│  ├─────────────────────────────────┤│
+│  │ Language       Italiano      → ││ ← opens picker
+│  └─────────────────────────────────┘│
+│                                     │
+│  🏢 Organisation                    │
+│  ┌─────────────────────────────────┐│
+│  │ Name          Acme Corp      → ││
+│  ├─────────────────────────────────┤│
+│  │ Members       5              → ││
+│  └─────────────────────────────────┘│
+│                                     │
+│  🔐 Security                        │
+│  ┌─────────────────────────────────┐│
+│  │ Sign out                     → ││
+│  └─────────────────────────────────┘│
+│                                     │
+├─────────┬─────────┬─────────────────┤
+│  🏠    │  📋    │      ⚙️        │
+│  Home   │  Tasks  │   Settings      │
+└─────────┴─────────┴─────────────────┘
+```
+
+Notes:
+- Grouped sections with section headers
+- Tap row → navigates to sub-page or opens inline control
+- Theme toggle is inline (no navigation)
+- Language picker: IT / EN / DE / FR
+
+---
+
+## 7. Audit Trail (Admin)
+
+### Desktop Only (≥992px)
+
+```
+┌──────┬──────────────────────────────────────────────────────────┐
+│      │ Audit Trail                    🔍 Search   📥 Export   │
+│ 🏠  ├──────────────────────────────────────────────────────────┤
+│ 📋  │                                                          │
+│ ⚙️  │  [Date ▼] [User ▼] [Action ▼] [Entity ▼]  [Clear]     │
+│ 📊  │                                                          │
+│      │  ┌──────────────────────────────────────────────────┐   │
+│      │  │ Date            User     Action    Entity        │   │
+│      │  ├──────────────────────────────────────────────────┤   │
+│      │  │ 15 Jan 10:23  Marco    Created   Task           │   │
+│      │  │ 15 Jan 09:15  Luca     Updated   Task           │   │
+│      │  │ 14 Jan 17:42  Sara     Deleted   Task           │   │
+│      │  │ 14 Jan 16:30  Marco    Updated   Organisation   │   │
+│      │  │ 14 Jan 15:00  Admin    Created   User           │   │
+│      │  └──────────────────────────────────────────────────┘   │
+│      │                                                          │
+│      │  ← 1 2 3 ... 12 →                                      │
+│      │                                                          │
+└──────┴──────────────────────────────────────────────────────────┘
+```
+
+Notes:
+- Admin-only page (requires Admin role)
+- Table format is acceptable here (per frontend.md § 9.1 exception)
+- Filter dropdowns: Date range, User, Action type, Entity type
+- Pagination at bottom
+- Export button: CSV download
+- Search: full-text across all columns
+
+---
+
+## 8. Desktop Layout
+
+### Sidebar Collapsed (≥992px)
+
+```
+┌──────┬──────────────────────────────────────┐
+│      │                                      │
+│ 🏠  │    Page content area                 │
+│ 📋  │                                      │
+│ ⚙️  │    Max-width: 1200px                 │
+│      │    Centered                          │
+│      │                                      │
+│      │                                      │
+│      │                                      │
+└──────┴──────────────────────────────────────┘
+   60px              fluid
+```
+
+### Sidebar Expanded (hover/pin)
+
+```
+┌──────────────┬──────────────────────────────┐
+│              │                              │
+│ 🏠 Dashboard│    Page content area         │
+│ 📋 Tasks    │                              │
+│ ⚙️ Settings │    Max-width: 1200px         │
+│              │    Centered                  │
+│              │                              │
+│              │                              │
+│              │                              │
+└──────────────┴──────────────────────────────┘
+     220px                fluid
+```
+
+Notes:
+- Default: collapsed (60px, icons only)
+- On hover or pin: expands to 220px with labels
+- Slide-in animation: 200ms ease
+- Active item: left border accent `$accent`
+
+---
+
+## 9. Navigation Map
+
+```
+Login (MSAL)
+  │
+  ├── First time? → Onboarding Wizard (3 steps)
+  │                    └── Dashboard
+  │
+  └── Returning user → Dashboard
+                          │
+                          ├── Tasks
+                          │     ├── Task List (filter, search)
+                          │     ├── Task Detail
+                          │     ├── Create Task
+                          │     └── Edit Task
+                          │
+                          ├── Settings
+                          │     ├── Profile
+                          │     ├── Appearance (theme, language)
+                          │     └── Organisation
+                          │
+                          └── Audit Trail (Admin only)
+```
+
+---
+
+*Last updated: March 2026*

@@ -1,0 +1,23 @@
+{
+  "title": "Tâches",
+  "createTask": "Créer une tâche",
+  "editTask": "Modifier la tâche",
+  "deleteTask": "Supprimer la tâche",
+  "taskTitle": "Titre",
+  "taskDescription": "Description",
+  "taskStatus": "Statut",
+  "taskDueDate": "Date d'échéance",
+  "statusTodo": "À faire",
+  "statusInProgress": "En cours",
+  "statusDone": "Terminée",
+  "statusCancelled": "Annulée",
+  "noTasks": "Aucune tâche",
+  "assignedTo": "Assigné à",
+  "actions": "Actions",
+  "update": "Mettre à jour",
+  "newTask": "Nouvelle Tâche",
+  "noTasksDescription": "Créez votre première tâche pour commencer.",
+  "save": "Enregistrer",
+  "cancel": "Annuler",
+  "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette tâche ?"
+}

@@ -1,0 +1,61 @@
+//
+// Theme: MyApp Professional
+//
+// A trust-oriented, finance-grade palette designed for management accounting.
+// Inspired by Bloomberg (density), Stripe (cleanliness), Notion (sobriety).
+//
+// Light mode: Clean, high-contrast — ideal for client-facing presentations.
+// Dark mode: Deep slate — comfortable for extended analysis sessions.
+//
+// NOTE: This file is loaded BEFORE Bootstrap functions via Vite additionalData.
+//       Do NOT use Bootstrap SCSS functions (shade-color, tint-color, etc.) here.
+//       Use pre-computed hex values only.
+//
+
+// ─── Core Semantic Colors ────────────────────────────────────────────────────
+
+$primary:   #1E3A5F;  // Blu Notte — header, sidebar, primary CTA
+$secondary: #64748B;  // Slate 500 — sophisticated neutral for secondary elements
+$success:   #10B981;  // Active policies, completed checklist items
+$info:      #2D6DB5;  // Blu Elettrico — hover states, links, secondary actions
+$warning:   #F59E0B;  // Expiring soon (30–90 days)
+$danger:    #EF4444;  // Expired, errors, critical alerts
+$light:     #F7F9FC;  // Grigio Ghiaccio — page background
+$dark:      #1A1A2E;  // Main body text
+
+// ─── Brand Colors ────────────────────────────────────────────────────────────
+
+$brand:     #1E3A5F;  // Unified with primary — Blu Notte brand color
+$brand-two: #E2E8F0;  // Slate 200 — card backgrounds, separators
+
+// ─── Accent (AI elements, badges, notifications) ────────────────────────────
+
+$accent:    #00B4D8;  // Turchese — AI elements, glow effects, notification dots
+
+// ─── Body (Light Mode) ──────────────────────────────────────────────────────
+
+$body-color: #1A1A2E;  // Main body text — high readability on light backgrounds
+
+// ─── Dark Mode Overrides ────────────────────────────────────────────────────
+
+$dark-body-bg:    #0F172A;  // Slate 900 — deep but not pure black
+$dark-body-color: #E2E8F0;  // Slate 200 — soft white for comfortable reading
+$dark-card-bg:    #1E293B;  // Slate 800 — card elevation via subtle lightening
+$dark-border-color: #334155; // Slate 700 — subtle separators
+
+// ─── Aside Sidebar ──────────────────────────────────────────────────────────
+
+$aside-bg-color:      #1E3A5F;  // = $primary (Blu Notte sidebar)
+$aside-border-color:  #152C47;  // pre-computed shade of primary ~30%
+
+// ─── Navigation Icon Colors (optimized for petrol blue sidebar) ─────────────
+// Material Design 200-300 weight — high visibility on dark sidebar
+
+$nav-color-blue:   #90CAF9;  // Dashboard, Profile — light sky blue
+$nav-color-amber:  #FFD54F;  // HR, People — warm gold
+$nav-color-green:  #A5D6A7;  // Projects, Work — soft green
+$nav-color-purple: #CE93D8;  // Quotes, Contracts — lavender
+$nav-color-teal:   #80CBC4;  // Finance, Invoices — seafoam
+$nav-color-cyan:   #80DEEA;  // Messages — light cyan
+$nav-color-rose:   #F48FB1;  // Alliance — soft pink
+$nav-color-gray:   #B0BEC5;  // Settings — blue-grey

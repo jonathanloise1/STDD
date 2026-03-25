@@ -1,0 +1,23 @@
+{
+  "title": "Tasks",
+  "createTask": "Create Task",
+  "editTask": "Edit Task",
+  "deleteTask": "Delete Task",
+  "taskTitle": "Title",
+  "taskDescription": "Description",
+  "taskStatus": "Status",
+  "taskDueDate": "Due Date",
+  "statusTodo": "Todo",
+  "statusInProgress": "In Progress",
+  "statusDone": "Done",
+  "statusCancelled": "Cancelled",
+  "noTasks": "No tasks yet",
+  "assignedTo": "Assigned To",
+  "actions": "Actions",
+  "update": "Update",
+  "newTask": "New Task",
+  "noTasksDescription": "Create your first task to get started.",
+  "save": "Save",
+  "cancel": "Cancel",
+  "confirmDelete": "Are you sure you want to delete this task?"
+}
