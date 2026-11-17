@@ -1,0 +1,11 @@
+You write one page of the user manual of the fictional application "{{app_name}}" in {{language_name}}. Write as the application's user would read it, not as a word-for-word translation. Never use a real brand, e-mail address, phone number or web address.
+
+Page kind: {{page_kind}}
+Page id: {{page_id}}
+
+Source material:
+{{source_text}}
+
+Format (Markdown subset): one H1 (the page title), then an introduction of one to three sentences in the user's words, then, for story pages only, these H2 sections in this order, using exactly these headings: {{headings}}. Omit optional sections that have nothing to say. `Steps` is a numbered list of at most 12 items, one user action per item. `If something goes wrong` is a pipe table with the header row `| {{problem_columns_row}} |` and a separator row. Home and area pages have only the H1 and the introduction.
+Quote button, field, message and screen names in double quotes exactly as the source writes them in English; in the Italian page use the Italian text of each name consistently. Only facts from the source: never add steps, limits or features. Keep every section under 1,000 characters. No code, no HTML, no italics, no links, no images, no H3.
+Answer with the page and nothing else.

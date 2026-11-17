@@ -1,0 +1,7 @@
+# Optional override: publishes the compose SQL Server on the host's 127.0.0.1, for a client such as Azure Data Studio.
+#   docker compose -f compose.yaml -f compose.sqlserver-port.yaml up -d
+# The port is SQLSERVER_HOST_PORT (default 14330). Never 1433: another SQL Server on the machine may hold it.
+services:
+  sqlserver:
+    ports:
+      - "127.0.0.1:${SQLSERVER_HOST_PORT:-14330}:1433"

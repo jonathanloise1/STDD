@@ -1,0 +1,5 @@
+{
+  "contracts": {
+    "manual-page": { "version": 1, "spec": "docs/guidelines/manual.md#2-manual-pages" }
+  }
+}

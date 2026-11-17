@@ -1,0 +1,15 @@
+{
+  "status": "Degraded",
+  "checks": [
+    {
+      "name": "sqlserver",
+      "status": "Degraded",
+      "durationMs": 9400
+    },
+    {
+      "name": "disk",
+      "status": "Healthy",
+      "durationMs": 1
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "id": "bench-budget-exactly-enough",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "data_missing",
+  "trigger": "rate",
+  "class": "budget_pressure",
+  "world_dir": "worlds/bench-budget-exactly-enough",
+  "incident_id": "INC-bench-budget-exactly-enough",
+  "budget_override": 2,
+  "prompt": {
+    "incident": {
+      "trigger": "rate",
+      "severity": "Warning",
+      "environment": "prod",
+      "signature": {
+        "kind": "keyed",
+        "id": "task.edit.not_found",
+        "log_key": "task.edit.not_found",
+        "template_id": null,
+        "template": null
+      },
+      "count": 40,
+      "rate_per_hour": 180,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T09:41:00.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T09:41:00.000Z",
+              "Level": "Warning",
+              "Category": "MyApp.Application.Services.TaskItemService",
+              "LogKey": "task.edit.not_found",
+              "MessageTemplate": "Task not updated: task {TaskId} does not exist in organization {OrganizationId}",
+              "Message": "Task not updated: task 3bacae47-53e2-4b38-a6e8-247dc15c6f88 does not exist in organization 66c6ccbe-54e4-40dd-a80a-c113c844e858",
+              "TraceId": "0f79261aab7fbf2d83df51595110ac91",
+              "SpanId": "9216f9438c6d5798",
+              "Properties": {
+                "TaskId": "3bacae47-53e2-4b38-a6e8-247dc15c6f88",
+                "OrganizationId": "66c6ccbe-54e4-40dd-a80a-c113c844e858"
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            },
+            {
+              "Timestamp": "2026-11-06T09:39:00.000Z",
+              "Level": "Warning",
+              "Category": "MyApp.Application.Services.TaskItemService",
+              "LogKey": "task.edit.not_found",
+              "MessageTemplate": "Task not updated: task {TaskId} does not exist in organization {OrganizationId}",
+              "Message": "Task not updated: task 3bacae47-53e2-4b38-a6e8-247dc15c6f88 does not exist in organization 66c6ccbe-54e4-40dd-a80a-c113c844e858",
+              "TraceId": "bc914c8c543946383e39d6f7bc42b1de",
+              "SpanId": "0f900849eac3ebef",
+              "Properties": {
+                "TaskId": "3bacae47-53e2-4b38-a6e8-247dc15c6f88",
+                "OrganizationId": "66c6ccbe-54e4-40dd-a80a-c113c844e858"
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": {
+      "signature": {
+        "id": "task.edit.not_found",
+        "kind": "keyed",
+        "match": {
+          "log_key": "task.edit.not_found"
+        },
+        "area": "tasks",
+        "user_story": "US-TASK-02",
+        "test_case": "TASK-EDIT-004",
+        "severity": "Warning",
+        "message": "This task no longer exists.",
+        "runbook": {
+          "anchor": "task-edit-not-found",
+          "path": "docs/areas/tasks/operations.md",
+          "text": "### Meaning\n\nA member saved changes to a task that was deleted by someone else while the edit form was open. The member sees \"This task no longer exists.\" and the changes are lost.\n\n### Check\n\n1. Confirm the task is gone: `sql_entity_read` with entity `task` and the task id from the entry; `found` must be false.\n2. Read `audit_trail_by_entity` (entity `task`) for the same id: a Delete entry shortly before the entry names who removed it.\n3. If the task still exists, the update was refused for the wrong reason: keep the trace id and hand over.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| sql_entity_read | entity=task, id={signal.Properties.TaskId} | found == false |\n\n### Resolve\n\n1. No action when the task is gone and the delete is in the history. If the user still needs the task, they create it again.\n2. Hand over to development when the task still exists.\n\n### History\n\nNone."
+        },
+        "rate": {
+          "expected_per_hour": 5
+        },
+        "fingerprint_by": [
+          "OrganizationId"
+        ],
+        "cause_category": "data_missing",
+        "status": "active",
+        "fixed_in": null,
+        "noise": null,
+        "rule_checks": [
+          {
+            "tool": "sql_entity_read",
+            "arguments": {
+              "entity": "task",
+              "id": "{signal.Properties.TaskId}"
+            },
+            "expect": "found == false"
+          }
+        ],
+        "history": []
+      },
+      "runbook": "### Meaning\n\nA member saved changes to a task that was deleted by someone else while the edit form was open. The member sees \"This task no longer exists.\" and the changes are lost.\n\n### Check\n\n1. Confirm the task is gone: `sql_entity_read` with entity `task` and the task id from the entry; `found` must be false.\n2. Read `audit_trail_by_entity` (entity `task`) for the same id: a Delete entry shortly before the entry names who removed it.\n3. If the task still exists, the update was refused for the wrong reason: keep the trace id and hand over.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| sql_entity_read | entity=task, id={signal.Properties.TaskId} | found == false |\n\n### Resolve\n\n1. No action when the task is gone and the delete is in the history. If the user still needs the task, they create it again.\n2. Hand over to development when the task still exists.\n\n### History\n\nNone."
+    },
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "explained",
+    "abstain_reason": null,
+    "cause_category": "data_missing",
+    "area": "tasks",
+    "user_story": "US-TASK-02",
+    "supporting_evidence": [
+      {
+        "tool": "audit_trail_by_entity",
+        "arguments": {
+          "entity": "task",
+          "id": "3bacae47-53e2-4b38-a6e8-247dc15c6f88"
+        }
+      }
+    ],
+    "min_calls": 1
+  },
+  "note": "Two calls are allowed and one is enough: the answer must come without spending the rest."
+}

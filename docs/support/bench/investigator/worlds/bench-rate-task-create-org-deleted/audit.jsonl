@@ -1,0 +1,1 @@
+{"Timestamp":"2026-11-06T09:10:02Z","EntityType":"Organization","EntityId":"576c16ed-63e2-4a66-a376-9acfe6b0e900","Action":"Update","UserId":"54e494fd-f6ad-4889-aae1-010e4356d72f","ChangedProperties":["IsDeleted"],"OldValues":{"IsDeleted":false},"NewValues":{"IsDeleted":true},"CorrelationId":"abe60f97cc0f8f82e8ba90895ee10fc7"}

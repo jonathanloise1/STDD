@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w20",
+ "app": "VetCare",
+ "sector": "veterinary clinic",
+ "split": "holdout",
+ "service": "vetcare-api",
+ "namespace": "VetCare.Application.Services",
+ "record": "appointment",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "visits",
+   "title": "Visits",
+   "verb": "book",
+   "stories": [
+    {
+     "id": "US-VISI-01",
+     "title": "Book a visit",
+     "test_case": "VISI-BOOK-001"
+    },
+    {
+     "id": "US-VISI-02",
+     "title": "Reschedule a visit",
+     "test_case": "VISI-BOOK-002"
+    }
+   ]
+  },
+  {
+   "id": "patients",
+   "title": "Patients",
+   "verb": "register",
+   "stories": [
+    {
+     "id": "US-PATI-01",
+     "title": "Register a patient",
+     "test_case": "PATI-REGISTER-001"
+    },
+    {
+     "id": "US-PATI-02",
+     "title": "Merge patients",
+     "test_case": "PATI-REGISTER-002"
+    }
+   ]
+  },
+  {
+   "id": "meds",
+   "title": "Medication",
+   "verb": "prescribe",
+   "stories": [
+    {
+     "id": "US-MEDS-01",
+     "title": "Prescribe a drug",
+     "test_case": "MEDS-PRESCRIB-001"
+    },
+    {
+     "id": "US-MEDS-02",
+     "title": "Stop a drug",
+     "test_case": "MEDS-PRESCRIB-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "appointment",
+   "description": "A appointment of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.Appointments",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Appointment",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "lab-gateway",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Vet:LabUrl",
+  "VetCare:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "visits.book.access_lost",
+   "level": "Warning",
+   "area": "visits",
+   "story": "US-VISI-01",
+   "test_case": "VISI-BOOK-005",
+   "category": "VetCare.Application.Services.VisitsService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "visits.book.not_found",
+   "level": "Warning",
+   "area": "visits",
+   "story": "US-VISI-02",
+   "test_case": "VISI-BOOK-006",
+   "category": "VetCare.Application.Services.VisitsService",
+   "template": "appointment {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "patients.register.duplicate_entry",
+   "level": "Warning",
+   "area": "patients",
+   "story": "US-PATI-01",
+   "test_case": "PATI-REGISTER-007",
+   "category": "VetCare.Application.Services.PatientsService",
+   "template": "appointment {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "patients.register.dependency_failed",
+   "level": "Error",
+   "area": "patients",
+   "story": "US-PATI-02",
+   "test_case": "PATI-REGISTER-008",
+   "category": "VetCare.Application.Services.PatientsService",
+   "template": "Call to {Dependency} failed for appointment {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "meds.prescribe.config_invalid",
+   "level": "Error",
+   "area": "meds",
+   "story": "US-MEDS-01",
+   "test_case": "MEDS-PRESCRIB-009",
+   "category": "VetCare.Application.Services.MedsService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "meds.prescribe.timed_out",
+   "level": "Error",
+   "area": "meds",
+   "story": "US-MEDS-02",
+   "test_case": "MEDS-PRESCRIB-010",
+   "category": "VetCare.Application.Services.MedsService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "visits.book.unhandled_error",
+   "level": "Error",
+   "area": "visits",
+   "story": "US-VISI-01",
+   "test_case": "VISI-BOOK-011",
+   "category": "VetCare.Application.Services.VisitsService",
+   "template": "Unhandled error while handling appointment {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "visits.book.input_rejected",
+   "level": "Warning",
+   "area": "visits",
+   "story": "US-VISI-02",
+   "test_case": "VISI-BOOK-012",
+   "category": "VetCare.Application.Services.VisitsService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "patients.register.high_volume",
+   "level": "Warning",
+   "area": "patients",
+   "story": "US-PATI-01",
+   "test_case": "PATI-REGISTER-013",
+   "category": "VetCare.Application.Services.PatientsService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "patients.register.component_failed",
+   "level": "Error",
+   "area": "patients",
+   "story": "US-PATI-02",
+   "test_case": "PATI-REGISTER-014",
+   "category": "VetCare.Application.Services.PatientsService",
+   "template": "Component {Component} failed for appointment {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "visits-book-access-lost",
+   "log_key": "visits.book.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-VISI-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "visits-book-not-found",
+   "log_key": "visits.book.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "appointment {RecordId} was not found when it was saved. See story US-VISI-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "patients-register-duplicate-entry",
+   "log_key": "patients.register.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "appointment {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-PATI-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "patients-register-dependency-failed",
+   "log_key": "patients.register.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for appointment {RecordId}. See story US-PATI-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "meds-prescribe-config-invalid",
+   "log_key": "meds.prescribe.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-MEDS-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "meds-prescribe-timed-out",
+   "log_key": "meds.prescribe.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-MEDS-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "visits-book-unhandled-error",
+   "log_key": "visits.book.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling appointment {RecordId}. See story US-VISI-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "visits-book-input-rejected",
+   "log_key": "visits.book.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-VISI-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "patients-register-high-volume",
+   "log_key": "patients.register.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-PATI-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "patients-register-component-failed",
+   "log_key": "patients.register.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for appointment {RecordId}. See story US-PATI-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

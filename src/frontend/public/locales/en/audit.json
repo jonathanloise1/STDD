@@ -1,0 +1,69 @@
+{
+  "title": "Audit Log",
+  "filterType": "Type",
+  "allTypes": "All types",
+  "dateFrom": "From",
+  "dateTo": "To",
+  "timestamp": "Date/Time",
+  "action": "Action",
+  "entityType": "Type",
+  "user": "User",
+  "changes": "Changes",
+  "details": "Details",
+  "oldValues": "Old Values",
+  "newValues": "New Values",
+  "empty": "No audit logs found.",
+  "totalChanges_one": "{{count}} change",
+  "totalChanges_other": "{{count}} changes",
+  "actions": {
+    "Create": "Create",
+    "Update": "Update",
+    "Delete": "Delete"
+  },
+  "types": {
+    "TaskItem": "Task",
+    "OrganizationUser": "Team member",
+    "Organization": "Organization",
+    "User": "User"
+  },
+  "values": {
+    "yes": "Yes",
+    "no": "No",
+    "Admin": "Admin",
+    "Editor": "Editor",
+    "Viewer": "Viewer",
+    "Active": "Active",
+    "Pending": "Pending",
+    "Disabled": "Removed",
+    "en": "English",
+    "it": "Italiano"
+  },
+  "fields": {
+    "title": "Title",
+    "description": "Description",
+    "status": "Status",
+    "dueDate": "Due Date",
+    "role": "Role",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "preferredLanguage": "Language",
+    "logoUrl": "Logo",
+    "legalName": "Legal Name",
+    "vatNumber": "VAT Number",
+    "fiscalCode": "Fiscal Code",
+    "billingEmail": "Billing Email",
+    "billingAddress": "Street Address",
+    "billingCity": "City",
+    "billingProvince": "Province",
+    "billingZipCode": "ZIP / Postal Code",
+    "billingCountryCode": "Country",
+    "Organization": {
+      "name": "Organization Name"
+    },
+    "OrganizationUser": {
+      "status": "Status"
+    },
+    "name": "Name"
+  }
+}

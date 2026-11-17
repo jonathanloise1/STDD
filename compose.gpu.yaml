@@ -1,0 +1,24 @@
+# Override that gives the model hosts an NVIDIA GPU (docs/guidelines/models.md 7.4). Use it with compose.yaml:
+#   docker compose -f compose.yaml -f compose.gpu.yaml --profile assistant-model up -d
+#
+# Needs a Linux or Windows (WSL 2) host with an NVIDIA GPU, its driver and the NVIDIA Container Toolkit.
+# macOS: Docker Desktop gives containers no GPU, so there the models run on the CPU (use compose.yaml alone;
+# for the GPU of an Apple silicon Mac run src/support/model-host/start.sh on the host instead).
+#
+# It swaps the image for the CUDA build of the llama.cpp server and reserves the GPU. The launcher (start.sh,
+# MODEL_HOST_DEVICE=auto) offloads every layer when it can and falls back to the CPU otherwise, so a host without
+# a working GPU still starts. Set LLAMA_SERVER_CUDA_IMAGE to pin another tag.
+x-gpu: &gpu
+  image: ${LLAMA_SERVER_CUDA_IMAGE:-ghcr.io/ggml-org/llama.cpp:server-cuda}
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+
+services:
+  assistant-model: *gpu
+  investigator-model: *gpu
+  teacher: *gpu

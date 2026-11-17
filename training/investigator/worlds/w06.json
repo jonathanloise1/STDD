@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w06",
+ "app": "RentWheel",
+ "sector": "car rental",
+ "split": "train",
+ "service": "rentwheel-api",
+ "namespace": "RentWheel.Application.Services",
+ "record": "rental",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "rentals",
+   "title": "Rentals",
+   "verb": "rent",
+   "stories": [
+    {
+     "id": "US-RENT-01",
+     "title": "Start a rental",
+     "test_case": "RENT-RENT-001"
+    },
+    {
+     "id": "US-RENT-02",
+     "title": "End a rental",
+     "test_case": "RENT-RENT-002"
+    }
+   ]
+  },
+  {
+   "id": "cars",
+   "title": "Cars",
+   "verb": "inspect",
+   "stories": [
+    {
+     "id": "US-CARS-01",
+     "title": "Inspect a car",
+     "test_case": "CARS-INSPECT-001"
+    },
+    {
+     "id": "US-CARS-02",
+     "title": "Move a car",
+     "test_case": "CARS-INSPECT-002"
+    }
+   ]
+  },
+  {
+   "id": "billing",
+   "title": "Billing",
+   "verb": "invoice",
+   "stories": [
+    {
+     "id": "US-BILL-01",
+     "title": "Create an invoice",
+     "test_case": "BILL-INVOICE-001"
+    },
+    {
+     "id": "US-BILL-02",
+     "title": "Apply a deposit",
+     "test_case": "BILL-INVOICE-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "rental",
+   "description": "A rental of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.Rentals",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Rental",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "insurance-api",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Rent:InsuranceUrl",
+  "RentWheel:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "rentals.rent.access_lost",
+   "level": "Warning",
+   "area": "rentals",
+   "story": "US-RENT-01",
+   "test_case": "RENT-RENT-005",
+   "category": "RentWheel.Application.Services.RentalsService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "rentals.rent.not_found",
+   "level": "Warning",
+   "area": "rentals",
+   "story": "US-RENT-02",
+   "test_case": "RENT-RENT-006",
+   "category": "RentWheel.Application.Services.RentalsService",
+   "template": "rental {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "cars.inspect.duplicate_entry",
+   "level": "Warning",
+   "area": "cars",
+   "story": "US-CARS-01",
+   "test_case": "CARS-INSPECT-007",
+   "category": "RentWheel.Application.Services.CarsService",
+   "template": "rental {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "cars.inspect.dependency_failed",
+   "level": "Error",
+   "area": "cars",
+   "story": "US-CARS-02",
+   "test_case": "CARS-INSPECT-008",
+   "category": "RentWheel.Application.Services.CarsService",
+   "template": "Call to {Dependency} failed for rental {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "billing.invoice.config_invalid",
+   "level": "Error",
+   "area": "billing",
+   "story": "US-BILL-01",
+   "test_case": "BILL-INVOICE-009",
+   "category": "RentWheel.Application.Services.BillingService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "billing.invoice.timed_out",
+   "level": "Error",
+   "area": "billing",
+   "story": "US-BILL-02",
+   "test_case": "BILL-INVOICE-010",
+   "category": "RentWheel.Application.Services.BillingService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "rentals.rent.unhandled_error",
+   "level": "Error",
+   "area": "rentals",
+   "story": "US-RENT-01",
+   "test_case": "RENT-RENT-011",
+   "category": "RentWheel.Application.Services.RentalsService",
+   "template": "Unhandled error while handling rental {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "rentals.rent.input_rejected",
+   "level": "Warning",
+   "area": "rentals",
+   "story": "US-RENT-02",
+   "test_case": "RENT-RENT-012",
+   "category": "RentWheel.Application.Services.RentalsService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "cars.inspect.high_volume",
+   "level": "Warning",
+   "area": "cars",
+   "story": "US-CARS-01",
+   "test_case": "CARS-INSPECT-013",
+   "category": "RentWheel.Application.Services.CarsService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "cars.inspect.component_failed",
+   "level": "Error",
+   "area": "cars",
+   "story": "US-CARS-02",
+   "test_case": "CARS-INSPECT-014",
+   "category": "RentWheel.Application.Services.CarsService",
+   "template": "Component {Component} failed for rental {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "rentals-rent-access-lost",
+   "log_key": "rentals.rent.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-RENT-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "rentals-rent-not-found",
+   "log_key": "rentals.rent.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "rental {RecordId} was not found when it was saved. See story US-RENT-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "cars-inspect-duplicate-entry",
+   "log_key": "cars.inspect.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "rental {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-CARS-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "cars-inspect-dependency-failed",
+   "log_key": "cars.inspect.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for rental {RecordId}. See story US-CARS-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "billing-invoice-config-invalid",
+   "log_key": "billing.invoice.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-BILL-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "billing-invoice-timed-out",
+   "log_key": "billing.invoice.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-BILL-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "rentals-rent-unhandled-error",
+   "log_key": "rentals.rent.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling rental {RecordId}. See story US-RENT-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "rentals-rent-input-rejected",
+   "log_key": "rentals.rent.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-RENT-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "cars-inspect-high-volume",
+   "log_key": "cars.inspect.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-CARS-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "cars-inspect-component-failed",
+   "log_key": "cars.inspect.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for rental {RecordId}. See story US-CARS-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

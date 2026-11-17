@@ -1,0 +1,60 @@
+{
+  "title": "Gestione Team",
+  "Members": "Membri",
+  "searchPlaceholder": "Cerca membri del team...",
+  "noMembers": "Nessun membro del team trovato",
+  "noMatchingMembers": "Nessun membro del team corrisponde alla ricerca",
+  "inviteButton": "Invita",
+  "inviteSent": "Invito inviato con successo",
+  "updateSuccess": "Membro aggiornato con successo",
+  "removeSuccess": "Membro rimosso con successo",
+  "confirmRemoveTitle": "Conferma Rimozione",
+  "pendingInvitations": "Inviti in Attesa",
+  "edit": {
+    "title": "Modifica Membro del Team",
+    "memberName": "Nome",
+    "memberEmail": "Email",
+    "role": "Ruolo",
+    "demotionWarning": "Stai rimuovendo i tuoi privilegi di Admin. Questa azione non può essere annullata da te stesso.",
+    "confirmDemotion": "Conferma Declassamento"
+  },
+  "remove": "Rimuovi",
+  "columns": {
+    "name": "Nome",
+    "email": "Email",
+    "role": "Ruolo",
+    "actions": "Azioni",
+    "sentAt": "Inviato il"
+  },
+  "invite": {
+    "title": "Invita Membro del Team",
+    "fullName": "Nome Completo",
+    "fullNamePlaceholder": "es. Mario Rossi",
+    "email": "Email",
+    "emailPlaceholder": "es. mario.rossi@azienda.com",
+    "role": "Ruolo",
+    "submit": "Invia Invito"
+  },
+  "roles": {
+    "admin": "Admin",
+    "admin.description": "Accesso completo a tutte le funzionalità, alle impostazioni dell'organizzazione, al team e al registro di audit.",
+    "editor": "Editor",
+    "editor.description": "Può creare, modificare ed eliminare attività. Nessun accesso alle impostazioni dell'organizzazione.",
+    "viewer": "Visualizzatore",
+    "viewer.description": "Accesso in sola lettura."
+  },
+  "validation": {
+    "fullNameRequired": "Il nome completo è obbligatorio",
+    "emailRequired": "L'indirizzo email è obbligatorio",
+    "emailInvalid": "Inserisci un indirizzo email valido"
+  },
+  "common": {
+    "cancel": "Annulla",
+    "goBack": "Torna indietro",
+    "save": "Salva",
+    "sending": "Invio in corso..."
+  },
+  "team": {
+    "confirmRemoveMessage": "Sei sicuro di voler rimuovere {{name}} dal team? Questa azione non può essere annullata."
+  }
+}

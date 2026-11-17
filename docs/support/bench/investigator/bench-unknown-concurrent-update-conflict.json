@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "id": "bench-unknown-concurrent-update-conflict",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "data_conflict",
+  "trigger": "unknown",
+  "class": "answerable",
+  "world_dir": "worlds/bench-unknown-concurrent-update-conflict",
+  "incident_id": "INC-bench-unknown-concurrent-update-conflict",
+  "budget_override": null,
+  "prompt": {
+    "incident": {
+      "trigger": "unknown",
+      "severity": "Error",
+      "environment": "prod",
+      "signature": {
+        "kind": "none",
+        "id": null,
+        "log_key": null,
+        "template_id": "t-264007e25bc5",
+        "template": "Task {TaskId} was changed by someone else"
+      },
+      "count": 3,
+      "rate_per_hour": 1,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T12:30:00.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T12:30:00.000Z",
+              "Level": "Error",
+              "Category": "MyApp.Application.Services.TaskItemService",
+              "MessageTemplate": "Task {TaskId} was changed by someone else",
+              "Message": "Task was changed by someone else",
+              "TraceId": "3cf939b1de7a96932550395dfdbd4c2f",
+              "SpanId": "cf60a285ee34cc69",
+              "Properties": {
+                "TaskId": "a4dc745b-be94-44ce-ae16-bcaefe939dce",
+                "OrganizationId": "5406dcc7-852a-4a17-a95a-2d407dd9b068"
+              },
+              "Exception": {
+                "Type": "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException",
+                "Message": "The database operation was expected to affect 1 row",
+                "Frames": [
+                  "MyApp.Application.Services.TaskItemService.SaveAsync"
+                ]
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": null,
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "explained",
+    "abstain_reason": null,
+    "cause_category": "data_conflict",
+    "area": null,
+    "user_story": null,
+    "supporting_evidence": [
+      {
+        "tool": "audit_trail_by_entity",
+        "arguments": {
+          "entity": "task",
+          "id": "a4dc745b-be94-44ce-ae16-bcaefe939dce"
+        }
+      }
+    ],
+    "min_calls": 1
+  }
+}

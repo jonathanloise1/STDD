@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "id": "bench-unknown-vendor-call-timeout-database",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "dependency",
+  "trigger": "unknown",
+  "class": "answerable",
+  "world_dir": "worlds/bench-unknown-vendor-call-timeout-database",
+  "incident_id": "INC-bench-unknown-vendor-call-timeout-database",
+  "budget_override": null,
+  "prompt": {
+    "incident": {
+      "trigger": "unknown",
+      "severity": "Error",
+      "environment": "prod",
+      "signature": {
+        "kind": "none",
+        "id": null,
+        "log_key": null,
+        "template_id": "t-a57af720ad28",
+        "template": "Export step {Step} timed out after {DurationMs} ms"
+      },
+      "count": 3,
+      "rate_per_hour": 1,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T12:30:00.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T12:30:00.000Z",
+              "Level": "Error",
+              "Category": "Vendor.Reports.Exporter",
+              "MessageTemplate": "Export step {Step} timed out after {DurationMs} ms",
+              "Message": "Export step load timed out after 30000 ms",
+              "TraceId": "e204018a20be89c49714b7c412a02ee8",
+              "SpanId": "b7deca314d755fff",
+              "Properties": {
+                "Step": "load",
+                "DurationMs": "30000"
+              },
+              "Exception": {
+                "Type": "System.TimeoutException",
+                "Message": "The operation has timed out",
+                "Frames": [
+                  "Vendor.Reports.Exporter.LoadAsync"
+                ]
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": null,
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "explained",
+    "abstain_reason": null,
+    "cause_category": "dependency_unavailable",
+    "area": null,
+    "user_story": null,
+    "supporting_evidence": [
+      {
+        "tool": "health_status",
+        "arguments": {}
+      }
+    ],
+    "min_calls": 1
+  }
+}

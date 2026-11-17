@@ -1,0 +1,15 @@
+{
+  "status": "Healthy",
+  "checks": [
+    {
+      "name": "sqlserver",
+      "status": "Healthy",
+      "durationMs": 6
+    },
+    {
+      "name": "disk",
+      "status": "Healthy",
+      "durationMs": 1
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "More": "Altro",
+  "Dashboard": "Dashboard",
+  "Settings": "Impostazioni",
+  "Logout": "Esci",
+  "settings.organization": "Organizzazione",
+  "settings.organization.billing": "Fatturazione",
+  "settings.team": "Team",
+  "menu.auditLog": "Registro di audit",
+  "menu.dashboard": "Dashboard",
+  "menu.tasks": "Attività",
+  "sidebar.pin": "Fissa menu",
+  "sidebar.unpin": "Sblocca menu",
+  "menu.team": "Team",
+  "menu.manual": "Manuale",
+  "menu.unansweredQuestions": "Domande senza risposta",
+  "menu.language": "Cambia lingua",
+  "menu.user": "Menu utente"
+}

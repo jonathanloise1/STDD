@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w19",
+ "app": "MarinaOne",
+ "sector": "boat marina",
+ "split": "validation",
+ "service": "marinaone-api",
+ "namespace": "MarinaOne.Application.Services",
+ "record": "berth_booking",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "berths",
+   "title": "Berths",
+   "verb": "assign",
+   "stories": [
+    {
+     "id": "US-BERT-01",
+     "title": "Assign a berth",
+     "test_case": "BERT-ASSIGN-001"
+    },
+    {
+     "id": "US-BERT-02",
+     "title": "Free a berth",
+     "test_case": "BERT-ASSIGN-002"
+    }
+   ]
+  },
+  {
+   "id": "boats",
+   "title": "Boats",
+   "verb": "register",
+   "stories": [
+    {
+     "id": "US-BOAT-01",
+     "title": "Register a boat",
+     "test_case": "BOAT-REGISTER-001"
+    },
+    {
+     "id": "US-BOAT-02",
+     "title": "Update a boat",
+     "test_case": "BOAT-REGISTER-002"
+    }
+   ]
+  },
+  {
+   "id": "fuel",
+   "title": "Fuel",
+   "verb": "sell",
+   "stories": [
+    {
+     "id": "US-FUEL-01",
+     "title": "Sell fuel",
+     "test_case": "FUEL-SELL-001"
+    },
+    {
+     "id": "US-FUEL-02",
+     "title": "Void a sale",
+     "test_case": "FUEL-SELL-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "berth_booking",
+   "description": "A berth booking of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.BerthBookings",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "BerthBooking",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "weather-feed",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Marina:WeatherUrl",
+  "MarinaOne:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "berths.assign.access_lost",
+   "level": "Warning",
+   "area": "berths",
+   "story": "US-BERT-01",
+   "test_case": "BERT-ASSIGN-005",
+   "category": "MarinaOne.Application.Services.BerthsService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "berths.assign.not_found",
+   "level": "Warning",
+   "area": "berths",
+   "story": "US-BERT-02",
+   "test_case": "BERT-ASSIGN-006",
+   "category": "MarinaOne.Application.Services.BerthsService",
+   "template": "berth booking {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "boats.register.duplicate_entry",
+   "level": "Warning",
+   "area": "boats",
+   "story": "US-BOAT-01",
+   "test_case": "BOAT-REGISTER-007",
+   "category": "MarinaOne.Application.Services.BoatsService",
+   "template": "berth booking {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "boats.register.dependency_failed",
+   "level": "Error",
+   "area": "boats",
+   "story": "US-BOAT-02",
+   "test_case": "BOAT-REGISTER-008",
+   "category": "MarinaOne.Application.Services.BoatsService",
+   "template": "Call to {Dependency} failed for berth booking {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "fuel.sell.config_invalid",
+   "level": "Error",
+   "area": "fuel",
+   "story": "US-FUEL-01",
+   "test_case": "FUEL-SELL-009",
+   "category": "MarinaOne.Application.Services.FuelService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "fuel.sell.timed_out",
+   "level": "Error",
+   "area": "fuel",
+   "story": "US-FUEL-02",
+   "test_case": "FUEL-SELL-010",
+   "category": "MarinaOne.Application.Services.FuelService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "berths.assign.unhandled_error",
+   "level": "Error",
+   "area": "berths",
+   "story": "US-BERT-01",
+   "test_case": "BERT-ASSIGN-011",
+   "category": "MarinaOne.Application.Services.BerthsService",
+   "template": "Unhandled error while handling berth booking {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "berths.assign.input_rejected",
+   "level": "Warning",
+   "area": "berths",
+   "story": "US-BERT-02",
+   "test_case": "BERT-ASSIGN-012",
+   "category": "MarinaOne.Application.Services.BerthsService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "boats.register.high_volume",
+   "level": "Warning",
+   "area": "boats",
+   "story": "US-BOAT-01",
+   "test_case": "BOAT-REGISTER-013",
+   "category": "MarinaOne.Application.Services.BoatsService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "boats.register.component_failed",
+   "level": "Error",
+   "area": "boats",
+   "story": "US-BOAT-02",
+   "test_case": "BOAT-REGISTER-014",
+   "category": "MarinaOne.Application.Services.BoatsService",
+   "template": "Component {Component} failed for berth booking {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "berths-assign-access-lost",
+   "log_key": "berths.assign.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-BERT-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "berths-assign-not-found",
+   "log_key": "berths.assign.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "berth booking {RecordId} was not found when it was saved. See story US-BERT-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "boats-register-duplicate-entry",
+   "log_key": "boats.register.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "berth booking {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-BOAT-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "boats-register-dependency-failed",
+   "log_key": "boats.register.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for berth booking {RecordId}. See story US-BOAT-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "fuel-sell-config-invalid",
+   "log_key": "fuel.sell.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-FUEL-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "fuel-sell-timed-out",
+   "log_key": "fuel.sell.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-FUEL-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "berths-assign-unhandled-error",
+   "log_key": "berths.assign.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling berth booking {RecordId}. See story US-BERT-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "berths-assign-input-rejected",
+   "log_key": "berths.assign.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-BERT-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "boats-register-high-volume",
+   "log_key": "boats.register.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-BOAT-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "boats-register-component-failed",
+   "log_key": "boats.register.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for berth booking {RecordId}. See story US-BOAT-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

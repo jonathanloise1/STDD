@@ -1,0 +1,63 @@
+@using MyApp.Monitor.Store
+@inject IIncidentStore Store
+@{
+    var failed = await Store.NotificationsAsync(kind: "failed", limit: 20);
+    var section = ViewData["Section"] as string ?? "";
+    string Active(string name) => section == name ? "active" : "";
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@(ViewData["Title"] ?? "Monitor") - MyApp Monitor</title>
+    <style>
+        :root { color-scheme: light dark; --bg:#f6f7f9; --fg:#1d2330; --muted:#5d6676; --card:#fff; --line:#d9dde4; --accent:#1f5fbf; --bad:#b3261e; --warn:#8a5a00; --ok:#1b6e3c; }
+        @@media (prefers-color-scheme: dark) { :root { --bg:#14171d; --fg:#e6e9ef; --muted:#9aa3b2; --card:#1c2029; --line:#2d3340; --accent:#7aa7f0; --bad:#ff8a80; --warn:#f0c060; --ok:#6fcf97; } }
+        body { margin:0; font:14px/1.45 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+        header { background:var(--card); border-bottom:1px solid var(--line); padding:0 16px; display:flex; gap:4px; flex-wrap:wrap; align-items:center; }
+        header strong { margin-right:12px; }
+        header a { color:var(--fg); text-decoration:none; padding:12px 10px; border-bottom:3px solid transparent; }
+        header a.active { border-bottom-color:var(--accent); font-weight:600; }
+        main { max-width:1200px; margin:0 auto; padding:16px; }
+        h1 { font-size:20px; margin:0 0 12px; } h2 { font-size:16px; margin:20px 0 8px; }
+        table { border-collapse:collapse; width:100%; background:var(--card); border:1px solid var(--line); }
+        th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+        th { color:var(--muted); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.03em; }
+        .scroll { overflow-x:auto; }
+        .card { background:var(--card); border:1px solid var(--line); border-radius:6px; padding:12px; margin-bottom:12px; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px; }
+        .pill { display:inline-block; padding:1px 8px; border-radius:10px; font-size:12px; border:1px solid var(--line); }
+        .Critical, .Error, .failed, .Unhealthy { color:var(--bad); } .Warning, .draft, .Degraded { color:var(--warn); } .Healthy, .sent, .ok { color:var(--ok); }
+        .banner { padding:8px 16px; background:var(--bad); color:#fff; } .banner a { color:#fff; }
+        .message { padding:8px 12px; border-radius:6px; margin-bottom:12px; border:1px solid var(--line); background:var(--card); }
+        .message.error { border-color:var(--bad); color:var(--bad); }
+        .muted { color:var(--muted); } code, pre { font-family:ui-monospace, monospace; font-size:12px; } pre { white-space:pre-wrap; word-break:break-word; background:var(--bg); padding:8px; border-radius:4px; margin:4px 0; }
+        form.inline { display:inline; } label { display:inline-block; margin-right:8px; } input, select, textarea, button { font:inherit; padding:4px 8px; border:1px solid var(--line); border-radius:4px; background:var(--card); color:var(--fg); }
+        button { cursor:pointer; background:var(--accent); color:#fff; border-color:var(--accent); } button.secondary { background:var(--card); color:var(--fg); border-color:var(--line); }
+        a { color:var(--accent); }
+        @@media (max-width: 600px) { main { padding:12px; } }
+    </style>
+</head>
+<body>
+    <header>
+        <strong>MyApp Monitor</strong>
+        <a class="@Active("open")" href="/">Open incidents</a>
+        <a class="@Active("drafts")" href="/drafts">Drafts</a>
+        <a class="@Active("search")" href="/search">Search</a>
+        <a class="@Active("signals")" href="/signals">Signals</a>
+        <a class="@Active("review")" href="/review">Review</a>
+        <a class="@Active("sources")" href="/sources">Sources</a>
+    </header>
+    @if (failed.Count > 0)
+    {
+        <div class="banner" role="alert">
+            Error: @failed.Count notification(s) could not be delivered, latest for
+            @if (failed[0].IncidentId.StartsWith("INC-")) { <a href="/incidents/@failed[0].IncidentId">@failed[0].IncidentId</a> } else { <span>@failed[0].IncidentId</span> } (@failed[0].Channel).
+        </div>
+    }
+    <main>
+        @RenderBody()
+    </main>
+</body>
+</html>

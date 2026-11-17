@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "note": "Hub ids, pinned revisions, licences and sizes were read from the model cards on 2026-11-16 (task L3 of the next-steps plan); `verified` stays false until the owner confirms each entry on the Windows PC (models.md 9.1). Before a real run the owner also reviews the licence for commercial use and redistribution of fine-tuned weights (models.md 6.1). `eval --candidates` and `train` skip entries whose `verified` is false unless --allow-unverified is given. All Qwen3.5 repositories are multimodal (`...ForConditionalGeneration`, with a vision tower) and are used text-only (models.md 6.2). Thinking is on by default for some Qwen3.5 sizes, so every entry passes `enable_thinking: false`; the Qwen3 `/think` and `/nothink` switches are not supported. `trainable: false` marks an untrained-only candidate: `eval` and `export` accept it, `train` refuses it, the lock records it. `tool_role` is `user` for every Qwen3.5 and later entry: their chat template renders a `tool` message inside `<tool_response>` tags, which is the model's own tool format, and the investigator protocol (training/investigator/protocol.json, operations.md 11.3) is the single definition of how a result looks. With `user` the protocol's result turn is sent as a plain user turn (training, export template check and evaluation). The parameter ceiling `max_parameters` applies to trainable candidates only; an untrained-only candidate is limited by the machine that serves it.",
+  "max_parameters": 14000000000,
+  "candidates": [
+    {
+      "id": "qwen3.5-2b",
+      "tier": "small",
+      "hub_id": "Qwen/Qwen3.5-2B",
+      "revision": "15852e8c16360a2fea060d615a32b45270f8a8fc",
+      "parameters": 2000000000,
+      "license": "Apache-2.0",
+      "context_length": 262144,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      },
+      "kind": "base",
+      "verified": false,
+      "checked": {
+        "date": "2026-11-16",
+        "source": "Hugging Face model card, read in the L1/L2 research and fixed in the L3 decision; not yet confirmed on the owner's PC"
+      },
+      "tool_role": "user"
+    },
+    {
+      "id": "qwen3.5-4b",
+      "tier": "small",
+      "hub_id": "Qwen/Qwen3.5-4B",
+      "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+      "parameters": 4000000000,
+      "license": "Apache-2.0",
+      "context_length": 262144,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      },
+      "kind": "base",
+      "verified": false,
+      "checked": {
+        "date": "2026-11-16",
+        "source": "Hugging Face model card, read in the L1/L2 research and fixed in the L3 decision; not yet confirmed on the owner's PC"
+      },
+      "tool_role": "user"
+    },
+    {
+      "id": "qwen3.5-9b",
+      "tier": "large",
+      "hub_id": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+      "parameters": 9000000000,
+      "license": "Apache-2.0",
+      "context_length": 262144,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      },
+      "kind": "base",
+      "verified": false,
+      "checked": {
+        "date": "2026-11-16",
+        "source": "Hugging Face model card, read in the L1/L2 research and fixed in the L3 decision; not yet confirmed on the owner's PC"
+      },
+      "tool_role": "user",
+      "alternative_note": "Trainable alternative of the large tier, trained only if the untrained MoE candidate fails."
+    },
+    {
+      "id": "qwen3.6-35b-a3b",
+      "tier": "large",
+      "hub_id": "Qwen/Qwen3.6-35B-A3B",
+      "revision": "345d467b117d1fd5eda9b879a5988de9ae5f47a7",
+      "parameters": 35000000000,
+      "license": "Apache-2.0",
+      "context_length": 262144,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      },
+      "kind": "base",
+      "verified": false,
+      "checked": {
+        "date": "2026-11-16",
+        "source": "Hugging Face model card, read in the L1/L2 research and fixed in the L3 decision; not yet confirmed on the owner's PC"
+      },
+      "tool_role": "user",
+      "trainable": false,
+      "active_parameters": 3000000000,
+      "gguf": {
+        "repo": "unsloth/Qwen3.6-35B-A3B-GGUF",
+        "file": "Qwen3.6-35B-A3B-Q4_K_M.gguf",
+        "path": "investigator/Qwen3.6-35B-A3B-Q4_K_M.gguf",
+        "quantization": "Q4_K_M",
+        "sha256": null,
+        "note": "A community 4-bit conversion of the pinned Qwen/Qwen3.6-35B-A3B (the repository and file name are the expected ones and are UNVERIFIED: confirm them on the Hugging Face page and take the exact file name), or one made with llama.cpp from the pinned revision on a machine with enough memory. Why it exists: the BF16 weights (about 70 GB) do not fit a consumer GPU, so `eval --candidates` refuses this candidate without it, and `export --candidate` from BF16 needs about 80 GB of RAM and 165 GB of disk. Download the file into the weights folder (MYAPP_MODELS_DIR, default ~/myapp-models; never into the repository), run `python -m training.common.weights FILE` and write the result into `sha256`. Both `eval --candidates` and `export --candidate` refuse the file while `sha256` is null or does not match. `export --candidate` links the file into the run and records its hash in the lock (the exports files list); `--from-bf16` ignores this block."
+      },
+      "untrained_note": "Mixture of experts, 3B active. Used untrained with the protocol prompt and the report grammar, served as a 4-bit GGUF. LoRA on its fused expert tensors is not supported by the standard PEFT target modules."
+    }
+  ]
+}

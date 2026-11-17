@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "id": "bench-abstain-insufficient-single-line",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "component",
+  "trigger": "unknown",
+  "class": "abstain",
+  "world_dir": "worlds/bench-abstain-insufficient-single-line",
+  "incident_id": "INC-bench-abstain-insufficient-single-line",
+  "budget_override": null,
+  "prompt": {
+    "incident": {
+      "trigger": "unknown",
+      "severity": "Warning",
+      "environment": "prod",
+      "signature": {
+        "kind": "none",
+        "id": null,
+        "log_key": null,
+        "template_id": "t-f9f2d9d8e5eb",
+        "template": "Cache entry {Key} was rebuilt after {Count} misses"
+      },
+      "count": 3,
+      "rate_per_hour": 1,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T07:10:00.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T07:10:00.000Z",
+              "Level": "Warning",
+              "Category": "MyApp.Infrastructure.Caching.CountCache",
+              "MessageTemplate": "Cache entry {Key} was rebuilt after {Count} misses",
+              "Message": "Cache entry dashboard-counts was rebuilt after 3 misses",
+              "TraceId": "bb7fc8c89a750c7373838bfb26e874de",
+              "SpanId": "297d2c5682e7f5e5",
+              "Properties": {
+                "Key": "dashboard-counts",
+                "Count": "3"
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": null,
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "abstain",
+    "abstain_reason": "insufficient_evidence",
+    "cause_category": "unknown",
+    "area": null,
+    "user_story": null,
+    "supporting_evidence": [],
+    "min_calls": 1
+  }
+}

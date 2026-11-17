@@ -1,0 +1,20 @@
+{
+  "title": "[{{severity}}] {{signature.id}} in {{environment}} ({{id}})",
+  "incident_id": "{{json:id}}",
+  "fingerprint": "{{json:fingerprint}}",
+  "severity": "{{json:severity}}",
+  "trigger": "{{json:trigger}}",
+  "signature": "{{json:signature.id}}",
+  "area": "{{json:area}}",
+  "user_story": "{{json:user_story}}",
+  "test_case": "{{json:test_case}}",
+  "trace_id": "{{json:correlation.trace_ids.0}}",
+  "count": "{{json:count}}",
+  "first_seen": "{{json:first_seen}}",
+  "last_seen": "{{json:last_seen}}",
+  "rule_verdict": "{{json:rule_verdict.cause}}",
+  "model_verdict": "{{json:model_verdict.cause}}",
+  "runbook": "{{json:runbook.path}}#{{json:runbook.anchor}}",
+  "dashboard_url": "{{json:dashboard_url}}",
+  "description": "{{json:evidence_lines}}"
+}

@@ -1,0 +1,73 @@
+@page "/sources"
+@model SourcesModel
+@{
+    ViewData["Title"] = "Sources";
+    ViewData["Section"] = "sources";
+    var profile = Model.Context.Profile;
+}
+<h1>Sources</h1>
+
+<div class="grid">
+    <div class="card">
+        <strong>Operations pack</strong>
+        <div>Version <code>@Model.Context.Pack.Version</code></div>
+        <div>Profile <code>@profile.Name</code>, environment <code>@Model.Context.Runtime.Environment</code></div>
+        <div class="muted">@(Model.Status.PackPath ?? "built locally") @(Model.Status.Watching ? "(watched for a new pack)" : "(not watched)")</div>
+        @if (Model.Status.PackLoadedAt is not null) { <div class="muted">Replaced at @Fmt.Time(Model.Status.PackLoadedAt)</div> }
+        @if (Model.Status.PackError is not null) { <div class="message error">A new pack was refused at @Fmt.Time(Model.Status.PackErrorAt): @Model.Status.PackError</div> }
+    </div>
+    <div class="card">
+        <strong>Investigator</strong>
+        @{ var inv = Model.InvestigatorStatus; }
+        <div>State <code>@inv.State</code>@if (inv.Tier is not null) { <text>, tier <code>@inv.Tier</code></text> }@if (inv.Device is not null) { <text>, device <code>@inv.Device</code></text> }@if (inv.ModelVersion is not null) { <text>, model <code>@inv.ModelVersion</code></text> }</div>
+        <div class="muted">@(inv.IsReady ? "The host answers residual cases. " : "No host is answering: residual cases keep their rule verdict (rules only). ")@inv.Reason</div>
+        <div class="muted">Profile tier <code>@profile.Investigator.Tier</code>, device <code>@profile.Investigator.Device</code>. @inv.Completed done, @inv.Failed failed (@inv.ConsecutiveFailures in a row)@(inv.CheckedAt is null ? "" : ", checked " + Fmt.Time(inv.CheckedAt)).</div>
+    </div>
+    <div class="card">
+        <strong>Store</strong>
+        <div><code>@Model.Status.StorePath</code></div>
+        <div class="muted">Schema version @Model.Status.StoreSchemaVersion, retention @profile.Store.RetentionDays days. Started @Fmt.Time(Model.Status.StartedAt).</div>
+    </div>
+</div>
+
+<h2>Source health</h2>
+@if (Model.Health.Count == 0) { <p class="muted">No source is running.</p> }
+else
+{
+    <div class="scroll"><table>
+        <thead><tr><th>Source</th><th>Kind</th><th>Status</th><th>Error</th><th>Last success</th><th>Unhealthy since</th><th>Details</th></tr></thead>
+        <tbody>
+        @foreach (var h in Model.Health)
+        {
+            <tr><td><code>@h.SourceId</code></td><td>@h.Kind</td><td class="@h.Status">@h.Status</td><td>@h.Error</td><td>@Fmt.Time(h.LastSuccess)</td><td>@Fmt.Time(h.UnhealthySince)</td>
+                <td>@string.Join(", ", h.Details.Select(d => d.Key + "=" + d.Value))</td></tr>
+        }
+        </tbody>
+    </table></div>
+}
+
+<h2>File offsets</h2>
+@if (Model.Offsets.Count == 0) { <p class="muted">No file position saved.</p> }
+else
+{
+    <div class="scroll"><table>
+        <thead><tr><th>Source</th><th>Path</th><th>Offset (bytes)</th><th>Head hash</th><th>Updated</th></tr></thead>
+        <tbody>@foreach (var o in Model.Offsets) { <tr><td>@o.SourceId</td><td><code>@o.Path</code></td><td>@o.Offset</td><td><code>@o.HeadHash[..12]</code></td><td>@Fmt.Time(o.UpdatedAt)</td></tr> }</tbody>
+    </table></div>
+}
+
+<h2>Watermarks</h2>
+@if (Model.Watermarks.Count == 0) { <p class="muted">No query watermark saved.</p> }
+else
+{
+    <table><thead><tr><th>Source</th><th>Watermark</th></tr></thead>
+    <tbody>@foreach (var w in Model.Watermarks) { <tr><td>@w.Key</td><td><code>@w.Value</code></td></tr> }</tbody></table>
+}
+
+<h2>Discovery</h2>
+@if (Model.Discovered.Count == 0) { <p class="muted">No resource discovered (cached for 6 hours when a cloud source discovers its workspace).</p> }
+else
+{
+    <table><thead><tr><th>Source</th><th>Resource</th><th>Refreshed</th></tr></thead>
+    <tbody>@foreach (var d in Model.Discovered) { <tr><td>@d.SourceId</td><td><code>@d.ResourceId</code></td><td>@Fmt.Time(d.RefreshedAt)</td></tr> }</tbody></table>
+}

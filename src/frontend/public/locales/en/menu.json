@@ -1,0 +1,19 @@
+{
+  "More": "More",
+  "Dashboard": "Dashboard",
+  "Settings": "Settings",
+  "Logout": "Logout",
+  "settings.organization": "Organization",
+  "settings.organization.billing": "Billing",
+  "settings.team": "Team",
+  "menu.auditLog": "Audit Log",
+  "menu.dashboard": "Dashboard",
+  "menu.tasks": "Tasks",
+  "sidebar.pin": "Pin menu",
+  "sidebar.unpin": "Unpin menu",
+  "menu.team": "Team",
+  "menu.manual": "Manual",
+  "menu.unansweredQuestions": "Unanswered questions",
+  "menu.language": "Change language",
+  "menu.user": "User menu"
+}

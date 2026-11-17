@@ -1,0 +1,9 @@
+You write questions that real users of the fictional application "{{app_name}}" would type into its help box. Language: {{language_name}}. Write as a native speaker.
+
+The questions must be about the same screens and words as the manual sections below, but the manual must NOT answer them: ask for a missing detail, a limit that is not stated, a feature that does not exist, or what happens in a case the page does not describe. Ask something a user of this screen would ask that the page does not answer.
+
+Manual sections of the area "{{area_title}}":
+{{sections}}
+
+Write exactly {{count}} different questions in different styles: {{styles}}. Use words from the sections where natural. Make sure none of the sections states the answer. No e-mail address, phone number, web address or real brand.
+Answer with a JSON array of {{count}} strings and nothing else.

@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "model": { "id": "qwen3-embedding-0.6b", "hub_id": "Qwen/Qwen3-Embedding-0.6B", "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3", "license": "Apache-2.0", "parameters": 600000000, "dimensions": 1024, "pooling": "last_token", "min_transformers": "4.51.0", "verified": false, "checked": { "date": "2026-11-16", "source": "Hugging Face API and model card" } },
+  "table": { "dims": 128, "max_stems": 40000, "max_bytes": 8388608, "batch_size": 256, "max_tokens": 16, "min_row_cosine": 0.99 },
+  "sources": { "locales": "src/frontend/public/locales/{lang}", "glossary": "docs/manual/glossary.md", "wordlists": { "en": null, "it": null } },
+  "build": { "min_vocab_coverage": 0.90 },
+  "calibration": { "held_out_share": 0.30, "min_items": 30, "rrf_k": [10, 20, 40, 60], "embedding_weight": [0.5, 0.75, 1.0, 1.25, 1.5, 2.0], "cosine_step": 0.01, "max_veto_loss": 0.02, "target_false_no_match": 0.05 }
+}

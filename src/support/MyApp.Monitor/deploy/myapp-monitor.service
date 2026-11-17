@@ -1,0 +1,47 @@
+# systemd unit for the monitor (docs/guidelines/operations.md 14.3, Linux service).
+#
+# Install:
+#   dotnet publish src/support/MyApp.Monitor -c Release -o /opt/myapp-monitor
+#   copy the operations pack (pack build --profile onprem) to /opt/myapp-monitor/pack
+#   create /etc/myapp-monitor/monitor.env with the secrets (mode 0600, owner root), for example:
+#       Monitor__Masking__HashKey=<at least 32 bytes>
+#       Monitor__Connections__main-db=<read-only SQL login connection string>
+#       Monitor__Settings__LogGlob=/var/log/myapp/myapp-api-*.jsonl
+#       Monitor__Settings__ApiBaseUrl=http://localhost:5000
+#   sudo cp deploy/myapp-monitor.service /etc/systemd/system/ && sudo systemctl enable --now myapp-monitor
+#
+# The monitor never prompts: a missing secret or an invalid pack stops the start with one Critical log entry,
+# which `journalctl -u myapp-monitor` shows. UseSystemd() makes it report readiness and log to the journal.
+[Unit]
+Description=MyApp monitor (incident loop, dashboard, notifications)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+ExecStart=/opt/myapp-monitor/MyApp.Monitor run --profile onprem --pack /opt/myapp-monitor/pack
+WorkingDirectory=/opt/myapp-monitor
+EnvironmentFile=/etc/myapp-monitor/monitor.env
+# the store (data/monitor.db) lives under the state directory: /var/lib/myapp-monitor
+StateDirectory=myapp-monitor
+Environment=Monitor__ContentRoot=/var/lib/myapp-monitor
+Environment=Monitor__Settings__DashboardAuth=local
+User=myapp-monitor
+Group=myapp-monitor
+Restart=on-failure
+RestartSec=10
+# a graceful stop lets the batch in flight finish and its checkpoint be saved
+TimeoutStopSec=60
+KillSignal=SIGTERM
+
+# read-only monitor: it writes only to its own store and log
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/myapp-monitor
+# the application's log folder is read, never written
+ReadOnlyPaths=/var/log/myapp
+
+[Install]
+WantedBy=multi-user.target

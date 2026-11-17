@@ -1,0 +1,3653 @@
+{
+ "schema_version": 1,
+ "retrieval": {
+  "schema_version": 3,
+  "bm25": {
+   "k1": 1.2,
+   "b": 0.75,
+   "field_weights": {
+    "title": 2,
+    "text": 1,
+    "questions": 1.5
+   }
+  },
+  "candidates": 10,
+  "diversify": "page",
+  "out_of_scope": {
+   "min_coverage": 0.4,
+   "min_cosine": 0.55,
+   "min_cosine_lexical": -1,
+   "min_query_terms": 1
+  },
+  "fusion": {
+   "method": "rrf",
+   "depth": 30,
+   "rrf_k": 60,
+   "embedding_weight": 1
+  }
+ },
+ "languages": {
+  "en": {
+   "table_sha256": "f9426653a7daf31177840e2f7e4d81c70ed64e6bc1e88aa5a74bc01ed7a5e237",
+   "sections": [
+    {
+     "id": "tasks/US-TASK-01#overview",
+     "title": "Create a task",
+     "text": "Use this page to add a task with a title. The team can see what needs to be done.",
+     "questions": [
+      "How do I add something new to the team's to-do list?",
+      "Why does the form refuse to save when the name is blank?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-01#steps",
+     "title": "Create a task - Steps",
+     "text": "1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type a value.\n4. Click \"Create Task\".",
+     "questions": [
+      "How do I add something new to the team's to-do list?",
+      "Why does the form refuse to save when the name is blank?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-01#problems",
+     "title": "Create a task - If something goes wrong",
+     "text": "\"Enter a title.\". What to do: Type a title in the Title field.",
+     "questions": [
+      "How do I add something new to the team's to-do list?",
+      "Why does the form refuse to save when the name is blank?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-02#overview",
+     "title": "Edit a task",
+     "text": "Use this page to change the title or the status of a task.",
+     "questions": [
+      "Can I fix a typo in a task?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-02#steps",
+     "title": "Edit a task - Steps",
+     "text": "1. Open the Tasks page.\n2. Click the pencil next to the task.\n3. Change the title or the status.\n4. Click \"Save\".",
+     "questions": [
+      "Can I fix a typo in a task?"
+     ]
+    },
+    {
+     "id": "team/US-TEAM-01#overview",
+     "title": "Invite a colleague",
+     "text": "Send an invitation by e-mail so that a colleague can join your organization.",
+     "questions": []
+    },
+    {
+     "id": "team/US-TEAM-01#rules",
+     "title": "Invite a colleague - Good to know",
+     "text": "- An invitation expires after seven days.\n- Only an admin can invite people.",
+     "questions": []
+    },
+    {
+     "id": "home#overview",
+     "title": "MyApp",
+     "text": "Use this manual to find out how to use MyApp.",
+     "questions": []
+    },
+    {
+     "id": "home#blank",
+     "title": "A",
+     "text": "the and of",
+     "questions": []
+    },
+    {
+     "id": "home#rare",
+     "title": "Zyzzyva",
+     "text": "Zyzzyva zyzzyva",
+     "questions": []
+    }
+   ],
+   "glossary": [
+    {
+     "term": "task",
+     "aliases": [
+      "job",
+      "to-do item"
+     ]
+    },
+    {
+     "term": "organization",
+     "aliases": [
+      "company"
+     ]
+    },
+    {
+     "term": "due date",
+     "aliases": [
+      "deadline"
+     ]
+    },
+    {
+     "term": "manual",
+     "aliases": [
+      "guide"
+     ]
+    }
+   ],
+   "section_vectors": [
+    [
+     -0.8434371885232058,
+     -0.07413794176858628,
+     -0.3238655462129019,
+     0.006532168966945939,
+     0.25436747811521576,
+     -0.12289318564232476,
+     -0.20533784823499837,
+     -0.04873969739124961,
+     -0.07447867893757792,
+     -0.00789899433145656,
+     -0.059958724248567435,
+     -0.14582324675213806,
+     -0.0021229978563363987,
+     -0.09648985282677996,
+     0.09217638113201716,
+     -0.07457046761284426
+    ],
+    [
+     -0.8841154056834403,
+     -0.06684053587299525,
+     -0.22509130262303303,
+     -0.011815231467877307,
+     0.13264415635613247,
+     -0.20644272993109772,
+     -0.07751778616993343,
+     0.03121917224415232,
+     -0.05557207260900148,
+     -0.06798359911766766,
+     -0.09253011203800686,
+     -0.18221672785073162,
+     0.04729388843666098,
+     -0.18885759632263638,
+     0.04993684533918116,
+     -0.07744356978480159
+    ],
+    [
+     -0.7448460654750222,
+     -0.03233894896859035,
+     -0.17117905765721544,
+     -0.015418954077219625,
+     0.36526019608105675,
+     -0.1760510663751407,
+     -0.18821698845333745,
+     0.07951789644507677,
+     -0.202363829398136,
+     -0.24887943887167596,
+     -0.23942235799414935,
+     -0.16413066088196543,
+     0.0869977774794564,
+     -0.10171327503065924,
+     0.0566110089050703,
+     0.01370233434065861
+    ],
+    [
+     -0.9050078753741811,
+     -0.19940466055085984,
+     -0.2892457760617159,
+     -0.062356841807114254,
+     -0.14541477900125765,
+     -0.07065218402994264,
+     -0.051905428533713514,
+     0.025180687730221377,
+     0.12983602922103307,
+     -0.026105684600312734,
+     0.026652401057847264,
+     -0.0029149509516390214,
+     0.034753583723718756,
+     -0.05989810310200711,
+     -0.03355407148199926,
+     0.0015439696144492452
+    ],
+    [
+     -0.8881052984552137,
+     -0.11609010540825689,
+     -0.15970804112077855,
+     -0.06248733130875126,
+     -0.28352021368754005,
+     -0.08976149765402584,
+     0.03381504179231792,
+     0.04828428425689867,
+     0.19902247074352047,
+     0.011202714509062123,
+     -0.036860792523881906,
+     -0.009299490483622587,
+     0.10582570214294833,
+     -0.13815334447349062,
+     -0.05325018586778073,
+     -0.046512608839190846
+    ],
+    [
+     0.8899456279587781,
+     -0.07812217137599015,
+     -0.393651689159942,
+     0.0733396715104735,
+     -0.05269139728821422,
+     -0.09302826185786339,
+     0.028092558322532456,
+     0.033423408871107216,
+     0.05462306446180217,
+     -0.11430752577242904,
+     -0.04977146342113569,
+     -0.021621382553716366,
+     -0.013858746212426385,
+     -0.012502533754451381,
+     0.08925189100172817,
+     0.030125375622433833
+    ],
+    [
+     0.8405052401068329,
+     -0.16702122542254966,
+     -0.3070637855884457,
+     -0.11825636291277752,
+     -0.019182259776832,
+     -0.04846861317160506,
+     -0.09800283006661302,
+     -0.24412347046827113,
+     0.16810673319784822,
+     0.015254579323101999,
+     -0.12620776579078316,
+     0.15322254997882578,
+     -0.07534414974624626,
+     -0.0217827503554489,
+     0.08973066603834405,
+     0.05799292446641121
+    ],
+    [
+     0.18409537977146245,
+     -0.45363055160564286,
+     0.5123847938904407,
+     0.20623033118713058,
+     -0.38189449847691426,
+     0.16966548729005662,
+     -0.06159143619633061,
+     0.24698991666629047,
+     0.013315788604192583,
+     0.3411260556005674,
+     0.06409238919157978,
+     -0.008170908948581418,
+     0.24313185742315457,
+     0.1662368222916383,
+     0.08617038716625856,
+     0.03065561690918123
+    ],
+    null,
+    null
+   ],
+   "cases": [
+    {
+     "query": "How do I rename a task?",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "renam",
+      "task"
+     ],
+     "stems_in_table": [
+      "task"
+     ],
+     "query_vector": [
+      -0.9257966172588379,
+      -0.07046899851186096,
+      -0.3190663467221551,
+      -0.06941294079184412,
+      0.006145239759515083,
+      -0.05308441072705772,
+      0,
+      0.05491274162713973,
+      0.037233614694186616,
+      -0.015365723661049746,
+      -0.09914030704135225,
+      -0.028287380520814035,
+      -0.061927861101105104,
+      0.06418016417008542,
+      -0.06584510755626265,
+      -0.03001616876827092
+     ],
+     "lexical_total": 5,
+     "embedding_total": 5,
+     "lexical_list": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 1.2299829492860153
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 1.2084423709317111
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 1.1240817061848645
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 1.0894989410128246
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.7165116922642131
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "cosine": 0.9516037713768695
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "cosine": 0.9066388853020875
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "cosine": 0.8919923516516395
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "cosine": 0.8918925746507156
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "cosine": 0.772113634803144
+      }
+     ],
+     "fused": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.03278688524590164
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.03200204813108039
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.03200204813108039
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.03125
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.03076923076923077
+      }
+     ],
+     "decision": {
+      "top_id": "tasks/US-TASK-02#overview",
+      "coverage": 0.1831692509136336,
+      "cosine": 0.9516037713768695,
+      "in_scope": true
+     },
+     "tags": [
+      "fused_tie",
+      "semantic_accept"
+     ]
+    },
+    {
+     "query": "add a new task",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "add",
+      "new",
+      "task"
+     ],
+     "stems_in_table": [
+      "add",
+      "new",
+      "task"
+     ],
+     "query_vector": [
+      -0.9288022298333383,
+      -0.05971926417210391,
+      -0.32932625144457034,
+      -0.03630993586414289,
+      0.0086959688998456,
+      -0.02424658268091171,
+      -0.02101249218288141,
+      -0.03175888661131387,
+      0.012432075370594256,
+      -0.05081658697945799,
+      -0.0710649439968183,
+      -0.06870100512062997,
+      -0.08942594715285203,
+      -0.03328223382523266,
+      0.01551681978710818,
+      -0.0044443748751531184
+     ],
+     "lexical_total": 5,
+     "embedding_total": 5,
+     "lexical_list": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 3.337501336163765
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 3.273890818624726
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 2.474156624450217
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 1.2299829492860153
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 1.2084423709317111
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "cosine": 0.9503466336354849
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "cosine": 0.9315471580373756
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "cosine": 0.9242059330737956
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "cosine": 0.88381719924804
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "cosine": 0.7943987895078704
+      }
+     ],
+     "fused": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.032266458495966696
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.032018442622950824
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.03225806451612903
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.03125763125763126
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.031009615384615385
+      }
+     ],
+     "decision": {
+      "top_id": "tasks/US-TASK-01#overview",
+      "coverage": 1,
+      "cosine": 0.9242059330737956,
+      "in_scope": true
+     },
+     "tags": [
+      "diversify_after_fusion"
+     ]
+    },
+    {
+     "query": "invite someone to my organization",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "invit",
+      "organiz",
+      "someon"
+     ],
+     "stems_in_table": [
+      "invit",
+      "organiz"
+     ],
+     "query_vector": [
+      0.8597278887145546,
+      -0.0958948209531359,
+      -0.4444622379708887,
+      0.05947338461079167,
+      -0.04955552750201976,
+      0,
+      -0.04179280461972856,
+      -0.08302859157269557,
+      0.12302064265034653,
+      -0.10583977538629757,
+      -0.06662270858430663,
+      -0.06178003061724338,
+      -0.037900091203397664,
+      -0.009952925463380195,
+      0.05689053349892585,
+      -0.011346183706142515
+     ],
+     "lexical_total": 2,
+     "embedding_total": 2,
+     "lexical_list": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 4.4577845156792515
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 2.3705181202912193
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "cosine": 0.9794448321970481
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "cosine": 0.9189104910802751
+      }
+     ],
+     "fused": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 0.03278688524590164
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 0.03225806451612903
+      }
+     ],
+     "decision": {
+      "top_id": "team/US-TEAM-01#overview",
+      "coverage": 0.529168907156914,
+      "cosine": 0.9794448321970481,
+      "in_scope": true
+     },
+     "tags": []
+    },
+    {
+     "query": "how long is an invitation valid",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "invit",
+      "long",
+      "valid"
+     ],
+     "stems_in_table": [
+      "invit"
+     ],
+     "query_vector": [
+      0.8887900056426504,
+      -0.11267966448458146,
+      -0.3808679405563695,
+      0.05549551607432489,
+      0,
+      -0.0289369683336054,
+      -0.07251097481815465,
+      -0.10061020295648865,
+      0.06615156703873863,
+      -0.1484421461752058,
+      -0.0605477351706251,
+      -0.037692846187018944,
+      -0.035365149206841764,
+      -0.004933838555011864,
+      0,
+      0.014998669172551386
+     ],
+     "lexical_total": 2,
+     "embedding_total": 2,
+     "lexical_list": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 2.3883935291769776
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 2.3705181202912193
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "cosine": 0.9764827111958789
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "cosine": 0.9236748819326046
+      }
+     ],
+     "fused": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 0.03278688524590164
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 0.03225806451612903
+      }
+     ],
+     "decision": {
+      "top_id": "team/US-TEAM-01#overview",
+      "coverage": 0.19332784177212523,
+      "cosine": 0.9764827111958789,
+      "in_scope": true
+     },
+     "tags": [
+      "semantic_accept"
+     ]
+    },
+    {
+     "query": "what is the weather today",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "today",
+      "weather"
+     ],
+     "stems_in_table": [
+      "weather"
+     ],
+     "query_vector": [
+      0.10933066978575241,
+      0.04932135739271812,
+      0.20825011132803004,
+      -0.8814202955746411,
+      0.0061443749904935615,
+      0.1592308217843202,
+      0.22800260158694552,
+      -0.0686312677611167,
+      -0.020682430618883387,
+      -0.15875680081511945,
+      0.1431825139936801,
+      0.03299729984895543,
+      0.03095957325141167,
+      0.0394899277684475,
+      0.0611332815935425,
+      -0.17256868282911692
+     ],
+     "lexical_total": 0,
+     "embedding_total": 1,
+     "lexical_list": [],
+     "embedding_list": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "cosine": 0.08388832777518389
+      }
+     ],
+     "fused": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 0.01639344262295082
+      }
+     ],
+     "decision": {
+      "top_id": "team/US-TEAM-01#rules",
+      "coverage": 0,
+      "cosine": 0.08388832777518389,
+      "in_scope": false
+     },
+     "tags": [
+      "no_lexical_hit"
+     ]
+    },
+    {
+     "query": "pay my invoice",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "invoic",
+      "pay"
+     ],
+     "stems_in_table": [
+      "invoic",
+      "pay"
+     ],
+     "query_vector": [
+      0.00614394880616064,
+      0.858743641445738,
+      -0.15209336087893555,
+      0.14468245006042468,
+      -0.3058979308042636,
+      0.15357613398308698,
+      -0.02452499281786789,
+      0.08900136124989382,
+      -0.1602866768218009,
+      -0.03588138376228418,
+      0.12580487403186985,
+      -0.11993518294329093,
+      -0.1521930234506482,
+      0.022268116619708976,
+      -0.10118446884667293,
+      0.04107102102897186
+     ],
+     "lexical_total": 0,
+     "embedding_total": 0,
+     "lexical_list": [],
+     "embedding_list": [],
+     "fused": [],
+     "decision": {
+      "top_id": null,
+      "coverage": 0,
+      "cosine": null,
+      "in_scope": false
+     },
+     "tags": []
+    },
+    {
+     "query": "zzzz qqqq",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "qqqq",
+      "zzzz"
+     ],
+     "stems_in_table": [],
+     "query_vector": null,
+     "lexical_total": 0,
+     "embedding_total": 0,
+     "lexical_list": [],
+     "embedding_list": [],
+     "fused": [],
+     "decision": {
+      "top_id": null,
+      "coverage": 0,
+      "cosine": null,
+      "in_scope": false
+     },
+     "tags": [
+      "no_table_stem"
+     ]
+    },
+    {
+     "query": "rename a job",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "job",
+      "renam"
+     ],
+     "stems_in_table": [
+      "job"
+     ],
+     "query_vector": [
+      -0.9020892640772711,
+      -0.04219541963082571,
+      -0.3493747826308843,
+      -0.08312614699720881,
+      -0.03679646026772032,
+      -0.043344379032916706,
+      -0.062064813036396875,
+      -0.09133512706797961,
+      0.11147369975246954,
+      -0.0306689547413852,
+      -0.08244892053163433,
+      -0.004704976327410184,
+      0.07063077763157018,
+      -0.11824551401525876,
+      0,
+      -0.02995513071074552
+     ],
+     "lexical_total": 5,
+     "embedding_total": 5,
+     "lexical_list": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 1.1173752476379046
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 1.0894989410128246
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.9942135371706569
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.9878631209615166
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.7165116922642131
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "cosine": 0.9629665538299725
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "cosine": 0.9249843784113169
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "cosine": 0.9183900706320957
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "cosine": 0.9008169610377328
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "cosine": 0.7563273530378443
+      }
+     ],
+     "fused": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.03278688524590164
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.031754032258064516
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.03200204813108039
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.03149801587301587
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.03076923076923077
+      }
+     ],
+     "decision": {
+      "top_id": "tasks/US-TASK-02#overview",
+      "coverage": 0.1831692509136336,
+      "cosine": 0.9629665538299725,
+      "in_scope": true
+     },
+     "tags": [
+      "diversify_after_fusion",
+      "semantic_accept"
+     ]
+    },
+    {
+     "query": "weather forecast",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "forecast",
+      "weather"
+     ],
+     "stems_in_table": [
+      "forecast",
+      "weather"
+     ],
+     "query_vector": [
+      0.10587129673307348,
+      0.07181907265289743,
+      0.1902749092161743,
+      -0.880893316349694,
+      -0.0003224181620416693,
+      0.13686767700311922,
+      0.26438376333970165,
+      -0.05196429699741316,
+      0.0032694177555891973,
+      -0.1620260057109687,
+      0.1553234002331894,
+      0.028136725504888365,
+      0.02873447083688968,
+      0.013566323642135397,
+      0.05638483920977039,
+      -0.15733617313685538
+     ],
+     "lexical_total": 0,
+     "embedding_total": 1,
+     "lexical_list": [],
+     "embedding_list": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "cosine": 0.07914323399693836
+      }
+     ],
+     "fused": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 0.01639344262295082
+      }
+     ],
+     "decision": {
+      "top_id": "team/US-TEAM-01#rules",
+      "coverage": 0,
+      "cosine": 0.07914323399693836,
+      "in_scope": false
+     },
+     "tags": [
+      "no_lexical_hit"
+     ]
+    },
+    {
+     "query": "invitation expires",
+     "overrides": {
+      "out_of_scope": {
+       "min_cosine": 0.99,
+       "min_cosine_lexical": 0.99
+      }
+     },
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.99,
+       "min_cosine_lexical": 0.99,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "expir",
+      "invit"
+     ],
+     "stems_in_table": [
+      "expir",
+      "invit"
+     ],
+     "query_vector": [
+      0.6083206577334133,
+      -0.060454370464531934,
+      -0.20045339461913,
+      0.11909678656654853,
+      -0.12940156070215086,
+      -0.13172835800776658,
+      0.1212568880141018,
+      -0.2926460401927135,
+      0.2484393214342163,
+      0.3914666396923662,
+      -0.3737093170906069,
+      -0.11398300293935315,
+      -0.0482973162427672,
+      -0.13861074270256615,
+      0.16139313982215706,
+      -0.14923557598041828
+     ],
+     "lexical_total": 2,
+     "embedding_total": 3,
+     "lexical_list": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 4.314744329384082
+      },
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 2.3883935291769776
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "cosine": 0.7272088259495276
+      },
+      {
+       "id": "team/US-TEAM-01#overview",
+       "cosine": 0.6486351248611879
+      },
+      {
+       "id": "home#overview",
+       "cosine": 0.09695868450802889
+      }
+     ],
+     "fused": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 0.03278688524590164
+      },
+      {
+       "id": "home#overview",
+       "score": 0.015873015873015872
+      },
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 0.03225806451612903
+      }
+     ],
+     "decision": {
+      "top_id": "team/US-TEAM-01#rules",
+      "coverage": 1,
+      "cosine": 0.7272088259495276,
+      "in_scope": false
+     },
+     "tags": [
+      "diversify_after_fusion",
+      "veto"
+     ]
+    },
+    {
+     "query": "invitation expires",
+     "overrides": {
+      "out_of_scope": {
+       "min_cosine": 0.9,
+       "min_cosine_lexical": -1
+      }
+     },
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.9,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "expir",
+      "invit"
+     ],
+     "stems_in_table": [
+      "expir",
+      "invit"
+     ],
+     "query_vector": [
+      0.6083206577334133,
+      -0.060454370464531934,
+      -0.20045339461913,
+      0.11909678656654853,
+      -0.12940156070215086,
+      -0.13172835800776658,
+      0.1212568880141018,
+      -0.2926460401927135,
+      0.2484393214342163,
+      0.3914666396923662,
+      -0.3737093170906069,
+      -0.11398300293935315,
+      -0.0482973162427672,
+      -0.13861074270256615,
+      0.16139313982215706,
+      -0.14923557598041828
+     ],
+     "lexical_total": 2,
+     "embedding_total": 3,
+     "lexical_list": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 4.314744329384082
+      },
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 2.3883935291769776
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "cosine": 0.7272088259495276
+      },
+      {
+       "id": "team/US-TEAM-01#overview",
+       "cosine": 0.6486351248611879
+      },
+      {
+       "id": "home#overview",
+       "cosine": 0.09695868450802889
+      }
+     ],
+     "fused": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 0.03278688524590164
+      },
+      {
+       "id": "home#overview",
+       "score": 0.015873015873015872
+      },
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 0.03225806451612903
+      }
+     ],
+     "decision": {
+      "top_id": "team/US-TEAM-01#rules",
+      "coverage": 1,
+      "cosine": 0.7272088259495276,
+      "in_scope": true
+     },
+     "tags": [
+      "diversify_after_fusion",
+      "lexical_accept",
+      "veto_off"
+     ]
+    },
+    {
+     "query": "add a new task",
+     "overrides": {
+      "out_of_scope": {
+       "min_cosine": 0.97,
+       "min_cosine_lexical": 0.5
+      }
+     },
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.97,
+       "min_cosine_lexical": 0.5,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "add",
+      "new",
+      "task"
+     ],
+     "stems_in_table": [
+      "add",
+      "new",
+      "task"
+     ],
+     "query_vector": [
+      -0.9288022298333383,
+      -0.05971926417210391,
+      -0.32932625144457034,
+      -0.03630993586414289,
+      0.0086959688998456,
+      -0.02424658268091171,
+      -0.02101249218288141,
+      -0.03175888661131387,
+      0.012432075370594256,
+      -0.05081658697945799,
+      -0.0710649439968183,
+      -0.06870100512062997,
+      -0.08942594715285203,
+      -0.03328223382523266,
+      0.01551681978710818,
+      -0.0044443748751531184
+     ],
+     "lexical_total": 5,
+     "embedding_total": 5,
+     "lexical_list": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 3.337501336163765
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 3.273890818624726
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 2.474156624450217
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 1.2299829492860153
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 1.2084423709317111
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "cosine": 0.9503466336354849
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "cosine": 0.9315471580373756
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "cosine": 0.9242059330737956
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "cosine": 0.88381719924804
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "cosine": 0.7943987895078704
+      }
+     ],
+     "fused": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.032266458495966696
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.032018442622950824
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.03225806451612903
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.03125763125763126
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.031009615384615385
+      }
+     ],
+     "decision": {
+      "top_id": "tasks/US-TASK-01#overview",
+      "coverage": 1,
+      "cosine": 0.9242059330737956,
+      "in_scope": true
+     },
+     "tags": [
+      "diversify_after_fusion",
+      "lexical_accept"
+     ]
+    },
+    {
+     "query": "weather forecast",
+     "overrides": {
+      "out_of_scope": {
+       "min_cosine": 0.2
+      }
+     },
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.2,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "forecast",
+      "weather"
+     ],
+     "stems_in_table": [
+      "forecast",
+      "weather"
+     ],
+     "query_vector": [
+      0.10587129673307348,
+      0.07181907265289743,
+      0.1902749092161743,
+      -0.880893316349694,
+      -0.0003224181620416693,
+      0.13686767700311922,
+      0.26438376333970165,
+      -0.05196429699741316,
+      0.0032694177555891973,
+      -0.1620260057109687,
+      0.1553234002331894,
+      0.028136725504888365,
+      0.02873447083688968,
+      0.013566323642135397,
+      0.05638483920977039,
+      -0.15733617313685538
+     ],
+     "lexical_total": 0,
+     "embedding_total": 1,
+     "lexical_list": [],
+     "embedding_list": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "cosine": 0.07914323399693836
+      }
+     ],
+     "fused": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 0.01639344262295082
+      }
+     ],
+     "decision": {
+      "top_id": "team/US-TEAM-01#rules",
+      "coverage": 0,
+      "cosine": 0.07914323399693836,
+      "in_scope": false
+     },
+     "tags": [
+      "no_lexical_hit"
+     ]
+    },
+    {
+     "query": "zyzzyva task",
+     "overrides": {
+      "fusion": {
+       "embedding_weight": 0.01
+      }
+     },
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 0.01
+      }
+     },
+     "stems": [
+      "task",
+      "zyzzyva"
+     ],
+     "stems_in_table": [
+      "task"
+     ],
+     "query_vector": [
+      -0.9257966172588379,
+      -0.07046899851186096,
+      -0.3190663467221551,
+      -0.06941294079184412,
+      0.006145239759515083,
+      -0.05308441072705772,
+      0,
+      0.05491274162713973,
+      0.037233614694186616,
+      -0.015365723661049746,
+      -0.09914030704135225,
+      -0.028287380520814035,
+      -0.061927861101105104,
+      0.06418016417008542,
+      -0.06584510755626265,
+      -0.03001616876827092
+     ],
+     "lexical_total": 6,
+     "embedding_total": 5,
+     "lexical_list": [
+      {
+       "id": "home#rare",
+       "score": 3.7898107970570356
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 1.2299829492860153
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 1.2084423709317111
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 1.1240817061848645
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 1.0894989410128246
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.7165116922642131
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "cosine": 0.9516037713768695
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "cosine": 0.9066388853020875
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "cosine": 0.8919923516516395
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "cosine": 0.8918925746507156
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "cosine": 0.772113634803144
+      }
+     ],
+     "fused": [
+      {
+       "id": "home#rare",
+       "score": 0.01639344262295082
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.016292966684294023
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.015786290322580644
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.016031746031746032
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.015540865384615386
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.015305361305361306
+      }
+     ],
+     "decision": {
+      "top_id": "home#rare",
+      "coverage": 0.7419001237160864,
+      "cosine": 0,
+      "in_scope": true
+     },
+     "tags": [
+      "diversify_after_fusion",
+      "lexical_accept",
+      "veto_off",
+      "section_without_vector"
+     ]
+    },
+    {
+     "query": "create a task title",
+     "overrides": {
+      "fusion": {
+       "depth": 1
+      }
+     },
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 1,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "creat",
+      "task",
+      "titl"
+     ],
+     "stems_in_table": [
+      "creat",
+      "task",
+      "titl"
+     ],
+     "query_vector": [
+      -0.9199305033698448,
+      -0.04557989039708292,
+      -0.36102825906618663,
+      0.0002767991623853294,
+      -0.008772960735126463,
+      -0.08910039591453929,
+      0.031620155619458704,
+      -0.01883197659315396,
+      0.05285785379901109,
+      -0.04473013468269035,
+      -0.028728293275707306,
+      -0.05549861722177541,
+      -0.014146751999405544,
+      -0.04945400103874636,
+      -0.018867648795840623,
+      0.01538093417107412
+     ],
+     "lexical_total": 5,
+     "embedding_total": 5,
+     "lexical_list": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 3.327404943536918
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "cosine": 0.9620512744835117
+      }
+     ],
+     "fused": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.01639344262295082
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.01639344262295082
+      }
+     ],
+     "decision": {
+      "top_id": "tasks/US-TASK-01#overview",
+      "coverage": 1,
+      "cosine": 0.90750031289377,
+      "in_scope": true
+     },
+     "tags": [
+      "fused_tie",
+      "depth_cut"
+     ]
+    },
+    {
+     "query": "team colleague organization",
+     "overrides": {
+      "fusion": {
+       "depth": 2
+      }
+     },
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 2,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "colleagu",
+      "organiz",
+      "team"
+     ],
+     "stems_in_table": [
+      "colleagu",
+      "organiz",
+      "team"
+     ],
+     "query_vector": [
+      0.8638008926278843,
+      -0.11960156637333738,
+      -0.44227987910033445,
+      0.025402826054141157,
+      -0.03699664160072664,
+      -0.03603235286668422,
+      -0.012745624714408616,
+      -0.023207581918267894,
+      0.12391865765371475,
+      -0.03095290825737374,
+      -0.02454851019996601,
+      -0.06619882082273654,
+      -0.01738292074463594,
+      -0.0453981373168813,
+      0.12656800444355898,
+      -0.015398617053081994
+     ],
+     "lexical_total": 5,
+     "embedding_total": 2,
+     "lexical_list": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 4.4577845156792515
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 1.6865959453490507
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "cosine": 0.9828154508232314
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "cosine": 0.9142570708824842
+      }
+     ],
+     "fused": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 0.03278688524590164
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 0.03225806451612903
+      }
+     ],
+     "decision": {
+      "top_id": "team/US-TEAM-01#overview",
+      "coverage": 0.7520911666877631,
+      "cosine": 0.9828154508232314,
+      "in_scope": true
+     },
+     "tags": []
+    },
+    {
+     "query": "create a task title",
+     "overrides": {
+      "diversify": "none"
+     },
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "none",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "creat",
+      "task",
+      "titl"
+     ],
+     "stems_in_table": [
+      "creat",
+      "task",
+      "titl"
+     ],
+     "query_vector": [
+      -0.9199305033698448,
+      -0.04557989039708292,
+      -0.36102825906618663,
+      0.0002767991623853294,
+      -0.008772960735126463,
+      -0.08910039591453929,
+      0.031620155619458704,
+      -0.01883197659315396,
+      0.05285785379901109,
+      -0.04473013468269035,
+      -0.028728293275707306,
+      -0.05549861722177541,
+      -0.014146751999405544,
+      -0.04945400103874636,
+      -0.018867648795840623,
+      0.01538093417107412
+     ],
+     "lexical_total": 5,
+     "embedding_total": 5,
+     "lexical_list": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 3.327404943536918
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 3.2523843231663667
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 3.0111156022483945
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 1.9499040552753146
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 1.7277662647258496
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "cosine": 0.9620512744835117
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "cosine": 0.9312356361960651
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "cosine": 0.9077916955532156
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "cosine": 0.90750031289377
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "cosine": 0.7728748516900137
+      }
+     ],
+     "fused": [
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.03225806451612903
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.032018442622950824
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.032018442622950824
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.03125763125763126
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.03125763125763126
+      }
+     ],
+     "decision": {
+      "top_id": "tasks/US-TASK-01#steps",
+      "coverage": 1,
+      "cosine": 0.9312356361960651,
+      "in_scope": true
+     },
+     "tags": [
+      "fused_tie"
+     ]
+    },
+    {
+     "query": "create a task title",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "creat",
+      "task",
+      "titl"
+     ],
+     "stems_in_table": [
+      "creat",
+      "task",
+      "titl"
+     ],
+     "query_vector": [
+      -0.9199305033698448,
+      -0.04557989039708292,
+      -0.36102825906618663,
+      0.0002767991623853294,
+      -0.008772960735126463,
+      -0.08910039591453929,
+      0.031620155619458704,
+      -0.01883197659315396,
+      0.05285785379901109,
+      -0.04473013468269035,
+      -0.028728293275707306,
+      -0.05549861722177541,
+      -0.014146751999405544,
+      -0.04945400103874636,
+      -0.018867648795840623,
+      0.01538093417107412
+     ],
+     "lexical_total": 5,
+     "embedding_total": 5,
+     "lexical_list": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 3.327404943536918
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 3.2523843231663667
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 3.0111156022483945
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 1.9499040552753146
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 1.7277662647258496
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "cosine": 0.9620512744835117
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "cosine": 0.9312356361960651
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "cosine": 0.9077916955532156
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "cosine": 0.90750031289377
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "cosine": 0.7728748516900137
+      }
+     ],
+     "fused": [
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.03225806451612903
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.032018442622950824
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.032018442622950824
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.03125763125763126
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.03125763125763126
+      }
+     ],
+     "decision": {
+      "top_id": "tasks/US-TASK-01#steps",
+      "coverage": 1,
+      "cosine": 0.9312356361960651,
+      "in_scope": true
+     },
+     "tags": [
+      "fused_tie",
+      "diversify_after_fusion"
+     ]
+    },
+    {
+     "query": "the of and",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [],
+     "stems_in_table": [],
+     "query_vector": null,
+     "lexical_total": 0,
+     "embedding_total": 0,
+     "lexical_list": [],
+     "embedding_list": [],
+     "fused": [],
+     "decision": {
+      "top_id": null,
+      "coverage": 0,
+      "cosine": null,
+      "in_scope": false
+     },
+     "tags": []
+    },
+    {
+     "query": "colleague invitation task",
+     "overrides": {
+      "fusion": {
+       "rrf_k": 10,
+       "embedding_weight": 2
+      }
+     },
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 10,
+       "embedding_weight": 2
+      }
+     },
+     "stems": [
+      "colleagu",
+      "invit",
+      "task"
+     ],
+     "stems_in_table": [
+      "colleagu",
+      "invit",
+      "task"
+     ],
+     "query_vector": [
+      0.782513339085026,
+      -0.19127782423308842,
+      -0.546331615910385,
+      -0.005807559511741958,
+      -0.046912531804433964,
+      -0.10406098156984447,
+      -0.0233624984831159,
+      -0.05548054742182625,
+      0.1109835697743522,
+      -0.0950825395901053,
+      -0.054949250839219754,
+      -0.06280161834014131,
+      -0.045016808011451206,
+      -0.02490862947184448,
+      0.06460613506551319,
+      0.02789128491553933
+     ],
+     "lexical_total": 7,
+     "embedding_total": 2,
+     "lexical_list": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 4.776787058353955
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 4.05711406564027
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 1.2299829492860153
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 1.2084423709317111
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 1.1240817061848645
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 1.0894989410128246
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.7165116922642131
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "cosine": 0.9641830681945752
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "cosine": 0.9057447477468467
+      }
+     ],
+     "fused": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 0.2727272727272727
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.07692307692307693
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.06666666666666667
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 0.25
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.07142857142857142
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.0625
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.058823529411764705
+      }
+     ],
+     "decision": {
+      "top_id": "team/US-TEAM-01#overview",
+      "coverage": 0.8104267935577532,
+      "cosine": 0.9641830681945752,
+      "in_scope": true
+     },
+     "tags": [
+      "diversify_after_fusion"
+     ]
+    }
+   ]
+  },
+  "it": {
+   "table_sha256": "ddbfefd795b23711f75260c4d2348aa681888c474866afd2d9fc9a554121d489",
+   "sections": [
+    {
+     "id": "tasks/US-TASK-01#overview",
+     "title": "Creare un compito",
+     "text": "Usa questa pagina per aggiungere un compito con un titolo. Il team vede cosa c'è da fare.",
+     "questions": [
+      "Come aggiungo un lavoro da fare per il mio team?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-01#steps",
+     "title": "Creare un compito - Passaggi",
+     "text": "1. Apri la pagina Compiti.\n2. Clicca \"Nuovo compito\".\n3. Nel campo \"Titolo\" scrivi un valore.\n4. Clicca \"Crea compito\".",
+     "questions": [
+      "Come aggiungo un lavoro da fare per il mio team?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-02#overview",
+     "title": "Modificare un compito",
+     "text": "Usa questa pagina per cambiare il titolo o lo stato di un compito.",
+     "questions": [
+      "Posso correggere un errore di battitura?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-02#steps",
+     "title": "Modificare un compito - Passaggi",
+     "text": "1. Apri la pagina Compiti.\n2. Clicca la matita accanto al compito.\n3. Cambia il titolo o lo stato.\n4. Clicca \"Salva\".",
+     "questions": [
+      "Posso correggere un errore di battitura?"
+     ]
+    },
+    {
+     "id": "team/US-TEAM-01#overview",
+     "title": "Invitare un collega",
+     "text": "Invia un invito per e-mail così che un collega possa entrare nell'organizzazione.",
+     "questions": []
+    },
+    {
+     "id": "team/US-TEAM-01#rules",
+     "title": "Invitare un collega - Da sapere",
+     "text": "- Un invito scade dopo sette giorni.\n- Solo un amministratore può invitare le persone.",
+     "questions": []
+    },
+    {
+     "id": "home#overview",
+     "title": "MyApp",
+     "text": "Usa questo manuale per scoprire come usare MyApp.",
+     "questions": []
+    }
+   ],
+   "glossary": [
+    {
+     "term": "compito",
+     "aliases": [
+      "lavoro",
+      "attività da fare"
+     ]
+    },
+    {
+     "term": "organizzazione",
+     "aliases": [
+      "azienda"
+     ]
+    },
+    {
+     "term": "manuale",
+     "aliases": [
+      "guida"
+     ]
+    }
+   ],
+   "section_vectors": [
+    [
+     -0.8093152047518339,
+     -0.31878274749556623,
+     0.021734108455681356,
+     -0.15114916739281778,
+     0.030490603978918746,
+     0.08089963583244153,
+     0.3545002110539877,
+     0.09639502547884045,
+     -0.07182337161021331,
+     0.19741468102211696,
+     0.005982753343739779,
+     -0.04774330780816481,
+     0.15293906405821947,
+     -0.008992186007968786,
+     0.0040138525966264054,
+     0.08773534574005368
+    ],
+    [
+     -0.8683800638605513,
+     -0.21588806272288752,
+     -0.01827235807191165,
+     -0.22465901390404572,
+     0.054791490268936316,
+     0.1002374848474729,
+     0.2161073430869927,
+     0.16667737298668175,
+     -0.08883021124231726,
+     0.10635140186733168,
+     -0.06636497211329212,
+     -0.17435049336876549,
+     0.004104984318924306,
+     -0.028468150783719722,
+     0.014683979072510508,
+     0.07695927086726685
+    ],
+    [
+     -0.9005047178331531,
+     -0.20575335045943227,
+     -0.018433955041771,
+     -0.07899388243840545,
+     0.03098076248628414,
+     0.12077915786122251,
+     0.24287111338691336,
+     0.09267189037819344,
+     -0.12115523807322547,
+     0.02931670697461153,
+     -0.017460985758319406,
+     0.06282154850829304,
+     0.1340393852908525,
+     -0.03180241970783355,
+     0.09495707640493714,
+     0.09628503052380014
+    ],
+    [
+     -0.9372060648594237,
+     -0.13613524381207306,
+     -0.009520759705648278,
+     -0.13831273695853993,
+     0.02486934002284702,
+     0.1333239582125945,
+     0.13713783762989937,
+     0.04010253951260691,
+     -0.17972983838606624,
+     0.036189461699566446,
+     -0.014408234006744559,
+     -0.05817803497542931,
+     -0.0370215923664764,
+     -0.0028648248561971962,
+     0.061816751118086495,
+     0.05174242044988708
+    ],
+    [
+     0.8653572014258722,
+     -0.31840865604287544,
+     -0.09765618548349439,
+     -0.055168212967064395,
+     0.24593143582725882,
+     -0.027537628417597507,
+     0.09261642260516816,
+     0.027157234489084824,
+     -0.06942771289240218,
+     0.18239902897903187,
+     -0.0833343305981347,
+     0.04884416749890078,
+     0.12360611542601958,
+     0.05150506898958484,
+     -0.0005087849532566103,
+     0.035849560313411494
+    ],
+    [
+     0.8017855970222973,
+     -0.2807099181144872,
+     0.09273780841025903,
+     -0.16411502852133877,
+     0.21980981291648427,
+     -0.26237808435861043,
+     -0.16941442081274585,
+     0.06485865696412789,
+     0.11211220380620368,
+     0.0896684414007472,
+     0.013279654171026684,
+     0.10009631582263753,
+     0.20199693213844672,
+     -0.03351304974869701,
+     0.12682997673862537,
+     0.06264443181849691
+    ],
+    [
+     0.1501725450750074,
+     -0.13706303779937432,
+     0.3575807928160657,
+     0.4017363068497524,
+     -0.5644363959622106,
+     0.0496042975955258,
+     -0.03871721264381614,
+     0.3407290595559158,
+     -0.13538655896757013,
+     -0.12246122943082552,
+     0.20245842073568127,
+     0.1167738856580953,
+     -0.1758186094427059,
+     0.25007565810088866,
+     -0.1826739820722252,
+     -0.12645107056403326
+    ]
+   ],
+   "cases": [
+    {
+     "query": "Come rinomino un compito?",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "comp",
+      "rinomin"
+     ],
+     "stems_in_table": [
+      "comp"
+     ],
+     "query_vector": [
+      -0.8805990570061868,
+      -0.29215902707068625,
+      -0.2694497514721578,
+      -0.13195055062562924,
+      0.07965305610793608,
+      0.07247645145795838,
+      0.07056476100600348,
+      0.11346702345843211,
+      -0.008337713086833946,
+      0.09621175834691822,
+      0.014921080247716526,
+      -0.02548430343669988,
+      -0.023477885380837504,
+      -0.05674484277786603,
+      0.014535249951563628,
+      0.07444407978043763
+     ],
+     "lexical_total": 4,
+     "embedding_total": 4,
+     "lexical_list": [
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.9572555326016261
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.9403860691707666
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.9231869066570243
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.9139475824201531
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "cosine": 0.9300142916988585
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "cosine": 0.9237931256983415
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "cosine": 0.9165363244268832
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "cosine": 0.8885580209581401
+      }
+     ],
+     "fused": [
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.03278688524590164
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.03200204813108039
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.031754032258064516
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.03149801587301587
+      }
+     ],
+     "decision": {
+      "top_id": "tasks/US-TASK-01#steps",
+      "coverage": 0.17185550924272538,
+      "cosine": 0.9300142916988585,
+      "in_scope": true
+     },
+     "tags": [
+      "semantic_accept"
+     ]
+    },
+    {
+     "query": "aggiungere un nuovo compito",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "aggiung",
+      "comp",
+      "nuov"
+     ],
+     "stems_in_table": [
+      "aggiung",
+      "comp",
+      "nuov"
+     ],
+     "query_vector": [
+      -0.8672151530958505,
+      -0.17888975085371478,
+      -0.042255284015908084,
+      -0.05224465205526155,
+      0.11390001901553523,
+      -0.021231963253520173,
+      0.20627017605043912,
+      -0.05465559782914012,
+      0.26980346451938986,
+      0.24137122994310217,
+      0.07973829336557835,
+      -0.016968351683100236,
+      0.09727333331114091,
+      0.05062721456649048,
+      0.028936352733181146,
+      0.04358971038203198
+     ],
+     "lexical_total": 4,
+     "embedding_total": 4,
+     "lexical_list": [
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 3.381388061363924
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 2.486325786020349
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.9403860691707666
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.9139475824201531
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "cosine": 0.8833866031188661
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "cosine": 0.8589437600269039
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "cosine": 0.8458886651551468
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "cosine": 0.8312180064647876
+      }
+     ],
+     "fused": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.03252247488101534
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.03200204813108039
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.032266458495966696
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.03125
+      }
+     ],
+     "decision": {
+      "top_id": "tasks/US-TASK-01#overview",
+      "coverage": 0.5094562174367981,
+      "cosine": 0.8833866031188661,
+      "in_scope": true
+     },
+     "tags": [
+      "diversify_after_fusion"
+     ]
+    },
+    {
+     "query": "invitare qualcuno nell'organizzazione",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "invit",
+      "organizz",
+      "qualcun"
+     ],
+     "stems_in_table": [
+      "invit",
+      "organizz"
+     ],
+     "query_vector": [
+      0.852723147923831,
+      -0.39450925978450535,
+      -0.12228829551723133,
+      -0.19582689080461146,
+      0.12935111238240685,
+      -0.08450026489545101,
+      -0.03565095117354729,
+      0.019843673385480803,
+      0.03159304282194842,
+      0.1215210202035295,
+      -0.047743676493760795,
+      0.028325572396680824,
+      0.13838499873646015,
+      -0.008959002652241883,
+      0.012851203463726375,
+      0.011967095904674593
+     ],
+     "lexical_total": 2,
+     "embedding_total": 2,
+     "lexical_list": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 3.6697967065433312
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 1.9548958257474047
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "cosine": 0.9600467699975822
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "cosine": 0.9204446787281344
+      }
+     ],
+     "fused": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 0.03278688524590164
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 0.03225806451612903
+      }
+     ],
+     "decision": {
+      "top_id": "team/US-TEAM-01#overview",
+      "coverage": 0.5057523876015415,
+      "cosine": 0.9600467699975822,
+      "in_scope": true
+     },
+     "tags": []
+    },
+    {
+     "query": "quanto dura un invito",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "dur",
+      "invit"
+     ],
+     "stems_in_table": [
+      "invit"
+     ],
+     "query_vector": [
+      0.85004768026965,
+      -0.3819244341259181,
+      -0.08208931054633567,
+      -0.1482354433445738,
+      0.10794843138770369,
+      -0.17258521598497967,
+      -0.014093089109024114,
+      0,
+      0.062444837102312835,
+      0.10675149594566162,
+      -0.06456701232004965,
+      0.04071749741310851,
+      0.1953736811207647,
+      -0.01062468337167779,
+      0.03265828312922138,
+      0.027032474335448302
+     ],
+     "lexical_total": 2,
+     "embedding_total": 2,
+     "lexical_list": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 1.9548958257474047
+      },
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 1.882354087934584
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "cosine": 0.9504526606798173
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "cosine": 0.9423268655887956
+      }
+     ],
+     "fused": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 0.03252247488101534
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 0.03252247488101534
+      }
+     ],
+     "decision": {
+      "top_id": "team/US-TEAM-01#overview",
+      "coverage": 0.29553551507540293,
+      "cosine": 0.9504526606798173,
+      "in_scope": true
+     },
+     "tags": [
+      "fused_tie",
+      "semantic_accept"
+     ]
+    },
+    {
+     "query": "pagare la fattura",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "fattur",
+      "pag"
+     ],
+     "stems_in_table": [
+      "fattur",
+      "pag"
+     ],
+     "query_vector": [
+      -0.052209639307404035,
+      0.3143535810210119,
+      0.014090733301023744,
+      -0.5012323904452306,
+      -0.1493706911504868,
+      0.45418243300804995,
+      -0.22272133404538,
+      -0.4137831852408722,
+      -0.1870703069862302,
+      0.1441876512435757,
+      0.2312530945201401,
+      0.17904946084590467,
+      0.18267942867163173,
+      0.02628781006469127,
+      0.07258781247325607,
+      -0.1302114587602774
+     ],
+     "lexical_total": 0,
+     "embedding_total": 2,
+     "lexical_list": [],
+     "embedding_list": [
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "cosine": 0.10103341743246046
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "cosine": 0.03156722071069737
+      }
+     ],
+     "fused": [
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.01639344262295082
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.016129032258064516
+      }
+     ],
+     "decision": {
+      "top_id": "tasks/US-TASK-02#steps",
+      "coverage": 0,
+      "cosine": 0.10103341743246046,
+      "in_scope": false
+     },
+     "tags": [
+      "no_lexical_hit"
+     ]
+    },
+    {
+     "query": "che tempo fa oggi",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "fa",
+      "oggi",
+      "temp"
+     ],
+     "stems_in_table": [
+      "temp"
+     ],
+     "query_vector": [
+      0.11767363963830003,
+      0.23424564763087685,
+      -0.5812884989995349,
+      0.48351430117387756,
+      -0.10834035201048949,
+      0.11733703172903656,
+      -0.084865535257465,
+      -0.2755491638438812,
+      -0.367673099733566,
+      -0.219635095428717,
+      -0.1395723132201958,
+      -0.11748781658787015,
+      -0.03921660206471489,
+      -0.04620744980410743,
+      0.16388426607008152,
+      0.0610438931999974
+     ],
+     "lexical_total": 0,
+     "embedding_total": 0,
+     "lexical_list": [],
+     "embedding_list": [],
+     "fused": [],
+     "decision": {
+      "top_id": null,
+      "coverage": 0,
+      "cosine": null,
+      "in_scope": false
+     },
+     "tags": []
+    },
+    {
+     "query": "zzzz qqqq",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "qqqq",
+      "zzzz"
+     ],
+     "stems_in_table": [],
+     "query_vector": null,
+     "lexical_total": 0,
+     "embedding_total": 0,
+     "lexical_list": [],
+     "embedding_list": [],
+     "fused": [],
+     "decision": {
+      "top_id": null,
+      "coverage": 0,
+      "cosine": null,
+      "in_scope": false
+     },
+     "tags": [
+      "no_table_stem"
+     ]
+    },
+    {
+     "query": "Come rinomino un lavoro?",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "lavor",
+      "rinomin"
+     ],
+     "stems_in_table": [
+      "lavor"
+     ],
+     "query_vector": [
+      -0.860615215711245,
+      -0.1970083041322897,
+      -0.32959791865484406,
+      -0.23559294042304005,
+      0.13116816172289641,
+      0.08941280928589121,
+      0.028292677858036575,
+      0.026246642335126965,
+      0.025072312342111425,
+      -0.016073227428826158,
+      0.05484005540873582,
+      -0.05108918228389248,
+      -0.11766713271575964,
+      0,
+      -0.01821204462586875,
+      0.09497115173140498
+     ],
+     "lexical_total": 4,
+     "embedding_total": 4,
+     "lexical_list": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.9786947859633244
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.9403860691707666
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.9188718262148527
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.8401596331484827
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "cosine": 0.8944712373531495
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "cosine": 0.8833516768649113
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "cosine": 0.84834305704203
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "cosine": 0.7996073713065793
+      }
+     ],
+     "fused": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.032018442622950824
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.032018442622950824
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.03200204813108039
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.03200204813108039
+      }
+     ],
+     "decision": {
+      "top_id": "tasks/US-TASK-01#overview",
+      "coverage": 0.17185550924272538,
+      "cosine": 0.7996073713065793,
+      "in_scope": true
+     },
+     "tags": [
+      "fused_tie",
+      "semantic_accept"
+     ]
+    },
+    {
+     "query": "tempo pioggia",
+     "overrides": {},
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "piogg",
+      "temp"
+     ],
+     "stems_in_table": [
+      "piogg",
+      "temp"
+     ],
+     "query_vector": [
+      0.141592856916296,
+      0.2889097253021293,
+      -0.5791381443758257,
+      0.4660585882342432,
+      -0.11488372569231974,
+      0.12084121082805868,
+      -0.11772376521150556,
+      -0.25829496817734154,
+      -0.38265786034656857,
+      -0.2149798146193555,
+      -0.10325670830937403,
+      -0.13156134678088338,
+      -0.022781221135501187,
+      -0.020064674474897796,
+      0.10098856090510167,
+      0.061327255157450425
+     ],
+     "lexical_total": 0,
+     "embedding_total": 0,
+     "lexical_list": [],
+     "embedding_list": [],
+     "fused": [],
+     "decision": {
+      "top_id": null,
+      "coverage": 0,
+      "cosine": null,
+      "in_scope": false
+     },
+     "tags": []
+    },
+    {
+     "query": "invito scade",
+     "overrides": {
+      "out_of_scope": {
+       "min_cosine": 0.99,
+       "min_cosine_lexical": 0.99
+      }
+     },
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.99,
+       "min_cosine_lexical": 0.99,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 30,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "invit",
+      "scad"
+     ],
+     "stems_in_table": [
+      "invit",
+      "scad"
+     ],
+     "query_vector": [
+      0.5581186575727133,
+      0.024240269360058228,
+      0.090308513686739,
+      -0.13798868501179257,
+      -0.2293400211549028,
+      -0.5088202491158877,
+      -0.07155766860528594,
+      0.10621255682575798,
+      0.2758454178975508,
+      0.17073969765852484,
+      -0.18535515219805945,
+      0.1240458708711974,
+      0.2976029957594424,
+      0.07822291269886983,
+      0.28742558458165435,
+      -0.023162187100197913
+     ],
+     "lexical_total": 2,
+     "embedding_total": 3,
+     "lexical_list": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 3.742338444356152
+      },
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 1.882354087934584
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "cosine": 0.7224991320936964
+      },
+      {
+       "id": "team/US-TEAM-01#overview",
+       "cosine": 0.5012485366158878
+      },
+      {
+       "id": "home#overview",
+       "cosine": 0.03688264201716828
+      }
+     ],
+     "fused": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 0.03278688524590164
+      },
+      {
+       "id": "home#overview",
+       "score": 0.015873015873015872
+      },
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 0.03225806451612903
+      }
+     ],
+     "decision": {
+      "top_id": "team/US-TEAM-01#rules",
+      "coverage": 1,
+      "cosine": 0.7224991320936964,
+      "in_scope": false
+     },
+     "tags": [
+      "diversify_after_fusion",
+      "veto"
+     ]
+    },
+    {
+     "query": "crea un compito",
+     "overrides": {
+      "fusion": {
+       "depth": 1
+      }
+     },
+     "retrieval": {
+      "schema_version": 3,
+      "bm25": {
+       "k1": 1.2,
+       "b": 0.75,
+       "field_weights": {
+        "title": 2,
+        "text": 1,
+        "questions": 1.5
+       }
+      },
+      "candidates": 10,
+      "diversify": "page",
+      "out_of_scope": {
+       "min_coverage": 0.4,
+       "min_cosine": 0.55,
+       "min_cosine_lexical": -1,
+       "min_query_terms": 1
+      },
+      "fusion": {
+       "method": "rrf",
+       "depth": 1,
+       "rrf_k": 60,
+       "embedding_weight": 1
+      }
+     },
+     "stems": [
+      "comp",
+      "cre"
+     ],
+     "stems_in_table": [
+      "comp",
+      "cre"
+     ],
+     "query_vector": [
+      -0.8828099237432627,
+      -0.2394454827167098,
+      -0.2863630065707309,
+      -0.16235825539595755,
+      0.08764947745537245,
+      0.10553313025480793,
+      0.049803747471494374,
+      0.14544243974526527,
+      -0.04888709874716225,
+      0.027764549272367947,
+      -0.0429199816313361,
+      -0.03228513930197847,
+      -0.04646270059208485,
+      -0.011273015256575642,
+      0.0075926206150767105,
+      0.06407925349446286
+     ],
+     "lexical_total": 4,
+     "embedding_total": 4,
+     "lexical_list": [
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 2.644111473796441
+      }
+     ],
+     "embedding_list": [
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "cosine": 0.9318921873350796
+      }
+     ],
+     "fused": [
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.01639344262295082
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.01639344262295082
+      }
+     ],
+     "decision": {
+      "top_id": "tasks/US-TASK-01#steps",
+      "coverage": 1,
+      "cosine": 0.9313474118002045,
+      "in_scope": true
+     },
+     "tags": [
+      "fused_tie",
+      "depth_cut"
+     ]
+    }
+   ]
+  }
+ }
+}

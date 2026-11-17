@@ -1,0 +1,53 @@
+# Serves the build and forwards the API to the backend, so the browser sees one origin and needs no CORS.
+# The official nginx image fills ${BACKEND_UPSTREAM} from the environment when it starts.
+server {
+    listen 8080;
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+
+    # Docker's resolver: the name is looked up per request, so nginx starts even when the backend does not answer yet.
+    resolver 127.0.0.11 valid=10s ipv6=off;
+    set $backend "${BACKEND_UPSTREAM}";
+
+    # The health check of this container only: it does not depend on the backend.
+    location = /nginx-health {
+        access_log off;
+        default_type text/plain;
+        return 200 "ok\n";
+    }
+
+    # The backend: the API, its health endpoint and, in the Development environment, Swagger.
+    location /api/ {
+        proxy_pass $backend;
+        include /etc/nginx/proxy_params.conf;
+    }
+    location = /health {
+        proxy_pass $backend;
+        include /etc/nginx/proxy_params.conf;
+    }
+    location /swagger {
+        proxy_pass $backend;
+        include /etc/nginx/proxy_params.conf;
+    }
+
+    # Written at container start from the environment (docker/40-runtime-config.sh): never cached.
+    location = /config.js {
+        add_header Cache-Control "no-store";
+    }
+
+    # Files with a hash in the name never change.
+    location /assets/ {
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        try_files $uri =404;
+    }
+
+    location / {
+        add_header Cache-Control "no-cache";
+        try_files $uri /index.html;
+    }
+}

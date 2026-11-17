@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "id": "bench-unknown-user-removed-before-the-job",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "data_missing",
+  "trigger": "unknown",
+  "class": "answerable",
+  "world_dir": "worlds/bench-unknown-user-removed-before-the-job",
+  "incident_id": "INC-bench-unknown-user-removed-before-the-job",
+  "budget_override": null,
+  "prompt": {
+    "incident": {
+      "trigger": "unknown",
+      "severity": "Error",
+      "environment": "prod",
+      "signature": {
+        "kind": "none",
+        "id": null,
+        "log_key": null,
+        "template_id": "t-61a57359d6b3",
+        "template": "Reminder not sent: user {UserId} could not be loaded"
+      },
+      "count": 3,
+      "rate_per_hour": 1,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T12:30:00.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T12:30:00.000Z",
+              "Level": "Error",
+              "Category": "MyApp.Application.Services.ReminderJob",
+              "MessageTemplate": "Reminder not sent: user {UserId} could not be loaded",
+              "Message": "Reminder not sent: user could not be loaded (user fb28d8f4-74ea-429d-aee0-e199852669f9)",
+              "TraceId": "f53d3667e0c1eb285e3fb51a43b80df4",
+              "SpanId": "6170fa0dc5924b7e",
+              "Properties": {
+                "UserId": "fb28d8f4-74ea-429d-aee0-e199852669f9",
+                "OrganizationId": "7d7e89d2-f252-4abc-a901-069a5c92f1e8"
+              },
+              "Exception": {
+                "Type": "System.InvalidOperationException",
+                "Message": "Sequence contains no elements",
+                "Frames": [
+                  "MyApp.Application.Services.ReminderJob.SendAsync"
+                ]
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": null,
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "explained",
+    "abstain_reason": null,
+    "cause_category": "data_missing",
+    "area": null,
+    "user_story": null,
+    "supporting_evidence": [
+      {
+        "tool": "audit_trail_by_entity",
+        "arguments": {
+          "entity": "user",
+          "id": "fb28d8f4-74ea-429d-aee0-e199852669f9"
+        }
+      }
+    ],
+    "min_calls": 1
+  }
+}

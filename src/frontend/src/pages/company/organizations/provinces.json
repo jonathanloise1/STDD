@@ -1,0 +1,430 @@
+[
+  {
+    "code": "AG",
+    "label": "Agrigento"
+  },
+  {
+    "code": "AL",
+    "label": "Alessandria"
+  },
+  {
+    "code": "AN",
+    "label": "Ancona"
+  },
+  {
+    "code": "AO",
+    "label": "Aosta"
+  },
+  {
+    "code": "AP",
+    "label": "Ascoli Piceno"
+  },
+  {
+    "code": "AQ",
+    "label": "L'Aquila"
+  },
+  {
+    "code": "AR",
+    "label": "Arezzo"
+  },
+  {
+    "code": "AT",
+    "label": "Asti"
+  },
+  {
+    "code": "AV",
+    "label": "Avellino"
+  },
+  {
+    "code": "BA",
+    "label": "Bari"
+  },
+  {
+    "code": "BG",
+    "label": "Bergamo"
+  },
+  {
+    "code": "BI",
+    "label": "Biella"
+  },
+  {
+    "code": "BL",
+    "label": "Belluno"
+  },
+  {
+    "code": "BN",
+    "label": "Benevento"
+  },
+  {
+    "code": "BO",
+    "label": "Bologna"
+  },
+  {
+    "code": "BR",
+    "label": "Brindisi"
+  },
+  {
+    "code": "BS",
+    "label": "Brescia"
+  },
+  {
+    "code": "BT",
+    "label": "Barletta-Andria-Trani"
+  },
+  {
+    "code": "BZ",
+    "label": "Bolzano"
+  },
+  {
+    "code": "CA",
+    "label": "Cagliari"
+  },
+  {
+    "code": "CB",
+    "label": "Campobasso"
+  },
+  {
+    "code": "CE",
+    "label": "Caserta"
+  },
+  {
+    "code": "CH",
+    "label": "Chieti"
+  },
+  {
+    "code": "CL",
+    "label": "Caltanissetta"
+  },
+  {
+    "code": "CN",
+    "label": "Cuneo"
+  },
+  {
+    "code": "CO",
+    "label": "Como"
+  },
+  {
+    "code": "CR",
+    "label": "Cremona"
+  },
+  {
+    "code": "CS",
+    "label": "Cosenza"
+  },
+  {
+    "code": "CT",
+    "label": "Catania"
+  },
+  {
+    "code": "CZ",
+    "label": "Catanzaro"
+  },
+  {
+    "code": "EN",
+    "label": "Enna"
+  },
+  {
+    "code": "FE",
+    "label": "Ferrara"
+  },
+  {
+    "code": "FG",
+    "label": "Foggia"
+  },
+  {
+    "code": "FI",
+    "label": "Firenze"
+  },
+  {
+    "code": "FM",
+    "label": "Fermo"
+  },
+  {
+    "code": "FR",
+    "label": "Frosinone"
+  },
+  {
+    "code": "GE",
+    "label": "Genova"
+  },
+  {
+    "code": "GO",
+    "label": "Gorizia"
+  },
+  {
+    "code": "GR",
+    "label": "Grosseto"
+  },
+  {
+    "code": "IM",
+    "label": "Imperia"
+  },
+  {
+    "code": "IS",
+    "label": "Isernia"
+  },
+  {
+    "code": "KR",
+    "label": "Crotone"
+  },
+  {
+    "code": "LC",
+    "label": "Lecco"
+  },
+  {
+    "code": "LE",
+    "label": "Lecce"
+  },
+  {
+    "code": "LI",
+    "label": "Livorno"
+  },
+  {
+    "code": "LO",
+    "label": "Lodi"
+  },
+  {
+    "code": "LT",
+    "label": "Latina"
+  },
+  {
+    "code": "LU",
+    "label": "Lucca"
+  },
+  {
+    "code": "MB",
+    "label": "Monza e della Brianza"
+  },
+  {
+    "code": "MC",
+    "label": "Macerata"
+  },
+  {
+    "code": "ME",
+    "label": "Messina"
+  },
+  {
+    "code": "MI",
+    "label": "Milano"
+  },
+  {
+    "code": "MN",
+    "label": "Mantova"
+  },
+  {
+    "code": "MO",
+    "label": "Modena"
+  },
+  {
+    "code": "MS",
+    "label": "Massa-Carrara"
+  },
+  {
+    "code": "MT",
+    "label": "Matera"
+  },
+  {
+    "code": "NA",
+    "label": "Napoli"
+  },
+  {
+    "code": "NO",
+    "label": "Novara"
+  },
+  {
+    "code": "NU",
+    "label": "Nuoro"
+  },
+  {
+    "code": "OR",
+    "label": "Oristano"
+  },
+  {
+    "code": "PA",
+    "label": "Palermo"
+  },
+  {
+    "code": "PC",
+    "label": "Piacenza"
+  },
+  {
+    "code": "PD",
+    "label": "Padova"
+  },
+  {
+    "code": "PE",
+    "label": "Pescara"
+  },
+  {
+    "code": "PG",
+    "label": "Perugia"
+  },
+  {
+    "code": "PI",
+    "label": "Pisa"
+  },
+  {
+    "code": "PN",
+    "label": "Pordenone"
+  },
+  {
+    "code": "PO",
+    "label": "Prato"
+  },
+  {
+    "code": "PR",
+    "label": "Parma"
+  },
+  {
+    "code": "PT",
+    "label": "Pistoia"
+  },
+  {
+    "code": "PU",
+    "label": "Pesaro e Urbino"
+  },
+  {
+    "code": "PV",
+    "label": "Pavia"
+  },
+  {
+    "code": "PZ",
+    "label": "Potenza"
+  },
+  {
+    "code": "RA",
+    "label": "Ravenna"
+  },
+  {
+    "code": "RC",
+    "label": "Reggio di Calabria"
+  },
+  {
+    "code": "RE",
+    "label": "Reggio nell'Emilia"
+  },
+  {
+    "code": "RG",
+    "label": "Ragusa"
+  },
+  {
+    "code": "RI",
+    "label": "Rieti"
+  },
+  {
+    "code": "RM",
+    "label": "Roma"
+  },
+  {
+    "code": "RN",
+    "label": "Rimini"
+  },
+  {
+    "code": "RO",
+    "label": "Rovigo"
+  },
+  {
+    "code": "SA",
+    "label": "Salerno"
+  },
+  {
+    "code": "SI",
+    "label": "Siena"
+  },
+  {
+    "code": "SO",
+    "label": "Sondrio"
+  },
+  {
+    "code": "SP",
+    "label": "La Spezia"
+  },
+  {
+    "code": "SR",
+    "label": "Siracusa"
+  },
+  {
+    "code": "SS",
+    "label": "Sassari"
+  },
+  {
+    "code": "SU",
+    "label": "Sud Sardegna"
+  },
+  {
+    "code": "SV",
+    "label": "Savona"
+  },
+  {
+    "code": "TA",
+    "label": "Taranto"
+  },
+  {
+    "code": "TE",
+    "label": "Teramo"
+  },
+  {
+    "code": "TN",
+    "label": "Trento"
+  },
+  {
+    "code": "TO",
+    "label": "Torino"
+  },
+  {
+    "code": "TP",
+    "label": "Trapani"
+  },
+  {
+    "code": "TR",
+    "label": "Terni"
+  },
+  {
+    "code": "TS",
+    "label": "Trieste"
+  },
+  {
+    "code": "TV",
+    "label": "Treviso"
+  },
+  {
+    "code": "UD",
+    "label": "Udine"
+  },
+  {
+    "code": "VA",
+    "label": "Varese"
+  },
+  {
+    "code": "VB",
+    "label": "Verbano-Cusio-Ossola"
+  },
+  {
+    "code": "VC",
+    "label": "Vercelli"
+  },
+  {
+    "code": "VE",
+    "label": "Venezia"
+  },
+  {
+    "code": "VI",
+    "label": "Vicenza"
+  },
+  {
+    "code": "VR",
+    "label": "Verona"
+  },
+  {
+    "code": "VT",
+    "label": "Viterbo"
+  },
+  {
+    "code": "VV",
+    "label": "Vibo Valentia"
+  },
+  {
+    "code": "FC",
+    "label": "Forlì-Cesena"
+  }
+]

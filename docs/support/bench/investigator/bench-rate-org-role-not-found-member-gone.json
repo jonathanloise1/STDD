@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "id": "bench-rate-org-role-not-found-member-gone",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "data_missing",
+  "trigger": "rate",
+  "class": "answerable",
+  "world_dir": "worlds/bench-rate-org-role-not-found-member-gone",
+  "incident_id": "INC-bench-rate-org-role-not-found-member-gone",
+  "budget_override": null,
+  "prompt": {
+    "incident": {
+      "trigger": "rate",
+      "severity": "Warning",
+      "environment": "prod",
+      "signature": {
+        "kind": "keyed",
+        "id": "org.role.not_found",
+        "log_key": "org.role.not_found",
+        "template_id": null,
+        "template": null
+      },
+      "count": 40,
+      "rate_per_hour": 180,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T16:30:00.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T16:30:00.000Z",
+              "Level": "Warning",
+              "Category": "MyApp.Application.Services.OrganizationService",
+              "LogKey": "org.role.not_found",
+              "MessageTemplate": "Role not changed: membership {MembershipId} is no longer in organization {OrganizationId}",
+              "Message": "Role not changed: membership b456d3d9-7480-42cc-abb3-0e961bf2a424 is no longer in organization 006e997d-47fe-40e2-a42b-88e258ca53d9",
+              "TraceId": "5c78d690f4b48478c8a2f7f18ed818fc",
+              "SpanId": "2277fca7ad4578db",
+              "Properties": {
+                "MembershipId": "b456d3d9-7480-42cc-abb3-0e961bf2a424",
+                "OrganizationId": "006e997d-47fe-40e2-a42b-88e258ca53d9"
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            },
+            {
+              "Timestamp": "2026-11-06T16:30:00.000Z",
+              "Level": "Warning",
+              "Category": "MyApp.Application.Services.OrganizationService",
+              "LogKey": "org.role.not_found",
+              "MessageTemplate": "Role not changed: membership {MembershipId} is no longer in organization {OrganizationId}",
+              "Message": "Role not changed: membership b456d3d9-7480-42cc-abb3-0e961bf2a424 is no longer in organization 006e997d-47fe-40e2-a42b-88e258ca53d9",
+              "TraceId": "eeee586ffe112c3bcaea0245fbc12b62",
+              "SpanId": "1e40e46c686f294c",
+              "Properties": {
+                "MembershipId": "b456d3d9-7480-42cc-abb3-0e961bf2a424",
+                "OrganizationId": "006e997d-47fe-40e2-a42b-88e258ca53d9"
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": {
+      "signature": {
+        "id": "org.role.not_found",
+        "kind": "keyed",
+        "match": {
+          "log_key": "org.role.not_found"
+        },
+        "area": "organizations",
+        "user_story": "US-ORG-06",
+        "test_case": "ORG-ROLE-006",
+        "severity": "Warning",
+        "message": "This member is no longer in the team.",
+        "runbook": {
+          "anchor": "org-role-not-found",
+          "path": "docs/areas/organizations/operations.md",
+          "text": "### Meaning\n\nAn Admin saved a new role for a member who had been removed in the meantime. The Admin sees \"This member is no longer in the team.\" and no role is changed.\n\n### Check\n\n1. Confirm that the member is gone: read the membership with `sql_entity_read` (entity `membership`) using the id in the entry.\n2. Read `audit_trail_by_entity` (entity `membership`) to see who removed the member and when.\n3. If the membership still exists, the request was rejected for the wrong reason: keep the trace id and hand over.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| sql_entity_read | entity=membership, id={signal.Properties.MembershipId} | found == false |\n\n### Resolve\n\n1. No action when the membership is gone and the removal is in the history.\n2. Ask the Admin to refresh the Team page; invite the person again if they should still be in the team.\n3. Hand over to development when the membership still exists.\n\n### History\n\nNone."
+        },
+        "rate": {
+          "expected_per_hour": 5
+        },
+        "fingerprint_by": [
+          "OrganizationId"
+        ],
+        "cause_category": "data_missing",
+        "status": "active",
+        "fixed_in": null,
+        "noise": null,
+        "rule_checks": [
+          {
+            "tool": "sql_entity_read",
+            "arguments": {
+              "entity": "membership",
+              "id": "{signal.Properties.MembershipId}"
+            },
+            "expect": "found == false"
+          }
+        ],
+        "history": []
+      },
+      "runbook": "### Meaning\n\nAn Admin saved a new role for a member who had been removed in the meantime. The Admin sees \"This member is no longer in the team.\" and no role is changed.\n\n### Check\n\n1. Confirm that the member is gone: read the membership with `sql_entity_read` (entity `membership`) using the id in the entry.\n2. Read `audit_trail_by_entity` (entity `membership`) to see who removed the member and when.\n3. If the membership still exists, the request was rejected for the wrong reason: keep the trace id and hand over.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| sql_entity_read | entity=membership, id={signal.Properties.MembershipId} | found == false |\n\n### Resolve\n\n1. No action when the membership is gone and the removal is in the history.\n2. Ask the Admin to refresh the Team page; invite the person again if they should still be in the team.\n3. Hand over to development when the membership still exists.\n\n### History\n\nNone."
+    },
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "explained",
+    "abstain_reason": null,
+    "cause_category": "data_missing",
+    "area": "organizations",
+    "user_story": "US-ORG-06",
+    "supporting_evidence": [
+      {
+        "tool": "sql_entity_read",
+        "arguments": {
+          "entity": "membership",
+          "id": "b456d3d9-7480-42cc-abb3-0e961bf2a424"
+        }
+      },
+      {
+        "tool": "audit_trail_by_entity",
+        "arguments": {
+          "entity": "membership",
+          "id": "b456d3d9-7480-42cc-abb3-0e961bf2a424"
+        }
+      }
+    ],
+    "min_calls": 2
+  }
+}

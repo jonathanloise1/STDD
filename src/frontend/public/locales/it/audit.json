@@ -1,0 +1,69 @@
+{
+  "title": "Registro di audit",
+  "filterType": "Tipo",
+  "allTypes": "Tutti i tipi",
+  "dateFrom": "Da",
+  "dateTo": "A",
+  "timestamp": "Data/Ora",
+  "action": "Azione",
+  "entityType": "Tipo",
+  "user": "Utente",
+  "changes": "Modifiche",
+  "details": "Dettagli",
+  "oldValues": "Valori precedenti",
+  "newValues": "Nuovi valori",
+  "empty": "Nessuna modifica trovata.",
+  "totalChanges_one": "{{count}} modifica",
+  "totalChanges_other": "{{count}} modifiche",
+  "actions": {
+    "Create": "Creazione",
+    "Update": "Modifica",
+    "Delete": "Eliminazione"
+  },
+  "types": {
+    "TaskItem": "Attività",
+    "OrganizationUser": "Membro del team",
+    "Organization": "Organizzazione",
+    "User": "Utente"
+  },
+  "values": {
+    "yes": "Sì",
+    "no": "No",
+    "Admin": "Admin",
+    "Editor": "Editor",
+    "Viewer": "Visualizzatore",
+    "Active": "Attivo",
+    "Pending": "In sospeso",
+    "Disabled": "Rimosso",
+    "en": "English",
+    "it": "Italiano"
+  },
+  "fields": {
+    "title": "Titolo",
+    "description": "Descrizione",
+    "status": "Stato",
+    "dueDate": "Scadenza",
+    "role": "Ruolo",
+    "email": "Email",
+    "firstName": "Nome",
+    "lastName": "Cognome",
+    "preferredLanguage": "Lingua",
+    "logoUrl": "Logo",
+    "legalName": "Ragione sociale",
+    "vatNumber": "Partita IVA",
+    "fiscalCode": "Codice fiscale",
+    "billingEmail": "Email di fatturazione",
+    "billingAddress": "Indirizzo",
+    "billingCity": "Città",
+    "billingProvince": "Provincia",
+    "billingZipCode": "CAP / Codice postale",
+    "billingCountryCode": "Paese",
+    "Organization": {
+      "name": "Nome organizzazione"
+    },
+    "OrganizationUser": {
+      "status": "Stato"
+    },
+    "name": "Nome"
+  }
+}

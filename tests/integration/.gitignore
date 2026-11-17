@@ -1,0 +1,9 @@
+# Build outputs
+bin/
+obj/
+
+# Test results
+TestResults/
+
+# Local connection string (never commit it)
+appsettings.integration.local.json

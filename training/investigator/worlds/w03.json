@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w03",
+ "app": "StayDesk",
+ "sector": "hotel front desk",
+ "split": "train",
+ "service": "staydesk-api",
+ "namespace": "StayDesk.Application.Services",
+ "record": "booking",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "bookings",
+   "title": "Bookings",
+   "verb": "book",
+   "stories": [
+    {
+     "id": "US-BOOK-01",
+     "title": "Create a booking",
+     "test_case": "BOOK-BOOK-001"
+    },
+    {
+     "id": "US-BOOK-02",
+     "title": "Cancel a booking",
+     "test_case": "BOOK-BOOK-002"
+    }
+   ]
+  },
+  {
+   "id": "rooms",
+   "title": "Rooms",
+   "verb": "assign",
+   "stories": [
+    {
+     "id": "US-ROOM-01",
+     "title": "Assign a room",
+     "test_case": "ROOM-ASSIGN-001"
+    },
+    {
+     "id": "US-ROOM-02",
+     "title": "Block a room",
+     "test_case": "ROOM-ASSIGN-002"
+    }
+   ]
+  },
+  {
+   "id": "guests",
+   "title": "Guests",
+   "verb": "checkin",
+   "stories": [
+    {
+     "id": "US-GUES-01",
+     "title": "Check in a guest",
+     "test_case": "GUES-CHECKIN-001"
+    },
+    {
+     "id": "US-GUES-02",
+     "title": "Check out a guest",
+     "test_case": "GUES-CHECKIN-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "booking",
+   "description": "A booking of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.Bookings",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Booking",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "payment-gateway",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Stay:GatewayUrl",
+  "StayDesk:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "bookings.book.access_lost",
+   "level": "Warning",
+   "area": "bookings",
+   "story": "US-BOOK-01",
+   "test_case": "BOOK-BOOK-005",
+   "category": "StayDesk.Application.Services.BookingsService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "bookings.book.not_found",
+   "level": "Warning",
+   "area": "bookings",
+   "story": "US-BOOK-02",
+   "test_case": "BOOK-BOOK-006",
+   "category": "StayDesk.Application.Services.BookingsService",
+   "template": "booking {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "rooms.assign.duplicate_entry",
+   "level": "Warning",
+   "area": "rooms",
+   "story": "US-ROOM-01",
+   "test_case": "ROOM-ASSIGN-007",
+   "category": "StayDesk.Application.Services.RoomsService",
+   "template": "booking {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "rooms.assign.dependency_failed",
+   "level": "Error",
+   "area": "rooms",
+   "story": "US-ROOM-02",
+   "test_case": "ROOM-ASSIGN-008",
+   "category": "StayDesk.Application.Services.RoomsService",
+   "template": "Call to {Dependency} failed for booking {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "guests.checkin.config_invalid",
+   "level": "Error",
+   "area": "guests",
+   "story": "US-GUES-01",
+   "test_case": "GUES-CHECKIN-009",
+   "category": "StayDesk.Application.Services.GuestsService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "guests.checkin.timed_out",
+   "level": "Error",
+   "area": "guests",
+   "story": "US-GUES-02",
+   "test_case": "GUES-CHECKIN-010",
+   "category": "StayDesk.Application.Services.GuestsService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "bookings.book.unhandled_error",
+   "level": "Error",
+   "area": "bookings",
+   "story": "US-BOOK-01",
+   "test_case": "BOOK-BOOK-011",
+   "category": "StayDesk.Application.Services.BookingsService",
+   "template": "Unhandled error while handling booking {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "bookings.book.input_rejected",
+   "level": "Warning",
+   "area": "bookings",
+   "story": "US-BOOK-02",
+   "test_case": "BOOK-BOOK-012",
+   "category": "StayDesk.Application.Services.BookingsService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "rooms.assign.high_volume",
+   "level": "Warning",
+   "area": "rooms",
+   "story": "US-ROOM-01",
+   "test_case": "ROOM-ASSIGN-013",
+   "category": "StayDesk.Application.Services.RoomsService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "rooms.assign.component_failed",
+   "level": "Error",
+   "area": "rooms",
+   "story": "US-ROOM-02",
+   "test_case": "ROOM-ASSIGN-014",
+   "category": "StayDesk.Application.Services.RoomsService",
+   "template": "Component {Component} failed for booking {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "bookings-book-access-lost",
+   "log_key": "bookings.book.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-BOOK-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "bookings-book-not-found",
+   "log_key": "bookings.book.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "booking {RecordId} was not found when it was saved. See story US-BOOK-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "rooms-assign-duplicate-entry",
+   "log_key": "rooms.assign.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "booking {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-ROOM-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "rooms-assign-dependency-failed",
+   "log_key": "rooms.assign.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for booking {RecordId}. See story US-ROOM-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "guests-checkin-config-invalid",
+   "log_key": "guests.checkin.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-GUES-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "guests-checkin-timed-out",
+   "log_key": "guests.checkin.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-GUES-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "bookings-book-unhandled-error",
+   "log_key": "bookings.book.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling booking {RecordId}. See story US-BOOK-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "bookings-book-input-rejected",
+   "log_key": "bookings.book.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-BOOK-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "rooms-assign-high-volume",
+   "log_key": "rooms.assign.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-ROOM-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "rooms-assign-component-failed",
+   "log_key": "rooms.assign.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for booking {RecordId}. See story US-ROOM-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

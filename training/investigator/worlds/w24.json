@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w24",
+ "app": "FarmBox",
+ "sector": "farm produce boxes",
+ "split": "holdout",
+ "service": "farmbox-api",
+ "namespace": "FarmBox.Application.Services",
+ "record": "box_order",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "orders",
+   "title": "Orders",
+   "verb": "pack",
+   "stories": [
+    {
+     "id": "US-ORDE-01",
+     "title": "Pack a box",
+     "test_case": "ORDE-PACK-001"
+    },
+    {
+     "id": "US-ORDE-02",
+     "title": "Skip a delivery",
+     "test_case": "ORDE-PACK-002"
+    }
+   ]
+  },
+  {
+   "id": "harvest",
+   "title": "Harvest",
+   "verb": "log",
+   "stories": [
+    {
+     "id": "US-HARV-01",
+     "title": "Log a harvest",
+     "test_case": "HARV-LOG-001"
+    },
+    {
+     "id": "US-HARV-02",
+     "title": "Adjust a harvest",
+     "test_case": "HARV-LOG-002"
+    }
+   ]
+  },
+  {
+   "id": "routes",
+   "title": "Routes",
+   "verb": "route",
+   "stories": [
+    {
+     "id": "US-ROUT-01",
+     "title": "Plan a route",
+     "test_case": "ROUT-ROUTE-001"
+    },
+    {
+     "id": "US-ROUT-02",
+     "title": "Swap a stop",
+     "test_case": "ROUT-ROUTE-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "box_order",
+   "description": "A box order of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.BoxOrders",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "BoxOrder",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "cold-chain-sensor",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Farm:SensorUrl",
+  "FarmBox:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "orders.pack.access_lost",
+   "level": "Warning",
+   "area": "orders",
+   "story": "US-ORDE-01",
+   "test_case": "ORDE-PACK-005",
+   "category": "FarmBox.Application.Services.OrdersService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "orders.pack.not_found",
+   "level": "Warning",
+   "area": "orders",
+   "story": "US-ORDE-02",
+   "test_case": "ORDE-PACK-006",
+   "category": "FarmBox.Application.Services.OrdersService",
+   "template": "box order {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "harvest.log.duplicate_entry",
+   "level": "Warning",
+   "area": "harvest",
+   "story": "US-HARV-01",
+   "test_case": "HARV-LOG-007",
+   "category": "FarmBox.Application.Services.HarvestService",
+   "template": "box order {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "harvest.log.dependency_failed",
+   "level": "Error",
+   "area": "harvest",
+   "story": "US-HARV-02",
+   "test_case": "HARV-LOG-008",
+   "category": "FarmBox.Application.Services.HarvestService",
+   "template": "Call to {Dependency} failed for box order {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "routes.route.config_invalid",
+   "level": "Error",
+   "area": "routes",
+   "story": "US-ROUT-01",
+   "test_case": "ROUT-ROUTE-009",
+   "category": "FarmBox.Application.Services.RoutesService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "routes.route.timed_out",
+   "level": "Error",
+   "area": "routes",
+   "story": "US-ROUT-02",
+   "test_case": "ROUT-ROUTE-010",
+   "category": "FarmBox.Application.Services.RoutesService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "orders.pack.unhandled_error",
+   "level": "Error",
+   "area": "orders",
+   "story": "US-ORDE-01",
+   "test_case": "ORDE-PACK-011",
+   "category": "FarmBox.Application.Services.OrdersService",
+   "template": "Unhandled error while handling box order {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "orders.pack.input_rejected",
+   "level": "Warning",
+   "area": "orders",
+   "story": "US-ORDE-02",
+   "test_case": "ORDE-PACK-012",
+   "category": "FarmBox.Application.Services.OrdersService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "harvest.log.high_volume",
+   "level": "Warning",
+   "area": "harvest",
+   "story": "US-HARV-01",
+   "test_case": "HARV-LOG-013",
+   "category": "FarmBox.Application.Services.HarvestService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "harvest.log.component_failed",
+   "level": "Error",
+   "area": "harvest",
+   "story": "US-HARV-02",
+   "test_case": "HARV-LOG-014",
+   "category": "FarmBox.Application.Services.HarvestService",
+   "template": "Component {Component} failed for box order {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "orders-pack-access-lost",
+   "log_key": "orders.pack.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-ORDE-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "orders-pack-not-found",
+   "log_key": "orders.pack.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "box order {RecordId} was not found when it was saved. See story US-ORDE-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "harvest-log-duplicate-entry",
+   "log_key": "harvest.log.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "box order {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-HARV-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "harvest-log-dependency-failed",
+   "log_key": "harvest.log.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for box order {RecordId}. See story US-HARV-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "routes-route-config-invalid",
+   "log_key": "routes.route.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-ROUT-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "routes-route-timed-out",
+   "log_key": "routes.route.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-ROUT-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "orders-pack-unhandled-error",
+   "log_key": "orders.pack.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling box order {RecordId}. See story US-ORDE-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "orders-pack-input-rejected",
+   "log_key": "orders.pack.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-ORDE-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "harvest-log-high-volume",
+   "log_key": "harvest.log.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-HARV-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "harvest-log-component-failed",
+   "log_key": "harvest.log.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for box order {RecordId}. See story US-HARV-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

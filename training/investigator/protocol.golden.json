@@ -1,0 +1,1323 @@
+{
+  "schema_version": 1,
+  "protocol_sha256": "3244e948c7eeee98fa34c262e1072406e6ede2bf4b1ae7dbff0b54e3feaaa630",
+  "system_block_sha256": "f992615dab42586edf83a49d864c963e77818c6f164523846eac6fec9d465255",
+  "format": {
+    "json": "compact separators (',', ':'), non-ASCII characters kept",
+    "lengths": "Unicode code points"
+  },
+  "render": [
+    {
+      "id": "u01-rate-with-pack",
+      "description": "Rate trigger with a pack, budget 6",
+      "kind": "user",
+      "input": {
+        "incident": {
+          "trigger": "rate",
+          "severity": "Warning",
+          "environment": "prod",
+          "signature": {
+            "kind": "keyed",
+            "id": "loans.lend.access_lost",
+            "log_key": "loans.lend.access_lost",
+            "template_id": null,
+            "template": null
+          },
+          "count": 41,
+          "rate_per_hour": 120,
+          "first_seen": "2026-11-06T09:12:44.120Z",
+          "last_seen": "2026-11-06T09:58:03.511Z",
+          "evidence": [
+            {
+              "id": "E1",
+              "source": "signal",
+              "records": [
+                {
+                  "LogKey": "loans.lend.access_lost",
+                  "Message": "contact [email] à \"quoted\" {braces}",
+                  "TraceId": "4bf92f3577b34da6a3ce929d0e0e4736"
+                }
+              ]
+            }
+          ]
+        },
+        "pack": {
+          "signature": {
+            "id": "loans.lend.access_lost",
+            "user_story": "US-LOAN-01",
+            "status": "active"
+          },
+          "runbook": "### Meaning\n\nA member lost access."
+        },
+        "tools": [
+          {
+            "name": "logs_by_correlation",
+            "description": "Returns the log entries of one request, identified by its trace id.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "trace_id"
+              ],
+              "properties": {
+                "trace_id": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{32}$"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 200
+                }
+              }
+            }
+          },
+          {
+            "name": "health_status",
+            "description": "Returns the current health of the application.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {}
+            }
+          }
+        ],
+        "entities": [
+          {
+            "name": "membership",
+            "description": "The link between a person and a site."
+          },
+          {
+            "name": "site",
+            "description": "A tenant."
+          }
+        ],
+        "constraints": [
+          {
+            "id": "C01",
+            "text": "Every tool is read-only."
+          },
+          {
+            "id": "C03",
+            "text": "An investigation may make at most 12 tool calls."
+          }
+        ],
+        "calls": 6
+      },
+      "expected": "<incident>{\"trigger\":\"rate\",\"severity\":\"Warning\",\"environment\":\"prod\",\"signature\":{\"kind\":\"keyed\",\"id\":\"loans.lend.access_lost\",\"log_key\":\"loans.lend.access_lost\",\"template_id\":null,\"template\":null},\"count\":41,\"rate_per_hour\":120,\"first_seen\":\"2026-11-06T09:12:44.120Z\",\"last_seen\":\"2026-11-06T09:58:03.511Z\",\"evidence\":[{\"id\":\"E1\",\"source\":\"signal\",\"records\":[{\"LogKey\":\"loans.lend.access_lost\",\"Message\":\"contact [email] à \\\"quoted\\\" {braces}\",\"TraceId\":\"4bf92f3577b34da6a3ce929d0e0e4736\"}]}]}</incident>\n<pack>{\"signature\":{\"id\":\"loans.lend.access_lost\",\"user_story\":\"US-LOAN-01\",\"status\":\"active\"},\"runbook\":\"### Meaning\\n\\nA member lost access.\"}</pack>\n<tools>{\"tools\":[{\"name\":\"logs_by_correlation\",\"description\":\"Returns the log entries of one request, identified by its trace id.\",\"parameters\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"trace_id\"],\"properties\":{\"trace_id\":{\"type\":\"string\",\"pattern\":\"^[0-9a-f]{32}$\"},\"limit\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":200}}}},{\"name\":\"health_status\",\"description\":\"Returns the current health of the application.\",\"parameters\":{\"type\":\"object\",\"additionalProperties\":false,\"properties\":{}}}],\"entities\":[{\"name\":\"membership\",\"description\":\"The link between a person and a site.\"},{\"name\":\"site\",\"description\":\"A tenant.\"}]}</tools>\n<constraints>\nC01: Every tool is read-only.\nC03: An investigation may make at most 12 tool calls.\n</constraints>\n<budget calls=\"6\" />"
+    },
+    {
+      "id": "u02-unknown-no-pack",
+      "description": "Unknown trigger, no pack (null), budget 10",
+      "kind": "user",
+      "input": {
+        "incident": {
+          "trigger": "unknown",
+          "severity": "Warning",
+          "environment": "prod",
+          "signature": {
+            "kind": "template",
+            "id": null,
+            "log_key": null,
+            "template_id": "t-0123456789ab",
+            "template": "Failed for {Id}"
+          },
+          "count": 41,
+          "rate_per_hour": 120,
+          "first_seen": "2026-11-06T09:12:44.120Z",
+          "last_seen": "2026-11-06T09:58:03.511Z",
+          "evidence": [
+            {
+              "id": "E1",
+              "source": "signal",
+              "records": [
+                {
+                  "LogKey": "loans.lend.access_lost",
+                  "Message": "contact [email] à \"quoted\" {braces}",
+                  "TraceId": "4bf92f3577b34da6a3ce929d0e0e4736"
+                }
+              ]
+            }
+          ]
+        },
+        "pack": null,
+        "tools": [
+          {
+            "name": "logs_by_correlation",
+            "description": "Returns the log entries of one request, identified by its trace id.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "trace_id"
+              ],
+              "properties": {
+                "trace_id": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{32}$"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 200
+                }
+              }
+            }
+          },
+          {
+            "name": "health_status",
+            "description": "Returns the current health of the application.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {}
+            }
+          }
+        ],
+        "entities": [
+          {
+            "name": "membership",
+            "description": "The link between a person and a site."
+          },
+          {
+            "name": "site",
+            "description": "A tenant."
+          }
+        ],
+        "constraints": [
+          {
+            "id": "C01",
+            "text": "Every tool is read-only."
+          },
+          {
+            "id": "C03",
+            "text": "An investigation may make at most 12 tool calls."
+          }
+        ],
+        "calls": 10
+      },
+      "expected": "<incident>{\"trigger\":\"unknown\",\"severity\":\"Warning\",\"environment\":\"prod\",\"signature\":{\"kind\":\"template\",\"id\":null,\"log_key\":null,\"template_id\":\"t-0123456789ab\",\"template\":\"Failed for {Id}\"},\"count\":41,\"rate_per_hour\":120,\"first_seen\":\"2026-11-06T09:12:44.120Z\",\"last_seen\":\"2026-11-06T09:58:03.511Z\",\"evidence\":[{\"id\":\"E1\",\"source\":\"signal\",\"records\":[{\"LogKey\":\"loans.lend.access_lost\",\"Message\":\"contact [email] à \\\"quoted\\\" {braces}\",\"TraceId\":\"4bf92f3577b34da6a3ce929d0e0e4736\"}]}]}</incident>\n<pack>null</pack>\n<tools>{\"tools\":[{\"name\":\"logs_by_correlation\",\"description\":\"Returns the log entries of one request, identified by its trace id.\",\"parameters\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"trace_id\"],\"properties\":{\"trace_id\":{\"type\":\"string\",\"pattern\":\"^[0-9a-f]{32}$\"},\"limit\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":200}}}},{\"name\":\"health_status\",\"description\":\"Returns the current health of the application.\",\"parameters\":{\"type\":\"object\",\"additionalProperties\":false,\"properties\":{}}}],\"entities\":[{\"name\":\"membership\",\"description\":\"The link between a person and a site.\"},{\"name\":\"site\",\"description\":\"A tenant.\"}]}</tools>\n<constraints>\nC01: Every tool is read-only.\nC03: An investigation may make at most 12 tool calls.\n</constraints>\n<budget calls=\"10\" />"
+    },
+    {
+      "id": "u03-budget-one",
+      "description": "Budget 1",
+      "kind": "user",
+      "input": {
+        "incident": {
+          "trigger": "rate",
+          "severity": "Warning",
+          "environment": "prod",
+          "signature": {
+            "kind": "keyed",
+            "id": "loans.lend.access_lost",
+            "log_key": "loans.lend.access_lost",
+            "template_id": null,
+            "template": null
+          },
+          "count": 41,
+          "rate_per_hour": 120,
+          "first_seen": "2026-11-06T09:12:44.120Z",
+          "last_seen": "2026-11-06T09:58:03.511Z",
+          "evidence": [
+            {
+              "id": "E1",
+              "source": "signal",
+              "records": [
+                {
+                  "LogKey": "loans.lend.access_lost",
+                  "Message": "contact [email] à \"quoted\" {braces}",
+                  "TraceId": "4bf92f3577b34da6a3ce929d0e0e4736"
+                }
+              ]
+            }
+          ]
+        },
+        "pack": {
+          "signature": {
+            "id": "loans.lend.access_lost",
+            "user_story": "US-LOAN-01",
+            "status": "active"
+          },
+          "runbook": "### Meaning\n\nA member lost access."
+        },
+        "tools": [
+          {
+            "name": "logs_by_correlation",
+            "description": "Returns the log entries of one request, identified by its trace id.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "trace_id"
+              ],
+              "properties": {
+                "trace_id": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{32}$"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 200
+                }
+              }
+            }
+          },
+          {
+            "name": "health_status",
+            "description": "Returns the current health of the application.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {}
+            }
+          }
+        ],
+        "entities": [
+          {
+            "name": "membership",
+            "description": "The link between a person and a site."
+          },
+          {
+            "name": "site",
+            "description": "A tenant."
+          }
+        ],
+        "constraints": [
+          {
+            "id": "C01",
+            "text": "Every tool is read-only."
+          },
+          {
+            "id": "C03",
+            "text": "An investigation may make at most 12 tool calls."
+          }
+        ],
+        "calls": 1
+      },
+      "expected": "<incident>{\"trigger\":\"rate\",\"severity\":\"Warning\",\"environment\":\"prod\",\"signature\":{\"kind\":\"keyed\",\"id\":\"loans.lend.access_lost\",\"log_key\":\"loans.lend.access_lost\",\"template_id\":null,\"template\":null},\"count\":41,\"rate_per_hour\":120,\"first_seen\":\"2026-11-06T09:12:44.120Z\",\"last_seen\":\"2026-11-06T09:58:03.511Z\",\"evidence\":[{\"id\":\"E1\",\"source\":\"signal\",\"records\":[{\"LogKey\":\"loans.lend.access_lost\",\"Message\":\"contact [email] à \\\"quoted\\\" {braces}\",\"TraceId\":\"4bf92f3577b34da6a3ce929d0e0e4736\"}]}]}</incident>\n<pack>{\"signature\":{\"id\":\"loans.lend.access_lost\",\"user_story\":\"US-LOAN-01\",\"status\":\"active\"},\"runbook\":\"### Meaning\\n\\nA member lost access.\"}</pack>\n<tools>{\"tools\":[{\"name\":\"logs_by_correlation\",\"description\":\"Returns the log entries of one request, identified by its trace id.\",\"parameters\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"trace_id\"],\"properties\":{\"trace_id\":{\"type\":\"string\",\"pattern\":\"^[0-9a-f]{32}$\"},\"limit\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":200}}}},{\"name\":\"health_status\",\"description\":\"Returns the current health of the application.\",\"parameters\":{\"type\":\"object\",\"additionalProperties\":false,\"properties\":{}}}],\"entities\":[{\"name\":\"membership\",\"description\":\"The link between a person and a site.\"},{\"name\":\"site\",\"description\":\"A tenant.\"}]}</tools>\n<constraints>\nC01: Every tool is read-only.\nC03: An investigation may make at most 12 tool calls.\n</constraints>\n<budget calls=\"1\" />"
+    },
+    {
+      "id": "u04-non-ascii-kept",
+      "description": "Non-ASCII characters are kept, not escaped",
+      "kind": "user",
+      "input": {
+        "incident": {
+          "trigger": "rate",
+          "severity": "Warning",
+          "environment": "pröd",
+          "signature": {
+            "kind": "keyed",
+            "id": "loans.lend.access_lost",
+            "log_key": "loans.lend.access_lost",
+            "template_id": null,
+            "template": null
+          },
+          "count": 41,
+          "rate_per_hour": 120,
+          "first_seen": "2026-11-06T09:12:44.120Z",
+          "last_seen": "2026-11-06T09:58:03.511Z",
+          "evidence": [
+            {
+              "id": "E1",
+              "source": "signal",
+              "records": [
+                {
+                  "LogKey": "loans.lend.access_lost",
+                  "Message": "contact [email] à \"quoted\" {braces}",
+                  "TraceId": "4bf92f3577b34da6a3ce929d0e0e4736"
+                }
+              ]
+            }
+          ]
+        },
+        "pack": {
+          "signature": {
+            "id": "loans.lend.access_lost",
+            "user_story": "US-LOAN-01",
+            "status": "active"
+          },
+          "runbook": "### Meaning\n\nA member lost access."
+        },
+        "tools": [
+          {
+            "name": "logs_by_correlation",
+            "description": "Returns the log entries of one request, identified by its trace id.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "trace_id"
+              ],
+              "properties": {
+                "trace_id": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{32}$"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 200
+                }
+              }
+            }
+          },
+          {
+            "name": "health_status",
+            "description": "Returns the current health of the application.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {}
+            }
+          }
+        ],
+        "entities": [
+          {
+            "name": "membership",
+            "description": "The link between a person and a site."
+          },
+          {
+            "name": "site",
+            "description": "A tenant."
+          }
+        ],
+        "constraints": [
+          {
+            "id": "C01",
+            "text": "Every tool is read-only."
+          },
+          {
+            "id": "C03",
+            "text": "An investigation may make at most 12 tool calls."
+          }
+        ],
+        "calls": 6
+      },
+      "expected": "<incident>{\"trigger\":\"rate\",\"severity\":\"Warning\",\"environment\":\"pröd\",\"signature\":{\"kind\":\"keyed\",\"id\":\"loans.lend.access_lost\",\"log_key\":\"loans.lend.access_lost\",\"template_id\":null,\"template\":null},\"count\":41,\"rate_per_hour\":120,\"first_seen\":\"2026-11-06T09:12:44.120Z\",\"last_seen\":\"2026-11-06T09:58:03.511Z\",\"evidence\":[{\"id\":\"E1\",\"source\":\"signal\",\"records\":[{\"LogKey\":\"loans.lend.access_lost\",\"Message\":\"contact [email] à \\\"quoted\\\" {braces}\",\"TraceId\":\"4bf92f3577b34da6a3ce929d0e0e4736\"}]}]}</incident>\n<pack>{\"signature\":{\"id\":\"loans.lend.access_lost\",\"user_story\":\"US-LOAN-01\",\"status\":\"active\"},\"runbook\":\"### Meaning\\n\\nA member lost access.\"}</pack>\n<tools>{\"tools\":[{\"name\":\"logs_by_correlation\",\"description\":\"Returns the log entries of one request, identified by its trace id.\",\"parameters\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"trace_id\"],\"properties\":{\"trace_id\":{\"type\":\"string\",\"pattern\":\"^[0-9a-f]{32}$\"},\"limit\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":200}}}},{\"name\":\"health_status\",\"description\":\"Returns the current health of the application.\",\"parameters\":{\"type\":\"object\",\"additionalProperties\":false,\"properties\":{}}}],\"entities\":[{\"name\":\"membership\",\"description\":\"The link between a person and a site.\"},{\"name\":\"site\",\"description\":\"A tenant.\"}]}</tools>\n<constraints>\nC01: Every tool is read-only.\nC03: An investigation may make at most 12 tool calls.\n</constraints>\n<budget calls=\"6\" />"
+    },
+    {
+      "id": "u05-rule-check-failed",
+      "description": "A failed rule check is part of the incident (the trigger stays a value of the report schema)",
+      "kind": "user",
+      "input": {
+        "incident": {
+          "trigger": "severity",
+          "severity": "Warning",
+          "environment": "prod",
+          "signature": {
+            "kind": "keyed",
+            "id": "loans.lend.access_lost",
+            "log_key": "loans.lend.access_lost",
+            "template_id": null,
+            "template": null
+          },
+          "count": 41,
+          "rate_per_hour": 120,
+          "first_seen": "2026-11-06T09:12:44.120Z",
+          "last_seen": "2026-11-06T09:58:03.511Z",
+          "evidence": [
+            {
+              "id": "E1",
+              "source": "signal",
+              "records": [
+                {
+                  "LogKey": "loans.lend.access_lost",
+                  "Message": "contact [email] à \"quoted\" {braces}",
+                  "TraceId": "4bf92f3577b34da6a3ce929d0e0e4736"
+                }
+              ]
+            }
+          ],
+          "rule_checks": [
+            {
+              "tool": "health_status",
+              "expect": "status == Healthy",
+              "passed": false
+            }
+          ]
+        },
+        "pack": {
+          "signature": {
+            "id": "loans.lend.access_lost",
+            "user_story": "US-LOAN-01",
+            "status": "active"
+          },
+          "runbook": "### Meaning\n\nA member lost access."
+        },
+        "tools": [
+          {
+            "name": "logs_by_correlation",
+            "description": "Returns the log entries of one request, identified by its trace id.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "trace_id"
+              ],
+              "properties": {
+                "trace_id": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{32}$"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 200
+                }
+              }
+            }
+          },
+          {
+            "name": "health_status",
+            "description": "Returns the current health of the application.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {}
+            }
+          }
+        ],
+        "entities": [
+          {
+            "name": "membership",
+            "description": "The link between a person and a site."
+          },
+          {
+            "name": "site",
+            "description": "A tenant."
+          }
+        ],
+        "constraints": [
+          {
+            "id": "C01",
+            "text": "Every tool is read-only."
+          },
+          {
+            "id": "C03",
+            "text": "An investigation may make at most 12 tool calls."
+          }
+        ],
+        "calls": 6
+      },
+      "expected": "<incident>{\"trigger\":\"severity\",\"severity\":\"Warning\",\"environment\":\"prod\",\"signature\":{\"kind\":\"keyed\",\"id\":\"loans.lend.access_lost\",\"log_key\":\"loans.lend.access_lost\",\"template_id\":null,\"template\":null},\"count\":41,\"rate_per_hour\":120,\"first_seen\":\"2026-11-06T09:12:44.120Z\",\"last_seen\":\"2026-11-06T09:58:03.511Z\",\"evidence\":[{\"id\":\"E1\",\"source\":\"signal\",\"records\":[{\"LogKey\":\"loans.lend.access_lost\",\"Message\":\"contact [email] à \\\"quoted\\\" {braces}\",\"TraceId\":\"4bf92f3577b34da6a3ce929d0e0e4736\"}]}],\"rule_checks\":[{\"tool\":\"health_status\",\"expect\":\"status == Healthy\",\"passed\":false}]}</incident>\n<pack>{\"signature\":{\"id\":\"loans.lend.access_lost\",\"user_story\":\"US-LOAN-01\",\"status\":\"active\"},\"runbook\":\"### Meaning\\n\\nA member lost access.\"}</pack>\n<tools>{\"tools\":[{\"name\":\"logs_by_correlation\",\"description\":\"Returns the log entries of one request, identified by its trace id.\",\"parameters\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"trace_id\"],\"properties\":{\"trace_id\":{\"type\":\"string\",\"pattern\":\"^[0-9a-f]{32}$\"},\"limit\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":200}}}},{\"name\":\"health_status\",\"description\":\"Returns the current health of the application.\",\"parameters\":{\"type\":\"object\",\"additionalProperties\":false,\"properties\":{}}}],\"entities\":[{\"name\":\"membership\",\"description\":\"The link between a person and a site.\"},{\"name\":\"site\",\"description\":\"A tenant.\"}]}</tools>\n<constraints>\nC01: Every tool is read-only.\nC03: An investigation may make at most 12 tool calls.\n</constraints>\n<budget calls=\"6\" />"
+    },
+    {
+      "id": "u06-braces-in-values",
+      "description": "Braces in values stay literal and are not substituted again",
+      "kind": "user",
+      "input": {
+        "incident": {
+          "trigger": "rate",
+          "severity": "Warning",
+          "environment": "prod",
+          "signature": {
+            "kind": "keyed",
+            "id": "loans.lend.access_lost",
+            "log_key": "loans.lend.access_lost",
+            "template_id": null,
+            "template": null
+          },
+          "count": 1,
+          "rate_per_hour": 120,
+          "first_seen": "2026-11-06T09:12:44.120Z",
+          "last_seen": "2026-11-06T09:58:03.511Z",
+          "evidence": [
+            {
+              "id": "E1",
+              "source": "signal",
+              "records": [
+                {
+                  "LogKey": "loans.lend.access_lost",
+                  "Message": "contact [email] à \"quoted\" {braces}",
+                  "TraceId": "4bf92f3577b34da6a3ce929d0e0e4736"
+                }
+              ]
+            }
+          ],
+          "note": "{budget} {tools} {calls}"
+        },
+        "pack": {
+          "signature": {
+            "id": "loans.lend.access_lost",
+            "user_story": "US-LOAN-01",
+            "status": "active"
+          },
+          "runbook": "### Meaning\n\nA member lost access."
+        },
+        "tools": [
+          {
+            "name": "logs_by_correlation",
+            "description": "Returns the log entries of one request, identified by its trace id.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "trace_id"
+              ],
+              "properties": {
+                "trace_id": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{32}$"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 200
+                }
+              }
+            }
+          },
+          {
+            "name": "health_status",
+            "description": "Returns the current health of the application.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {}
+            }
+          }
+        ],
+        "entities": [
+          {
+            "name": "membership",
+            "description": "The link between a person and a site."
+          },
+          {
+            "name": "site",
+            "description": "A tenant."
+          }
+        ],
+        "constraints": [
+          {
+            "id": "C01",
+            "text": "Every tool is read-only."
+          },
+          {
+            "id": "C03",
+            "text": "An investigation may make at most 12 tool calls."
+          }
+        ],
+        "calls": 6
+      },
+      "expected": "<incident>{\"trigger\":\"rate\",\"severity\":\"Warning\",\"environment\":\"prod\",\"signature\":{\"kind\":\"keyed\",\"id\":\"loans.lend.access_lost\",\"log_key\":\"loans.lend.access_lost\",\"template_id\":null,\"template\":null},\"count\":1,\"rate_per_hour\":120,\"first_seen\":\"2026-11-06T09:12:44.120Z\",\"last_seen\":\"2026-11-06T09:58:03.511Z\",\"evidence\":[{\"id\":\"E1\",\"source\":\"signal\",\"records\":[{\"LogKey\":\"loans.lend.access_lost\",\"Message\":\"contact [email] à \\\"quoted\\\" {braces}\",\"TraceId\":\"4bf92f3577b34da6a3ce929d0e0e4736\"}]}],\"note\":\"{budget} {tools} {calls}\"}</incident>\n<pack>{\"signature\":{\"id\":\"loans.lend.access_lost\",\"user_story\":\"US-LOAN-01\",\"status\":\"active\"},\"runbook\":\"### Meaning\\n\\nA member lost access.\"}</pack>\n<tools>{\"tools\":[{\"name\":\"logs_by_correlation\",\"description\":\"Returns the log entries of one request, identified by its trace id.\",\"parameters\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"trace_id\"],\"properties\":{\"trace_id\":{\"type\":\"string\",\"pattern\":\"^[0-9a-f]{32}$\"},\"limit\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":200}}}},{\"name\":\"health_status\",\"description\":\"Returns the current health of the application.\",\"parameters\":{\"type\":\"object\",\"additionalProperties\":false,\"properties\":{}}}],\"entities\":[{\"name\":\"membership\",\"description\":\"The link between a person and a site.\"},{\"name\":\"site\",\"description\":\"A tenant.\"}]}</tools>\n<constraints>\nC01: Every tool is read-only.\nC03: An investigation may make at most 12 tool calls.\n</constraints>\n<budget calls=\"6\" />"
+    },
+    {
+      "id": "t01-call-logs",
+      "description": "A call with an optional argument",
+      "kind": "call",
+      "input": {
+        "tool": "logs_by_correlation",
+        "arguments": {
+          "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+          "limit": 50
+        }
+      },
+      "expected": "<call>{\"tool\":\"logs_by_correlation\",\"arguments\":{\"trace_id\":\"4bf92f3577b34da6a3ce929d0e0e4736\",\"limit\":50}}</call>"
+    },
+    {
+      "id": "t02-call-no-arguments",
+      "description": "A call without arguments",
+      "kind": "call",
+      "input": {
+        "tool": "health_status",
+        "arguments": {}
+      },
+      "expected": "<call>{\"tool\":\"health_status\",\"arguments\":{}}</call>"
+    },
+    {
+      "id": "t03-result-ok",
+      "description": "An ok result with 2 calls left",
+      "kind": "result",
+      "input": {
+        "envelope": {
+          "tool": "logs_by_correlation",
+          "call": 1,
+          "status": "ok",
+          "evidence_id": "E2",
+          "source": "world",
+          "rows": 1,
+          "truncated": false,
+          "fields_dropped": 0,
+          "data": {
+            "records": [
+              {
+                "timestamp": "2026-11-06T09:58:03.511Z",
+                "message": "café – \"x\""
+              }
+            ]
+          }
+        },
+        "calls_left": 2
+      },
+      "expected": "<result>{\"tool\":\"logs_by_correlation\",\"call\":1,\"status\":\"ok\",\"evidence_id\":\"E2\",\"source\":\"world\",\"rows\":1,\"truncated\":false,\"fields_dropped\":0,\"data\":{\"records\":[{\"timestamp\":\"2026-11-06T09:58:03.511Z\",\"message\":\"café – \\\"x\\\"\"}]}}</result>\n<budget calls=\"2\" />"
+    },
+    {
+      "id": "t04-result-denied-last",
+      "description": "A denied result with no calls left",
+      "kind": "result",
+      "input": {
+        "envelope": {
+          "tool": "logs_by_correlation",
+          "call": 2,
+          "status": "denied",
+          "evidence_id": "E3",
+          "source": "world",
+          "rows": 0,
+          "truncated": false,
+          "fields_dropped": 0,
+          "data": null,
+          "error": "$.limit: above 200"
+        },
+        "calls_left": 0
+      },
+      "expected": "<result>{\"tool\":\"logs_by_correlation\",\"call\":2,\"status\":\"denied\",\"evidence_id\":\"E3\",\"source\":\"world\",\"rows\":0,\"truncated\":false,\"fields_dropped\":0,\"data\":null,\"error\":\"$.limit: above 200\"}</result>\n<budget calls=\"0\" />"
+    },
+    {
+      "id": "t05-report-explained",
+      "description": "An explained report",
+      "kind": "report",
+      "input": {
+        "verdict": "explained",
+        "abstain_reason": null,
+        "cause_category": "access",
+        "cause": "The member was removed at 09:10.",
+        "confidence": 0.82,
+        "evidence_refs": [
+          "E1",
+          "E2"
+        ],
+        "area": "loans",
+        "user_story": "US-LOAN-01",
+        "reproduction": null,
+        "next_checks": [
+          "Ask the admin."
+        ]
+      },
+      "expected": "<report>{\"verdict\":\"explained\",\"abstain_reason\":null,\"cause_category\":\"access\",\"cause\":\"The member was removed at 09:10.\",\"confidence\":0.82,\"evidence_refs\":[\"E1\",\"E2\"],\"area\":\"loans\",\"user_story\":\"US-LOAN-01\",\"reproduction\":null,\"next_checks\":[\"Ask the admin.\"]}</report>"
+    },
+    {
+      "id": "t06-report-abstain",
+      "description": "An abstain report",
+      "kind": "report",
+      "input": {
+        "verdict": "abstain",
+        "abstain_reason": "budget_exhausted",
+        "cause_category": "unknown",
+        "cause": null,
+        "confidence": 0.2,
+        "evidence_refs": [],
+        "area": null,
+        "user_story": null,
+        "reproduction": null,
+        "next_checks": []
+      },
+      "expected": "<report>{\"verdict\":\"abstain\",\"abstain_reason\":\"budget_exhausted\",\"cause_category\":\"unknown\",\"cause\":null,\"confidence\":0.2,\"evidence_refs\":[],\"area\":null,\"user_story\":null,\"reproduction\":null,\"next_checks\":[]}</report>"
+    },
+    {
+      "id": "t07-repair",
+      "description": "The repair turn after an invalid report",
+      "kind": "repair",
+      "input": [
+        "evidence_refs: E9 was not received",
+        "user_story US-XXX-01 is not in the pack"
+      ],
+      "expected": "<validation_error>evidence_refs: E9 was not received; user_story US-XXX-01 is not in the pack</validation_error>"
+    }
+  ],
+  "parse": [
+    {
+      "id": "p01-call",
+      "output": "<call>{\"tool\":\"health_status\",\"arguments\":{}}</call>",
+      "expected": {
+        "kind": "call",
+        "payload": {
+          "tool": "health_status",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "p02-call-spaced-json",
+      "output": "<call>{\"tool\": \"logs_by_correlation\", \"arguments\": {\"trace_id\": \"4bf92f3577b34da6a3ce929d0e0e4736\"}}</call>",
+      "expected": {
+        "kind": "call",
+        "payload": {
+          "tool": "logs_by_correlation",
+          "arguments": {
+            "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736"
+          }
+        }
+      }
+    },
+    {
+      "id": "p03-report",
+      "output": "<report>{\"verdict\":\"explained\",\"abstain_reason\":null,\"cause_category\":\"access\",\"cause\":\"The member was removed at 09:10.\",\"confidence\":0.82,\"evidence_refs\":[\"E1\",\"E2\"],\"area\":\"loans\",\"user_story\":\"US-LOAN-01\",\"reproduction\":null,\"next_checks\":[\"Ask the admin.\"]}</report>",
+      "expected": {
+        "kind": "report",
+        "payload": {
+          "verdict": "explained",
+          "abstain_reason": null,
+          "cause_category": "access",
+          "cause": "The member was removed at 09:10.",
+          "confidence": 0.82,
+          "evidence_refs": [
+            "E1",
+            "E2"
+          ],
+          "area": "loans",
+          "user_story": "US-LOAN-01",
+          "reproduction": null,
+          "next_checks": [
+            "Ask the admin."
+          ]
+        }
+      }
+    },
+    {
+      "id": "p04-surrounding-whitespace",
+      "output": "\n  <call>{\"tool\":\"health_status\",\"arguments\":{}}</call>\r\n",
+      "expected": {
+        "kind": "call",
+        "payload": {
+          "tool": "health_status",
+          "arguments": {}
+        }
+      }
+    },
+    {
+      "id": "p05-text-before",
+      "output": "I will check the logs. <call>{\"tool\":\"health_status\",\"arguments\":{}}</call>",
+      "expected": {
+        "kind": "invalid",
+        "payload": null
+      }
+    },
+    {
+      "id": "p06-two-calls",
+      "output": "<call>{\"tool\":\"health_status\",\"arguments\":{}}</call><call>{\"tool\":\"health_status\",\"arguments\":{}}</call>",
+      "expected": {
+        "kind": "invalid",
+        "payload": null
+      }
+    },
+    {
+      "id": "p07-bad-json",
+      "output": "<call>{\"tool\":\"health_status\",</call>",
+      "expected": {
+        "kind": "invalid",
+        "payload": null
+      }
+    },
+    {
+      "id": "p08-missing-arguments",
+      "output": "<call>{\"tool\":\"health_status\"}</call>",
+      "expected": {
+        "kind": "invalid",
+        "payload": null
+      }
+    },
+    {
+      "id": "p09-extra-key",
+      "output": "<call>{\"tool\":\"health_status\",\"arguments\":{},\"why\":\"x\"}</call>",
+      "expected": {
+        "kind": "invalid",
+        "payload": null
+      }
+    },
+    {
+      "id": "p10-call-array",
+      "output": "<call>[1,2]</call>",
+      "expected": {
+        "kind": "invalid",
+        "payload": null
+      }
+    },
+    {
+      "id": "p11-unclosed",
+      "output": "<report>{\"verdict\":\"abstain\"}",
+      "expected": {
+        "kind": "invalid",
+        "payload": null
+      }
+    },
+    {
+      "id": "p12-empty",
+      "output": "",
+      "expected": {
+        "kind": "invalid",
+        "payload": null
+      }
+    },
+    {
+      "id": "p13-multiline-report",
+      "output": "<report>{\"verdict\":\n\"abstain\"}</report>",
+      "expected": {
+        "kind": "report",
+        "payload": {
+          "verdict": "abstain"
+        }
+      }
+    }
+  ],
+  "validate": [
+    {
+      "id": "v01-valid",
+      "report": {
+        "verdict": "explained",
+        "abstain_reason": null,
+        "cause_category": "access",
+        "cause": "The member was removed at 09:10.",
+        "confidence": 0.82,
+        "evidence_refs": [
+          "E1",
+          "E2"
+        ],
+        "area": "loans",
+        "user_story": "US-LOAN-01",
+        "reproduction": null,
+        "next_checks": [
+          "Ask the admin."
+        ]
+      },
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ],
+      "stories": [
+        "US-LOAN-01"
+      ],
+      "expected_valid": true
+    },
+    {
+      "id": "v02-unknown-evidence",
+      "report": {
+        "verdict": "explained",
+        "abstain_reason": null,
+        "cause_category": "access",
+        "cause": "The member was removed at 09:10.",
+        "confidence": 0.82,
+        "evidence_refs": [
+          "E1",
+          "E9"
+        ],
+        "area": "loans",
+        "user_story": "US-LOAN-01",
+        "reproduction": null,
+        "next_checks": [
+          "Ask the admin."
+        ]
+      },
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ],
+      "stories": [
+        "US-LOAN-01"
+      ],
+      "expected_valid": false
+    },
+    {
+      "id": "v03-story-not-in-pack",
+      "report": {
+        "verdict": "explained",
+        "abstain_reason": null,
+        "cause_category": "access",
+        "cause": "The member was removed at 09:10.",
+        "confidence": 0.82,
+        "evidence_refs": [
+          "E1",
+          "E2"
+        ],
+        "area": "loans",
+        "user_story": "US-LOAN-01",
+        "reproduction": null,
+        "next_checks": [
+          "Ask the admin."
+        ]
+      },
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ],
+      "stories": [
+        "US-OTHR-01"
+      ],
+      "expected_valid": false
+    },
+    {
+      "id": "v04-story-without-pack",
+      "report": {
+        "verdict": "explained",
+        "abstain_reason": null,
+        "cause_category": "access",
+        "cause": "The member was removed at 09:10.",
+        "confidence": 0.82,
+        "evidence_refs": [
+          "E1",
+          "E2"
+        ],
+        "area": "loans",
+        "user_story": "US-LOAN-01",
+        "reproduction": null,
+        "next_checks": [
+          "Ask the admin."
+        ]
+      },
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ],
+      "stories": null,
+      "expected_valid": false
+    },
+    {
+      "id": "v05-explained-without-evidence",
+      "report": {
+        "verdict": "explained",
+        "abstain_reason": null,
+        "cause_category": "access",
+        "cause": "The member was removed at 09:10.",
+        "confidence": 0.82,
+        "evidence_refs": [],
+        "area": "loans",
+        "user_story": "US-LOAN-01",
+        "reproduction": null,
+        "next_checks": [
+          "Ask the admin."
+        ]
+      },
+      "evidence_ids": [
+        "E1"
+      ],
+      "stories": [
+        "US-LOAN-01"
+      ],
+      "expected_valid": false
+    },
+    {
+      "id": "v06-abstain-valid",
+      "report": {
+        "verdict": "abstain",
+        "abstain_reason": "budget_exhausted",
+        "cause_category": "unknown",
+        "cause": null,
+        "confidence": 0.2,
+        "evidence_refs": [],
+        "area": null,
+        "user_story": null,
+        "reproduction": null,
+        "next_checks": []
+      },
+      "evidence_ids": [
+        "E1"
+      ],
+      "stories": null,
+      "expected_valid": true
+    },
+    {
+      "id": "v07-abstain-with-cause",
+      "report": {
+        "verdict": "abstain",
+        "abstain_reason": "budget_exhausted",
+        "cause_category": "unknown",
+        "cause": "x",
+        "confidence": 0.2,
+        "evidence_refs": [],
+        "area": null,
+        "user_story": null,
+        "reproduction": null,
+        "next_checks": []
+      },
+      "evidence_ids": [
+        "E1"
+      ],
+      "stories": null,
+      "expected_valid": false
+    },
+    {
+      "id": "v08-cause-too-long",
+      "report": {
+        "verdict": "explained",
+        "abstain_reason": null,
+        "cause_category": "access",
+        "cause": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "confidence": 0.82,
+        "evidence_refs": [
+          "E1",
+          "E2"
+        ],
+        "area": "loans",
+        "user_story": "US-LOAN-01",
+        "reproduction": null,
+        "next_checks": [
+          "Ask the admin."
+        ]
+      },
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ],
+      "stories": [
+        "US-LOAN-01"
+      ],
+      "expected_valid": false
+    },
+    {
+      "id": "v09-bad-category",
+      "report": {
+        "verdict": "explained",
+        "abstain_reason": null,
+        "cause_category": "network",
+        "cause": "The member was removed at 09:10.",
+        "confidence": 0.82,
+        "evidence_refs": [
+          "E1",
+          "E2"
+        ],
+        "area": "loans",
+        "user_story": "US-LOAN-01",
+        "reproduction": null,
+        "next_checks": [
+          "Ask the admin."
+        ]
+      },
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ],
+      "stories": [
+        "US-LOAN-01"
+      ],
+      "expected_valid": false
+    },
+    {
+      "id": "v10-extra-property",
+      "report": {
+        "verdict": "explained",
+        "abstain_reason": null,
+        "cause_category": "access",
+        "cause": "The member was removed at 09:10.",
+        "confidence": 0.82,
+        "evidence_refs": [
+          "E1",
+          "E2"
+        ],
+        "area": "loans",
+        "user_story": "US-LOAN-01",
+        "reproduction": null,
+        "next_checks": [
+          "Ask the admin."
+        ],
+        "extra": 1
+      },
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ],
+      "stories": [
+        "US-LOAN-01"
+      ],
+      "expected_valid": false
+    }
+  ],
+  "normalise": [
+    {
+      "id": "n01-low-confidence-explained",
+      "report": {
+        "verdict": "explained",
+        "abstain_reason": null,
+        "cause_category": "access",
+        "cause": "The member was removed at 09:10.",
+        "confidence": 0.4,
+        "evidence_refs": [
+          "E1",
+          "E2"
+        ],
+        "area": "loans",
+        "user_story": "US-LOAN-01",
+        "reproduction": null,
+        "next_checks": [
+          "Ask the admin."
+        ]
+      },
+      "expected": {
+        "verdict": "abstain",
+        "abstain_reason": "insufficient_evidence",
+        "cause_category": "access",
+        "cause": "The member was removed at 09:10.",
+        "confidence": 0.4,
+        "evidence_refs": [
+          "E1",
+          "E2"
+        ],
+        "area": "loans",
+        "user_story": "US-LOAN-01",
+        "reproduction": null,
+        "next_checks": [
+          "Ask the admin."
+        ]
+      }
+    },
+    {
+      "id": "n02-confidence-at-limit",
+      "report": {
+        "verdict": "explained",
+        "abstain_reason": null,
+        "cause_category": "access",
+        "cause": "The member was removed at 09:10.",
+        "confidence": 0.5,
+        "evidence_refs": [
+          "E1",
+          "E2"
+        ],
+        "area": "loans",
+        "user_story": "US-LOAN-01",
+        "reproduction": null,
+        "next_checks": [
+          "Ask the admin."
+        ]
+      },
+      "expected": {
+        "verdict": "explained",
+        "abstain_reason": null,
+        "cause_category": "access",
+        "cause": "The member was removed at 09:10.",
+        "confidence": 0.5,
+        "evidence_refs": [
+          "E1",
+          "E2"
+        ],
+        "area": "loans",
+        "user_story": "US-LOAN-01",
+        "reproduction": null,
+        "next_checks": [
+          "Ask the admin."
+        ]
+      }
+    },
+    {
+      "id": "n03-abstain-unchanged",
+      "report": {
+        "verdict": "abstain",
+        "abstain_reason": "budget_exhausted",
+        "cause_category": "unknown",
+        "cause": null,
+        "confidence": 0.2,
+        "evidence_refs": [],
+        "area": null,
+        "user_story": null,
+        "reproduction": null,
+        "next_checks": []
+      },
+      "expected": {
+        "verdict": "abstain",
+        "abstain_reason": "budget_exhausted",
+        "cause_category": "unknown",
+        "cause": null,
+        "confidence": 0.2,
+        "evidence_refs": [],
+        "area": null,
+        "user_story": null,
+        "reproduction": null,
+        "next_checks": []
+      }
+    }
+  ],
+  "grammar": [
+    {
+      "id": "g01-call-or-report",
+      "description": "A turn that may be a call or the report",
+      "only_report": false,
+      "input": {
+        "tools": [
+          {
+            "name": "logs_by_correlation",
+            "description": "Returns the log entries of one request, identified by its trace id.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "trace_id"
+              ],
+              "properties": {
+                "trace_id": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{32}$"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 200
+                }
+              }
+            }
+          },
+          {
+            "name": "health_status",
+            "description": "Returns the current health of the application.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {}
+            }
+          }
+        ],
+        "entities": [
+          "membership",
+          "site"
+        ],
+        "report_schema_path": "docs/support/incident-report.schema.json",
+        "report_def": "#/$defs/investigation"
+      },
+      "expected": "root ::= \"<call>{\\\"tool\\\":\\\"logs_by_correlation\\\",\\\"arguments\\\":\" args-logs-by-correlation-25 \"}</call>\" | \"<call>{\\\"tool\\\":\\\"health_status\\\",\\\"arguments\\\":\" args-health-status-28 \"}</call>\" | \"<report>\" report-1 \"</report>\"\nverdict-2 ::= \"\\\"explained\\\"\" | \"\\\"abstain\\\"\"\nabstain-reason-3 ::= \"\\\"insufficient_evidence\\\"\" | \"\\\"conflicting_evidence\\\"\" | \"\\\"out_of_scope\\\"\" | \"\\\"budget_exhausted\\\"\" | \"null\"\ndef-cause-category ::= \"\\\"access\\\"\" | \"\\\"data_missing\\\"\" | \"\\\"data_conflict\\\"\" | \"\\\"dependency_unavailable\\\"\" | \"\\\"configuration\\\"\" | \"\\\"capacity\\\"\" | \"\\\"code_defect\\\"\" | \"\\\"external_input\\\"\" | \"\\\"expected_behaviour\\\"\" | \"\\\"unknown\\\"\"\nstring ::= \"\\\"\" ([^\"\\\\\\x7F\\x00-\\x1F] | \"\\\\\" ([\"\\\\/bfnrt] | \"u\" [0-9a-fA-F]{4}))* \"\\\"\"\nt-5 ::= string\nnull ::= \"null\"\nt-6 ::= null\ncause-4 ::= t-5 | t-6\nnumber ::= \"-\"? (\"0\" | [1-9] [0-9]*) (\".\" [0-9]+)?\nconfidence-7 ::= number\ndef-evidence-id ::= string\nevidence-refs-8 ::= \"[\" (def-evidence-id (\",\" def-evidence-id)*)? \"]\"\nt-10 ::= string\nt-11 ::= null\narea-9 ::= t-10 | t-11\nt-13 ::= string\nt-14 ::= null\nuser-story-12 ::= t-13 | t-14\nalt-16 ::= null\ndef-reproduction ::= \"{\" \"\\\"preconditions\\\":\" preconditions-17 \",\" \"\\\"steps\\\":\" steps-19 \",\" \"\\\"expected\\\":\" expected-21 \",\" \"\\\"observed\\\":\" observed-22 \"}\"\nitem-18 ::= string\npreconditions-17 ::= \"[\" (item-18 (\",\" item-18)*)? \"]\"\nitem-20 ::= string\nsteps-19 ::= \"[\" (item-20 (\",\" item-20)*)? \"]\"\nexpected-21 ::= string\nobserved-22 ::= string\nreproduction-15 ::= alt-16 | def-reproduction\nitem-24 ::= string\nnext-checks-23 ::= \"[\" (item-24 (\",\" item-24)*)? \"]\"\nreport-1 ::= \"{\" \"\\\"verdict\\\":\" verdict-2 \",\" \"\\\"abstain_reason\\\":\" abstain-reason-3 \",\" \"\\\"cause_category\\\":\" def-cause-category \",\" \"\\\"cause\\\":\" cause-4 \",\" \"\\\"confidence\\\":\" confidence-7 \",\" \"\\\"evidence_refs\\\":\" evidence-refs-8 \",\" \"\\\"area\\\":\" area-9 \",\" \"\\\"user_story\\\":\" user-story-12 \",\" \"\\\"reproduction\\\":\" reproduction-15 \",\" \"\\\"next_checks\\\":\" next-checks-23 \"}\"\ntrace-id-26 ::= string\ninteger ::= \"-\"? (\"0\" | [1-9] [0-9]*)\nlimit-27 ::= integer\nargs-logs-by-correlation-25 ::= \"{\" \"\\\"trace_id\\\":\" trace-id-26 (\",\" \"\\\"limit\\\":\" limit-27)? \"}\"\nargs-health-status-28 ::= \"{\" \"}\"\n"
+    },
+    {
+      "id": "g02-report-only",
+      "description": "A turn constrained to the report",
+      "only_report": true,
+      "input": {
+        "tools": [
+          {
+            "name": "logs_by_correlation",
+            "description": "Returns the log entries of one request, identified by its trace id.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "trace_id"
+              ],
+              "properties": {
+                "trace_id": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{32}$"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 200
+                }
+              }
+            }
+          },
+          {
+            "name": "health_status",
+            "description": "Returns the current health of the application.",
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {}
+            }
+          }
+        ],
+        "entities": [
+          "membership",
+          "site"
+        ],
+        "report_schema_path": "docs/support/incident-report.schema.json",
+        "report_def": "#/$defs/investigation"
+      },
+      "expected": "root ::= \"<report>\" report-1 \"</report>\"\nverdict-2 ::= \"\\\"explained\\\"\" | \"\\\"abstain\\\"\"\nabstain-reason-3 ::= \"\\\"insufficient_evidence\\\"\" | \"\\\"conflicting_evidence\\\"\" | \"\\\"out_of_scope\\\"\" | \"\\\"budget_exhausted\\\"\" | \"null\"\ndef-cause-category ::= \"\\\"access\\\"\" | \"\\\"data_missing\\\"\" | \"\\\"data_conflict\\\"\" | \"\\\"dependency_unavailable\\\"\" | \"\\\"configuration\\\"\" | \"\\\"capacity\\\"\" | \"\\\"code_defect\\\"\" | \"\\\"external_input\\\"\" | \"\\\"expected_behaviour\\\"\" | \"\\\"unknown\\\"\"\nstring ::= \"\\\"\" ([^\"\\\\\\x7F\\x00-\\x1F] | \"\\\\\" ([\"\\\\/bfnrt] | \"u\" [0-9a-fA-F]{4}))* \"\\\"\"\nt-5 ::= string\nnull ::= \"null\"\nt-6 ::= null\ncause-4 ::= t-5 | t-6\nnumber ::= \"-\"? (\"0\" | [1-9] [0-9]*) (\".\" [0-9]+)?\nconfidence-7 ::= number\ndef-evidence-id ::= string\nevidence-refs-8 ::= \"[\" (def-evidence-id (\",\" def-evidence-id)*)? \"]\"\nt-10 ::= string\nt-11 ::= null\narea-9 ::= t-10 | t-11\nt-13 ::= string\nt-14 ::= null\nuser-story-12 ::= t-13 | t-14\nalt-16 ::= null\ndef-reproduction ::= \"{\" \"\\\"preconditions\\\":\" preconditions-17 \",\" \"\\\"steps\\\":\" steps-19 \",\" \"\\\"expected\\\":\" expected-21 \",\" \"\\\"observed\\\":\" observed-22 \"}\"\nitem-18 ::= string\npreconditions-17 ::= \"[\" (item-18 (\",\" item-18)*)? \"]\"\nitem-20 ::= string\nsteps-19 ::= \"[\" (item-20 (\",\" item-20)*)? \"]\"\nexpected-21 ::= string\nobserved-22 ::= string\nreproduction-15 ::= alt-16 | def-reproduction\nitem-24 ::= string\nnext-checks-23 ::= \"[\" (item-24 (\",\" item-24)*)? \"]\"\nreport-1 ::= \"{\" \"\\\"verdict\\\":\" verdict-2 \",\" \"\\\"abstain_reason\\\":\" abstain-reason-3 \",\" \"\\\"cause_category\\\":\" def-cause-category \",\" \"\\\"cause\\\":\" cause-4 \",\" \"\\\"confidence\\\":\" confidence-7 \",\" \"\\\"evidence_refs\\\":\" evidence-refs-8 \",\" \"\\\"area\\\":\" area-9 \",\" \"\\\"user_story\\\":\" user-story-12 \",\" \"\\\"reproduction\\\":\" reproduction-15 \",\" \"\\\"next_checks\\\":\" next-checks-23 \"}\"\n"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Team Management",
+  "Members": "Members",
+  "searchPlaceholder": "Search team members...",
+  "noMembers": "No team members found",
+  "noMatchingMembers": "No team members match your search",
+  "inviteButton": "Invite",
+  "inviteSent": "Invitation sent successfully",
+  "updateSuccess": "Member updated successfully",
+  "removeSuccess": "Member removed successfully",
+  "confirmRemoveTitle": "Confirm Removal",
+  "pendingInvitations": "Pending Invitations",
+  "edit": {
+    "title": "Edit Team Member",
+    "memberName": "Name",
+    "memberEmail": "Email",
+    "role": "Role",
+    "demotionWarning": "You are removing your own Admin privileges. This action cannot be undone by yourself.",
+    "confirmDemotion": "Confirm Demotion"
+  },
+  "remove": "Remove",
+  "columns": {
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "actions": "Actions",
+    "sentAt": "Sent On"
+  },
+  "invite": {
+    "title": "Invite Team Member",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "e.g. John Smith",
+    "email": "Email",
+    "emailPlaceholder": "e.g. john.smith@company.com",
+    "role": "Role",
+    "submit": "Send Invitation"
+  },
+  "roles": {
+    "admin": "Admin",
+    "admin.description": "Full access to all features, organization settings, team and audit log.",
+    "editor": "Editor",
+    "editor.description": "Can create, edit and delete tasks. No access to organization settings.",
+    "viewer": "Viewer",
+    "viewer.description": "Read-only access."
+  },
+  "validation": {
+    "fullNameRequired": "Full name is required",
+    "emailRequired": "Email address is required",
+    "emailInvalid": "Please enter a valid email address"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "goBack": "Go Back",
+    "save": "Save",
+    "sending": "Sending..."
+  },
+  "team": {
+    "confirmRemoveMessage": "Are you sure you want to remove {{name}} from the team? This action cannot be undone."
+  }
+}

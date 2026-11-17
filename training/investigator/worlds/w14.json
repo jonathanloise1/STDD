@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w14",
+ "app": "MuseTix",
+ "sector": "museum tickets",
+ "split": "train",
+ "service": "musetix-api",
+ "namespace": "MuseTix.Application.Services",
+ "record": "ticket",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "tickets",
+   "title": "Tickets",
+   "verb": "sell",
+   "stories": [
+    {
+     "id": "US-TICK-01",
+     "title": "Sell a ticket",
+     "test_case": "TICK-SELL-001"
+    },
+    {
+     "id": "US-TICK-02",
+     "title": "Refund a ticket",
+     "test_case": "TICK-SELL-002"
+    }
+   ]
+  },
+  {
+   "id": "exhibits",
+   "title": "Exhibits",
+   "verb": "open",
+   "stories": [
+    {
+     "id": "US-EXHI-01",
+     "title": "Open an exhibit",
+     "test_case": "EXHI-OPEN-001"
+    },
+    {
+     "id": "US-EXHI-02",
+     "title": "Cap an exhibit",
+     "test_case": "EXHI-OPEN-002"
+    }
+   ]
+  },
+  {
+   "id": "groups",
+   "title": "Groups",
+   "verb": "book",
+   "stories": [
+    {
+     "id": "US-GROU-01",
+     "title": "Book a group",
+     "test_case": "GROU-BOOK-001"
+    },
+    {
+     "id": "US-GROU-02",
+     "title": "Split a group",
+     "test_case": "GROU-BOOK-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "ticket",
+   "description": "A ticket of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.Tickets",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Ticket",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "payment-gateway",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Muse:GatewayUrl",
+  "MuseTix:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "tickets.sell.access_lost",
+   "level": "Warning",
+   "area": "tickets",
+   "story": "US-TICK-01",
+   "test_case": "TICK-SELL-005",
+   "category": "MuseTix.Application.Services.TicketsService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "tickets.sell.not_found",
+   "level": "Warning",
+   "area": "tickets",
+   "story": "US-TICK-02",
+   "test_case": "TICK-SELL-006",
+   "category": "MuseTix.Application.Services.TicketsService",
+   "template": "ticket {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "exhibits.open.duplicate_entry",
+   "level": "Warning",
+   "area": "exhibits",
+   "story": "US-EXHI-01",
+   "test_case": "EXHI-OPEN-007",
+   "category": "MuseTix.Application.Services.ExhibitsService",
+   "template": "ticket {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "exhibits.open.dependency_failed",
+   "level": "Error",
+   "area": "exhibits",
+   "story": "US-EXHI-02",
+   "test_case": "EXHI-OPEN-008",
+   "category": "MuseTix.Application.Services.ExhibitsService",
+   "template": "Call to {Dependency} failed for ticket {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "groups.book.config_invalid",
+   "level": "Error",
+   "area": "groups",
+   "story": "US-GROU-01",
+   "test_case": "GROU-BOOK-009",
+   "category": "MuseTix.Application.Services.GroupsService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "groups.book.timed_out",
+   "level": "Error",
+   "area": "groups",
+   "story": "US-GROU-02",
+   "test_case": "GROU-BOOK-010",
+   "category": "MuseTix.Application.Services.GroupsService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "tickets.sell.unhandled_error",
+   "level": "Error",
+   "area": "tickets",
+   "story": "US-TICK-01",
+   "test_case": "TICK-SELL-011",
+   "category": "MuseTix.Application.Services.TicketsService",
+   "template": "Unhandled error while handling ticket {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "tickets.sell.input_rejected",
+   "level": "Warning",
+   "area": "tickets",
+   "story": "US-TICK-02",
+   "test_case": "TICK-SELL-012",
+   "category": "MuseTix.Application.Services.TicketsService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "exhibits.open.high_volume",
+   "level": "Warning",
+   "area": "exhibits",
+   "story": "US-EXHI-01",
+   "test_case": "EXHI-OPEN-013",
+   "category": "MuseTix.Application.Services.ExhibitsService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "exhibits.open.component_failed",
+   "level": "Error",
+   "area": "exhibits",
+   "story": "US-EXHI-02",
+   "test_case": "EXHI-OPEN-014",
+   "category": "MuseTix.Application.Services.ExhibitsService",
+   "template": "Component {Component} failed for ticket {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "tickets-sell-access-lost",
+   "log_key": "tickets.sell.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-TICK-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "tickets-sell-not-found",
+   "log_key": "tickets.sell.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "ticket {RecordId} was not found when it was saved. See story US-TICK-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "exhibits-open-duplicate-entry",
+   "log_key": "exhibits.open.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "ticket {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-EXHI-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "exhibits-open-dependency-failed",
+   "log_key": "exhibits.open.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for ticket {RecordId}. See story US-EXHI-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "groups-book-config-invalid",
+   "log_key": "groups.book.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-GROU-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "groups-book-timed-out",
+   "log_key": "groups.book.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-GROU-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "tickets-sell-unhandled-error",
+   "log_key": "tickets.sell.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling ticket {RecordId}. See story US-TICK-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "tickets-sell-input-rejected",
+   "log_key": "tickets.sell.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-TICK-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "exhibits-open-high-volume",
+   "log_key": "exhibits.open.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-EXHI-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "exhibits-open-component-failed",
+   "log_key": "exhibits.open.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for ticket {RecordId}. See story US-EXHI-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

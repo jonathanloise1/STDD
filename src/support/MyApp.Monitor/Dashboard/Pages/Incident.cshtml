@@ -1,0 +1,200 @@
+@page "/incidents/{id}"
+@model IncidentModel
+@{
+    ViewData["Title"] = Model.Row?.Id ?? "Incident";
+    ViewData["Section"] = "open";
+    var r = Model.Row!;
+    var report = Model.Report;
+    var rule = Model.Node("rule_verdict") as System.Text.Json.Nodes.JsonObject;
+    var modelVerdict = Model.Node("model_verdict") as System.Text.Json.Nodes.JsonObject;
+}
+<h1>@r.Id <span class="pill @r.Severity">@r.Severity</span> <span class="pill">@r.Status</span></h1>
+@if (Model.Message is not null) { <div class="message @(Model.MessageIsError ? "error" : "")">@Model.Message</div> }
+
+<div class="card">
+    <table>
+        <tr><th>Trigger</th><td>@r.Trigger</td><th>Environment</th><td>@r.Environment</td></tr>
+        <tr><th>Signature</th><td><code>@Fmt.At(report, "signature.kind") @(Fmt.At(report, "signature.id") + Fmt.At(report, "signature.template_id"))</code></td><th>Fingerprint</th><td><code>@r.Fingerprint</code></td></tr>
+        <tr><th>Area</th><td>@Fmt.At(report, "area")</td><th>User story</th><td>@Fmt.At(report, "user_story")</td></tr>
+        <tr><th>Test case</th><td>@Fmt.At(report, "test_case")</td><th>Runbook</th><td>@Fmt.At(report, "runbook.path")@(Fmt.At(report, "runbook.anchor") is { Length: > 0 } anchor ? "#" + anchor : "")</td></tr>
+        <tr><th>Seen</th><td>@r.Count times, @Fmt.Rate(Model.Node("rate_per_hour")?.GetValue<double>() ?? 0) per hour</td><th>Window</th><td>@Fmt.Time(r.FirstSeen) to @Fmt.Time(r.LastSeen)</td></tr>
+        <tr><th>Previous incident</th><td>@if (r.PreviousIncidentId is not null) { <a href="/incidents/@r.PreviousIncidentId">@r.PreviousIncidentId</a> }</td><th>Versions</th><td>pack @Fmt.At(report, "pack_version"), monitor @Fmt.At(report, "monitor_version")</td></tr>
+        @if (Model.Signature is { Length: > 0 } tpl)
+        {
+            <tr><th>Template</th><td colspan="3"><code>@tpl</code></td></tr>
+        }
+    </table>
+</div>
+
+<h2>Verdicts</h2>
+<div class="grid">
+    <div class="card">
+        <strong>Rule verdict</strong> <span class="muted">(deterministic, from the runbook)</span>
+        @if (rule is null) { <p class="muted">None: no signature matched.</p> }
+        else
+        {
+            <p>@Fmt.Text(rule["cause"])</p>
+            <p class="muted">Category <code>@Fmt.Text(rule["cause_category"])</code>, confidence @Fmt.Text(rule["confidence"]), evidence @string.Join(", ", (rule["evidence_refs"] as System.Text.Json.Nodes.JsonArray)?.Select(x => Fmt.Text(x)) ?? [])</p>
+        }
+    </div>
+    <div class="card">
+        <strong>Model verdict</strong> <span class="muted">(from the investigator model, never a rule)</span>
+        @if (modelVerdict is null)
+        {
+            <p class="muted">None.@(Model.Investigation is null ? " The investigator did not run for this incident." : " Investigation " + Model.Investigation.Status + (Model.Investigation.Error is null ? "." : ": " + Model.Investigation.Error))</p>
+        }
+        else
+        {
+            <p>@Fmt.Text(modelVerdict["cause"])</p>
+            <p class="muted">Category <code>@Fmt.Text(modelVerdict["cause_category"])</code>, confidence @Fmt.Text(modelVerdict["confidence"]), evidence @string.Join(", ", (modelVerdict["evidence_refs"] as System.Text.Json.Nodes.JsonArray)?.Select(x => Fmt.Text(x)) ?? [])</p>
+        }
+    </div>
+</div>
+
+@if (Model.Node("investigation") is System.Text.Json.Nodes.JsonObject investigation)
+{
+    <h2>Investigation</h2>
+    <div class="card">
+        <p>Verdict <code>@Fmt.Text(investigation["verdict"])</code>@(Fmt.Text(investigation["abstain_reason"]) is { Length: > 0 } reason ? ", reason " + reason : "")</p>
+        <p class="muted">Model @Fmt.At(report, "model.model_id") @Fmt.At(report, "model.version"), tier @Fmt.At(report, "model.tier"), device @Fmt.At(report, "model.device"), @Fmt.At(report, "model.tool_calls") tool call(s)</p>
+        @foreach (var next in (investigation["next_checks"] as System.Text.Json.Nodes.JsonArray) ?? []) { <div>Next check: @Fmt.Text(next)</div> }
+    </div>
+}
+
+@if (Model.Node("reproduction") is System.Text.Json.Nodes.JsonObject repro)
+{
+    <h2>Reproduction</h2>
+    <div class="card">
+        <div>Preconditions: @string.Join("; ", (repro["preconditions"] as System.Text.Json.Nodes.JsonArray)?.Select(x => Fmt.Text(x)) ?? [])</div>
+        <div>Steps: @string.Join("; ", (repro["steps"] as System.Text.Json.Nodes.JsonArray)?.Select(x => Fmt.Text(x)) ?? [])</div>
+        <div>Expected: @Fmt.Text(repro["expected"])</div>
+        <div>Observed: @Fmt.Text(repro["observed"])</div>
+    </div>
+}
+
+<h2>Runbook checks</h2>
+@if (!Model.Items("runbook.checks").Any()) { <p class="muted">No rule checks.</p> }
+else
+{
+    <table><thead><tr><th>Tool</th><th>Expect</th><th>Passed</th><th>Evidence</th></tr></thead><tbody>
+    @foreach (var c in Model.Items("runbook.checks"))
+    {
+        <tr><td>@Fmt.Text(c["tool"])</td><td><code>@Fmt.Text(c["expect"])</code></td><td class="@(Fmt.Text(c["passed"]) == "true" ? "ok" : "failed")">@(Fmt.Text(c["passed"]) == "true" ? "passed" : "failed")</td><td>@Fmt.Text(c["evidence_id"])</td></tr>
+    }
+    </tbody></table>
+}
+
+<h2>Evidence</h2>
+<div class="scroll"><table>
+    <thead><tr><th>Id</th><th>Source</th><th>Reference</th><th>Observed</th><th>Excerpt (masked)</th></tr></thead>
+    <tbody>
+    @foreach (var e in Model.Items("evidence"))
+    {
+        <tr>
+            <td>@Fmt.Text(e["id"])</td><td>@Fmt.Text(e["source"])</td><td><code>@Fmt.Text(e["reference"])</code></td><td>@Fmt.Text(e["observed_at"])</td><td><pre>@Fmt.Text(e["excerpt"])</pre></td>
+        </tr>
+    }
+    </tbody>
+</table></div>
+
+<h2>Correlation</h2>
+<div class="card">
+    <div>Trace ids:
+        @foreach (var t in (Model.Node("correlation.trace_ids") as System.Text.Json.Nodes.JsonArray) ?? [])
+        {
+            <a href="/search?trace=@Fmt.Text(t)"><code>@Fmt.Text(t)</code></a>
+        }
+    </div>
+    <div>Entities:
+        @foreach (var e in Model.Items("correlation.entities"))
+        {
+            <a href="/search?entity=@Fmt.Text(e["entity"])&amp;id=@Fmt.Text(e["id"])"><code>@Fmt.Text(e["entity"]) @Fmt.Text(e["id"])</code></a>
+        }
+    </div>
+</div>
+
+<h2>Actions</h2>
+<div class="card">
+    @if (r.Status == "open")
+    {
+        <form method="post" asp-page-handler="Acknowledge" class="inline"><button type="submit">Acknowledge</button></form>
+    }
+    <form method="post" asp-page-handler="Investigate" class="inline"><button type="submit" class="secondary">Investigate again</button></form>
+    @if (r.Status != "closed")
+    {
+        <h2>Close with outcome</h2>
+        <form method="post" asp-page-handler="Close">
+            <p>
+                <label>Outcome <select name="value">@foreach (var o in IncidentModel.OutcomeValues) { <option value="@o">@o</option> }</select></label>
+                <label>Duplicate of <input name="duplicateOf" placeholder="INC-20261106-0001" /></label>
+            </p>
+            <p>
+                <label>Ticket <input name="ticket" /></label>
+                <label>Pull request <input name="pullRequest" /></label>
+            </p>
+            <p><label>Note <input name="note" size="60" maxlength="1000" /></label></p>
+            <button type="submit">Close incident</button>
+            <span class="muted">An outcome other than duplicate asks for a repository change; it then appears on the Review page.</span>
+        </form>
+    }
+    else
+    {
+        <h2>Outcome</h2>
+        <div>@Fmt.At(report, "outcome.value") by @Fmt.At(report, "outcome.closed_by") at @Fmt.At(report, "outcome.closed_at")</div>
+        <div>Ticket: @Fmt.At(report, "outcome.ticket") Pull request: @Fmt.At(report, "outcome.pull_request")</div>
+        <div>Note: @Fmt.At(report, "outcome.note")</div>
+    }
+</div>
+
+<h2>Notifications</h2>
+@if (Model.Notifications.Count == 0) { <p class="muted">None sent or drafted.</p> }
+else
+{
+    <div class="scroll"><table>
+        <thead><tr><th>Id</th><th>Channel</th><th>Event</th><th>Kind</th><th>At</th><th>Reference</th><th>Error</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var n in Model.Notifications)
+        {
+            <tr>
+                <td>@n.Id</td><td>@n.Channel</td><td>@n.Event</td><td class="@n.Kind">@n.Kind</td><td>@Fmt.Time(n.At)</td><td>@n.Reference</td><td>@n.Error</td>
+                <td>
+                    @if (n.Kind is "draft" or "failed")
+                    {
+                        <form method="post" asp-page-handler="SendDraft" class="inline"><input type="hidden" name="notificationId" value="@n.Id" /><button type="submit">@(n.Kind == "draft" ? "Send draft" : "Retry")</button></form>
+                    }
+                </td>
+            </tr>
+            @if (n.Kind == "draft" && n.Body is not null) { <tr><td></td><td colspan="7"><pre>@n.Body</pre></td></tr> }
+        }
+        </tbody>
+    </table></div>
+}
+
+<h2>Timeline</h2>
+<div class="scroll"><table>
+    <thead><tr><th>At</th><th>Kind</th><th>Data</th></tr></thead>
+    <tbody>
+    @foreach (var e in Model.Events) { <tr><td>@Fmt.Time(e.At)</td><td>@e.Kind</td><td><code>@e.DataJson</code></td></tr> }
+    </tbody>
+</table></div>
+
+<h2>Actions taken</h2>
+<table>
+    <thead><tr><th>At</th><th>Action</th><th>Reference</th></tr></thead>
+    <tbody>
+    @foreach (var a in Model.Items("actions_taken")) { <tr><td>@Fmt.Text(a["at"])</td><td>@Fmt.Text(a["action"])</td><td>@Fmt.Text(a["reference"])</td></tr> }
+    </tbody>
+</table>
+
+@if (Model.Audit.Count > 0)
+{
+    <h2>Tool calls</h2>
+    <table>
+        <thead><tr><th>At</th><th>Caller</th><th>Tool</th><th>Arguments (masked)</th><th>Status</th><th>Rows</th></tr></thead>
+        <tbody>
+        @foreach (var a in Model.Audit) { <tr><td>@Fmt.Time(a.At)</td><td>@a.Caller</td><td>@a.Tool</td><td><code>@a.ArgumentsJson</code></td><td>@a.Status</td><td>@a.Rows</td></tr> }
+        </tbody>
+    </table>
+}
+
+<p><a href="/api/incidents/@r.Id?download=true">Download the report (JSON)</a></p>

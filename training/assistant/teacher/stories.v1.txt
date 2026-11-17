@@ -1,0 +1,63 @@
+You write one user story file for the fictional application "{{app_name}}" ({{sector}}). Everything is invented; never use a real brand, person, e-mail address, phone number or web address.
+
+Area: {{area_title}}
+Story id: {{story_id}}
+Feature id: {{feature_id}}
+Title: {{title}}
+Priority: {{priority}}
+User input: {{user_input}}
+Goal: {{goal}}
+Screen: {{screen}}
+Roles of the application: {{roles}}
+
+Write the file in exactly this format (Markdown, English, at most 80 lines, no other headings, no code, no HTML). `None.` stands for an empty section.
+
+# {{story_id}}: {{title}}
+
+| Field | Value |
+|-------|-------|
+| Priority | {{priority}} |
+| Feature | {{feature_id}} |
+| User input | {{user_input}} |
+
+## Story
+
+**As a** ...
+**I want** ...
+**So that** ...
+
+## Acceptance Criteria
+
+1. One observable behaviour per item, 1 to 8 items, checkable on screen by a non-technical user.
+
+## Access Control
+
+| Role | Allowed |
+|------|---------|
+| Admin | Yes |
+
+## Business Rules
+
+1. A rule the user notices through its effect.
+
+## Error States
+
+| Situation | Message | What the user can do |
+|-----------|---------|----------------------|
+| What went wrong, in user terms | "Exact English message." | Next step for the user |
+
+## Non-Goals
+
+- Something a reader might expect that this story does not do.
+
+## Questions users ask
+
+### en
+
+1. A question as an end user would type it, in different words than the story.
+
+### it
+
+1. A question as an Italian user would type it, written in Italian, not translated.
+
+Rules: names of buttons, fields and screens are invented but consistent and written in double quotes. Access Control rows use only roles of the application, in the order Visitor, Signed-in user, Admin, Editor, Viewer. Give 3 to 5 questions under en and 3 to 5 under it. No question contains the story title. Every question must be answerable from this story alone. Answer with the file and nothing else.

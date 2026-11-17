@@ -1,0 +1,8 @@
+# Flags that change what the model writes. start.sh and start.ps1 pass them to llama-server, and the evaluation
+# (training/common/backends.py, LlamaServerBackend) passes the same ones, so that what was evaluated is what runs
+# (models.md 7.4, 9.1 step 13). One flag per line; blank lines and lines that start with # are ignored.
+#
+# --jinja  render the prompt with the chat template stored in the GGUF file (what apply_chat_template, transformers.js
+#          and the template check of `export` render). Without it llama-server falls back to a built-in template
+#          that can differ from it.
+--jinja

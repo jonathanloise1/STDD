@@ -1,0 +1,341 @@
+// The application frame (frontend.md 6): side navigation, header, content, page header, bottom navigation.
+
+.app-shell {
+	--app-sidenav-width: 60px;
+
+	&[data-sidenav='pinned'] {
+		--app-sidenav-width: 220px;
+	}
+
+	&__main {
+		min-width: 0;
+
+		@include media-breakpoint-up(md) {
+			padding-left: var(--app-sidenav-width);
+		}
+	}
+}
+
+// Side navigation
+.slim-sidebar {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	z-index: $zindex-fixed;
+	width: 60px;
+	overflow: hidden;
+	background-color: var(--app-surface);
+	border-right: var(--bs-border-width) solid var(--bs-border-color);
+
+	&.is-expanded,
+	&:hover,
+	&:focus-within {
+		width: 220px;
+	}
+
+	&__brand {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		height: 56px;
+		padding-inline: 1rem;
+		flex-shrink: 0;
+		border-bottom: var(--bs-border-width) solid var(--bs-border-color);
+		color: var(--bs-primary);
+		font-weight: 700;
+		white-space: nowrap;
+	}
+
+	&__pin {
+		margin-left: auto;
+	}
+
+	&__entries,
+	&__bottom {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		padding: 0.5rem;
+	}
+
+	&__entries {
+		flex: 1 1 auto;
+		overflow-y: auto;
+	}
+
+	&__label {
+		display: none;
+	}
+
+	&.is-expanded &__label,
+	&:hover &__label,
+	&:focus-within &__label {
+		display: inline;
+	}
+
+	// The pin button only shows while the bar is wide.
+	&:not(.is-expanded):not(:hover):not(:focus-within) &__pin {
+		display: none;
+	}
+}
+
+.sidebar-item {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.625rem 0.75rem;
+	border-radius: var(--bs-border-radius);
+	color: var(--bs-body-color);
+	text-decoration: none;
+	white-space: nowrap;
+
+	&:hover {
+		background-color: var(--bs-tertiary-bg);
+		color: var(--bs-body-color);
+	}
+
+	&.active,
+	&[aria-current='page'] {
+		background-color: var(--bs-primary-bg-subtle);
+		color: var(--bs-primary);
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0.375rem;
+			bottom: 0.375rem;
+			left: -0.5rem;
+			width: 3px;
+			border-radius: 0 3px 3px 0;
+			background-color: var(--app-accent);
+		}
+	}
+}
+
+// Header
+.app-header {
+	position: sticky;
+	top: 0;
+	z-index: $zindex-sticky;
+	height: var(--app-header-height);
+	background-color: var(--app-surface);
+	border-bottom: var(--bs-border-width) solid var(--bs-border-color);
+
+	&__inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+		height: 100%;
+		padding-inline: 1rem;
+	}
+
+	&__org {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		min-width: 0;
+		font-weight: 600;
+
+		> span,
+		.app-menu-toggle > span {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+
+	&__actions {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		flex-shrink: 0;
+	}
+
+	&__icon-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.25rem;
+		min-width: 40px;
+		height: 40px;
+		padding-inline: 0.5rem;
+		border: 0;
+		border-radius: var(--bs-border-radius);
+		background: transparent;
+		color: var(--bs-body-color);
+
+		&:hover {
+			background-color: var(--bs-tertiary-bg);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--bs-info);
+			outline-offset: 2px;
+		}
+	}
+
+	&__lang-code {
+		font-size: 0.8125rem;
+		font-weight: 600;
+	}
+
+	&__avatar {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		background-color: var(--bs-primary);
+		color: var(--bs-white);
+	}
+
+	&__avatar-initials {
+		font-size: 0.8125rem;
+		font-weight: 600;
+		line-height: 1;
+	}
+
+	&__icon-btn:focus-visible &__avatar {
+		outline: 2px solid var(--app-accent);
+		outline-offset: 2px;
+	}
+}
+
+// Content and pages
+.app-content {
+	@include media-breakpoint-down(md) {
+		padding-bottom: 72px;
+	}
+}
+
+.page-wrapper {
+	opacity: 1;
+	transform: none;
+}
+
+.app-page {
+	padding: 1rem;
+
+	@include media-breakpoint-up(md) {
+		padding: 1.5rem;
+	}
+}
+
+.page-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	margin-bottom: 1rem;
+
+	@include media-breakpoint-up(md) {
+		position: sticky;
+		top: var(--app-header-height);
+		z-index: 1010;
+		padding-block: 0.5rem;
+		background-color: var(--bs-body-bg);
+	}
+
+	&__left {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		min-width: 0;
+	}
+
+	&__actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-left: auto;
+	}
+}
+
+// Bottom navigation
+.bottom-tab-bar {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: $zindex-fixed;
+	display: flex;
+	height: calc(var(--app-bottomnav-height) + env(safe-area-inset-bottom));
+	padding-bottom: env(safe-area-inset-bottom);
+	background-color: var(--app-surface);
+	border-top: var(--bs-border-width) solid var(--bs-border-color);
+
+	&__item {
+		display: flex;
+		flex: 1 1 0;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.125rem;
+		min-width: 0;
+		padding: 0.25rem;
+		border: 0;
+		background: transparent;
+		color: var(--bs-secondary-color);
+		font-size: 0.75rem;
+		text-decoration: none;
+
+		&.active,
+		&[aria-current='page'],
+		&[aria-expanded='true'] {
+			color: var(--bs-primary);
+			font-weight: 600;
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--bs-info);
+			outline-offset: -2px;
+		}
+	}
+}
+
+// Loading screen of the application start (frontend.md 6.8)
+.app-loading {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	padding-top: 15vh;
+
+	&__logo {
+		animation: app-breathe 1.5s ease-in-out infinite;
+
+		img {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+	}
+}
+
+@keyframes app-breathe {
+	0%,
+	100% {
+		transform: scale(0.95);
+		opacity: 0.6;
+	}
+
+	50% {
+		transform: scale(1.05);
+		opacity: 1;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.app-loading__logo {
+		animation: none;
+		opacity: 0.8;
+	}
+}

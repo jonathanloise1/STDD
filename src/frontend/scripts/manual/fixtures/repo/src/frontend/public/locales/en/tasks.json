@@ -1,0 +1,15 @@
+{
+  "title": "Tasks",
+  "newTask": "New Task",
+  "createTask": "Create Task",
+  "update": "Update",
+  "taskTitle": "Title",
+  "taskStatus": "Status",
+  "statusDone": "Done",
+  "edit": "Edit",
+  "titleRequired": "Enter a title.",
+  "roleChanged": "Your role does not allow this change.",
+  "withVar": "Hello {{name}}",
+  "dupA": "Cancel",
+  "dupB": "Cancel"
+}

@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w11",
+ "app": "DeskNest",
+ "sector": "coworking space",
+ "split": "train",
+ "service": "desknest-api",
+ "namespace": "DeskNest.Application.Services",
+ "record": "seat_booking",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "seats",
+   "title": "Seats",
+   "verb": "book",
+   "stories": [
+    {
+     "id": "US-SEAT-01",
+     "title": "Book a seat",
+     "test_case": "SEAT-BOOK-001"
+    },
+    {
+     "id": "US-SEAT-02",
+     "title": "Release a seat",
+     "test_case": "SEAT-BOOK-002"
+    }
+   ]
+  },
+  {
+   "id": "rooms",
+   "title": "Meeting rooms",
+   "verb": "reserve",
+   "stories": [
+    {
+     "id": "US-ROOM-01",
+     "title": "Reserve a room",
+     "test_case": "ROOM-RESERVE-001"
+    },
+    {
+     "id": "US-ROOM-02",
+     "title": "Extend a room",
+     "test_case": "ROOM-RESERVE-002"
+    }
+   ]
+  },
+  {
+   "id": "members",
+   "title": "Members",
+   "verb": "invite",
+   "stories": [
+    {
+     "id": "US-MEMB-01",
+     "title": "Invite a member",
+     "test_case": "MEMB-INVITE-001"
+    },
+    {
+     "id": "US-MEMB-02",
+     "title": "Remove a member",
+     "test_case": "MEMB-INVITE-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "seat_booking",
+   "description": "A seat booking of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.SeatBookings",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SeatBooking",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "badge-service",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Nest:BadgeEndpoint",
+  "DeskNest:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "seats.book.access_lost",
+   "level": "Warning",
+   "area": "seats",
+   "story": "US-SEAT-01",
+   "test_case": "SEAT-BOOK-005",
+   "category": "DeskNest.Application.Services.SeatsService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "seats.book.not_found",
+   "level": "Warning",
+   "area": "seats",
+   "story": "US-SEAT-02",
+   "test_case": "SEAT-BOOK-006",
+   "category": "DeskNest.Application.Services.SeatsService",
+   "template": "seat booking {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "rooms.reserve.duplicate_entry",
+   "level": "Warning",
+   "area": "rooms",
+   "story": "US-ROOM-01",
+   "test_case": "ROOM-RESERVE-007",
+   "category": "DeskNest.Application.Services.RoomsService",
+   "template": "seat booking {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "rooms.reserve.dependency_failed",
+   "level": "Error",
+   "area": "rooms",
+   "story": "US-ROOM-02",
+   "test_case": "ROOM-RESERVE-008",
+   "category": "DeskNest.Application.Services.RoomsService",
+   "template": "Call to {Dependency} failed for seat booking {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "members.invite.config_invalid",
+   "level": "Error",
+   "area": "members",
+   "story": "US-MEMB-01",
+   "test_case": "MEMB-INVITE-009",
+   "category": "DeskNest.Application.Services.MembersService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "members.invite.timed_out",
+   "level": "Error",
+   "area": "members",
+   "story": "US-MEMB-02",
+   "test_case": "MEMB-INVITE-010",
+   "category": "DeskNest.Application.Services.MembersService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "seats.book.unhandled_error",
+   "level": "Error",
+   "area": "seats",
+   "story": "US-SEAT-01",
+   "test_case": "SEAT-BOOK-011",
+   "category": "DeskNest.Application.Services.SeatsService",
+   "template": "Unhandled error while handling seat booking {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "seats.book.input_rejected",
+   "level": "Warning",
+   "area": "seats",
+   "story": "US-SEAT-02",
+   "test_case": "SEAT-BOOK-012",
+   "category": "DeskNest.Application.Services.SeatsService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "rooms.reserve.high_volume",
+   "level": "Warning",
+   "area": "rooms",
+   "story": "US-ROOM-01",
+   "test_case": "ROOM-RESERVE-013",
+   "category": "DeskNest.Application.Services.RoomsService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "rooms.reserve.component_failed",
+   "level": "Error",
+   "area": "rooms",
+   "story": "US-ROOM-02",
+   "test_case": "ROOM-RESERVE-014",
+   "category": "DeskNest.Application.Services.RoomsService",
+   "template": "Component {Component} failed for seat booking {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "seats-book-access-lost",
+   "log_key": "seats.book.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-SEAT-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "seats-book-not-found",
+   "log_key": "seats.book.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "seat booking {RecordId} was not found when it was saved. See story US-SEAT-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "rooms-reserve-duplicate-entry",
+   "log_key": "rooms.reserve.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "seat booking {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-ROOM-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "rooms-reserve-dependency-failed",
+   "log_key": "rooms.reserve.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for seat booking {RecordId}. See story US-ROOM-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "members-invite-config-invalid",
+   "log_key": "members.invite.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-MEMB-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "members-invite-timed-out",
+   "log_key": "members.invite.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-MEMB-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "seats-book-unhandled-error",
+   "log_key": "seats.book.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling seat booking {RecordId}. See story US-SEAT-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "seats-book-input-rejected",
+   "log_key": "seats.book.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-SEAT-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "rooms-reserve-high-volume",
+   "log_key": "rooms.reserve.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-ROOM-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "rooms-reserve-component-failed",
+   "log_key": "rooms.reserve.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for seat booking {RecordId}. See story US-ROOM-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

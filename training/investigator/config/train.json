@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "base_model": {
+    "candidate": null,
+    "note": "null: the smallest candidate of the tier (models.md 6.1 rule 2); pass --tier small|large"
+  },
+  "adapter": {
+    "method": "lora",
+    "rank": 16,
+    "alpha": 32,
+    "dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj",
+      "in_proj_qkv",
+      "in_proj_z",
+      "in_proj_b",
+      "in_proj_a",
+      "out_proj"
+    ],
+    "exclude_modules": ".*(visual|vision).*"
+  },
+  "loading": {
+    "text_only": true,
+    "freeze_vision_tower": true,
+    "attn_implementation": null,
+    "packing": false,
+    "note": "STARTING VALUES from field reports (secondary sources, not measured by us). Qwen3.5 dense models are multimodal checkpoints used text-only: the vision tower is frozen. Their Gated DeltaNet layers have the projections in_proj_qkv, in_proj_z, in_proj_b, in_proj_a and out_proj, so they are LoRA targets besides the attention and MLP ones; names that a model does not have (Qwen3-0.6B has no DeltaNet) are ignored. LoRA runs in BF16. Do not combine flash_attention_2 with sample packing (this pipeline does not pack: each example is its own row). First thing to check on the PC: the target modules actually found, in the training log."
+  },
+  "optimizer": {
+    "learning_rate": 0.0001,
+    "schedule": "cosine",
+    "warmup_steps": 50,
+    "weight_decay": 0.0,
+    "max_grad_norm": 1.0
+  },
+  "batch": {
+    "effective": 32
+  },
+  "max_seq_len": 6144,
+  "epochs": 2,
+  "precision": {
+    "cuda": "bf16",
+    "mps": "bf16-if-supported-else-fp32"
+  },
+  "validation": {
+    "every_steps": 250,
+    "max_new_tokens": 700,
+    "batch_size": 4
+  },
+  "score_weights": {
+    "format_valid": 0.2,
+    "call_correct": 0.35,
+    "report_valid": 0.2,
+    "cause_correct": 0.25
+  },
+  "format_valid_min": 0.98,
+  "early_stopping": {
+    "min_delta": 0.005,
+    "patience": 4
+  },
+  "memorisation": {
+    "loss_below": 0.05,
+    "window": 50
+  },
+  "keep_checkpoints": 3,
+  "selection": {
+    "note": "no judge: the investigator is scored deterministically; the kept checkpoint with the highest validation score is selected"
+  },
+  "checkpoint_every_steps": 50,
+  "log_every_steps": 10,
+  "required_contracts": [
+    "incident-report",
+    "tool-catalog",
+    "investigator-protocol"
+  ],
+  "validation_items": 300
+}

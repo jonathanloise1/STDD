@@ -1,0 +1,33 @@
+# Pinned Python dependencies of the model pipeline (docs/guidelines/models.md 9.1: Python 3.11 or 3.12).
+# Install: python -m venv .venv && pip install -r training/requirements.txt
+#
+# Light dependencies: enough for the data side (generate, validate, estimate, dry run), the lock, card and fetch
+# tools, `python -m training.common.hardware` and the tests. Nothing here calls a cloud service.
+pytest==9.2.0
+snowballstemmer==3.1.1
+numpy==1.26.4          # the help embedding table: builder, port and tests (models.md 7.8)
+
+# Heavy dependencies: train, export and eval only. They are imported lazily inside the functions that need them, so
+# everything above works without them.
+# Pins checked on PyPI on 2026-11-16: each is the newest release that was at least two weeks old, and the set satisfies the
+# requirements the releases declare. transformers 5.2.0 is the first release with the Qwen3.5 architecture (model_type
+# qwen3_5; the Qwen3.5 model card asks for the latest transformers) and peft 0.14 the first with `exclude_modules`
+# (models.md 6.2); transformers 5.22 needs Python 3.11 or later, huggingface_hub 1.31 or later and safetensors 0.8.0.
+# No release has been installed or run with the training code yet: pytest covers only the light dependencies, so check the
+# pins when the environment is first built (models.md 9.1 step 1, W4).
+# Torch: the Linux wheel of the default index is built for CUDA 13; the Windows wheel of the default index is CPU only. For
+# another CUDA version, or a GPU that needs a particular build (RTX 50 series: CUDA 12.8 or later), uncomment the next line, install
+# a torch release from that index and write its version below (models.md 9.4 W4); check `torch.cuda.is_available()` afterwards.
+# --extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.15.0
+transformers==5.22.1          # Qwen3 and the Qwen3 embedding model need 4.51.0 or later (models.md 7.8), Qwen3.5 needs 5.2.0 or later
+peft==0.21.2
+accelerate==1.15.0
+huggingface_hub==1.33.0
+safetensors==0.8.0
+onnx==1.23.2
+onnxruntime==1.31.1
+
+# Not installable with pip (see training/assistant/config/export.json): llama.cpp (llama-server, llama-quantize, convert_hf_to_gguf.py) at the
+# pinned tag, the transformers.js checkout (scripts/convert.py) at the pinned tag, Node 22.18 or later with @huggingface/transformers, and for the
+# investigator the .NET SDK and the built monitor (src/support/MyApp.Monitor).

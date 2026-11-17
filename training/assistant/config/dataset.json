@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "master_seed": 20261106,
+  "splits": { "train": 30, "validation": 4, "test": 6 },
+  "languages": ["en", "it"],
+  "per_domain": { "areas": [4, 6], "stories": [12, 20], "in_scope_per_story_lang": 10, "near_miss_per_area_lang": 6, "oos_per_domain_lang": 15 },
+  "classes": { "pos_distant": 0.32, "pos_mid": 0.15, "pos_near": 0.10, "pos_multi": 0.08, "ref_near_miss": 0.15, "ref_removed": 0.05, "ref_oos": 0.15 },
+  "target_examples": { "train": 20000, "validation": 320, "test": 720 },
+  "teacher": {
+    "base_url": "http://localhost:8093/v1",
+    "model": "qwen3.8-27b",
+    "verifier_model": "qwen3.8-27b",
+    "api_key_env": null,
+    "max_concurrency": 4,
+    "tokens_per_second": 0,
+    "prompt_tokens_per_second": 0,
+    "max_hours": null,
+    "weights": {
+      "repo": "unsloth/Qwen3.8-27B-GGUF",
+      "file": "Qwen3.8-27B-Q4_K_M.gguf",
+      "path": "teacher/Qwen3.8-27B-Q4_K_M.gguf",
+      "quantization": "Q4_K_M",
+      "sha256": null,
+      "self_made_from": {"hub_id": "Qwen/Qwen3.8-27B", "revision": "37561816e66b5b9153b1b64c10968c18c1e6f4a0"},
+      "note": "Where the host's model file comes from. Either download the 4-bit GGUF from a community conversion (the repository and file name are the expected ones and are UNVERIFIED: confirm them on the Hugging Face page and take the exact file name), or make it with llama.cpp (convert_hf_to_gguf.py, then llama-quantize) from the pinned revision in self_made_from. The file lives outside the repository, in the weights folder (MYAPP_MODELS_DIR, default ~/myapp-models), at `path`. After the download run `python -m training.common.weights FILE` and write the hash into `sha256`; `python -m training.common.weights --check teacher` verifies it later. The same block format serves the investigator's pre-made GGUF (investigator/config/candidates.json)."
+    }
+  }
+}

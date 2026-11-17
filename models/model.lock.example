@@ -1,0 +1,45 @@
+{
+  "_comment": "EXAMPLE ONLY. For an untrained candidate `status` is `untrained-candidate`, `adapter` and `dataset` are null, and `base_model` also carries `trainable` (false when the candidate is untrained-only) and, for the investigator, `tool_role`. The values are invented to show the fields (models.md 8.1). This is not a lock: nothing reads this file. The real models/model.lock is written only by `python -m training.common.lock --record`.",
+  "schema_version": 2,
+  "models": {
+    "assistant": {
+      "model_version": "0.0.0-EXAMPLE",
+      "status": "trained",
+      "base_model": { "hub_id": "example-org/example-base", "revision": "0000000000000000000000000000000000000000", "license": "EXAMPLE", "parameters": 600000000, "chat_template_kwargs": {} },
+      "adapter": { "method": "lora", "rank": 16, "alpha": 32, "checkpoint": "step-0000" },
+      "protocol": { "path": "training/assistant/protocol.json", "sha256": "EXAMPLE-64-hex-characters" },
+      "retrieval": { "path": "training/assistant/retrieval.json", "sha256": "EXAMPLE-64-hex-characters" },
+      "contracts": { "manual-page": 1, "help-pack": 1, "assistant-protocol": 1, "assistant-retrieval": 1 },
+      "dataset": { "config_sha256": "EXAMPLE", "dataset_sha256": "EXAMPLE", "domains": { "train": 30, "validation": 4, "test": 6 }, "examples": 0, "teacher_models": ["EXAMPLE"] },
+      "training": { "run_id": "0000-00-00-a", "code_commit": "EXAMPLE", "seed": 0, "hardware": "EXAMPLE" },
+      "exports": [
+        { "format": "onnx", "variant": "q4f16", "runtime": "browser", "url": "https://artifacts.example.invalid/assistant/0.0.0/onnx/", "files": [ { "path": "onnx/model_q4f16.onnx", "sha256": "EXAMPLE", "bytes": 0 } ] },
+        { "format": "gguf", "variant": "Q4_K_M", "runtime": "server", "url": "https://artifacts.example.invalid/assistant/0.0.0/gguf/", "files": [ { "path": "assistant-0.0.0-Q4_K_M.gguf", "sha256": "EXAMPLE", "bytes": 0 } ] }
+      ],
+      "evaluation": { "suite_version": 1, "report": "models/assistant/eval/0.0.0.json", "report_sha256": "EXAMPLE", "passed": false },
+      "card": "models/assistant/MODEL_CARD.md",
+      "recorded_at": "0000-00-00T00:00:00Z"
+    },
+    "embeddings": {
+      "model_version": "0.0.0-EXAMPLE",
+      "status": "distilled",
+      "base_model": { "hub_id": "example/embedding-model", "revision": "0000000000000000000000000000000000000000", "license": "EXAMPLE", "parameters": 0, "dimensions": 0 },
+      "distillation": {
+        "config": { "path": "training/assistant/config/embed.json", "sha256": "EXAMPLE" },
+        "dims": 128,
+        "languages": { "en": { "stems": 0, "inputs_sha256": "EXAMPLE", "analyzer": { "id": "snowball-en", "version": 2, "stopwords_sha256": "EXAMPLE" } } },
+        "run_id": "0000-00-00-a", "code_commit": "EXAMPLE", "device": "EXAMPLE"
+      },
+      "contracts": { "help-pack": 2, "assistant-retrieval": 3 },
+      "exports": [
+        { "format": "help-embeddings", "variant": "int8-128", "runtime": "browser", "url": "https://artifacts.example.invalid/embeddings/0.0.0/", "files": [ { "path": "en.bin", "sha256": "EXAMPLE", "bytes": 0 } ] }
+      ],
+      "calibration": {
+        "report": "models/embeddings/calibration/0.0.0.json", "report_sha256": "EXAMPLE",
+        "params": { "en": { "method": "rrf", "depth": 30, "rrf_k": 60, "embedding_weight": 1.0, "min_cosine": 0.55, "min_cosine_lexical": -1.0 } }
+      },
+      "card": null,
+      "recorded_at": "0000-00-00T00:00:00Z"
+    }
+  }
+}

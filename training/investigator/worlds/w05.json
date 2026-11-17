@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w05",
+ "app": "FitTrack",
+ "sector": "gym memberships",
+ "split": "train",
+ "service": "fittrack-api",
+ "namespace": "FitTrack.Application.Services",
+ "record": "membership_plan",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "plans",
+   "title": "Plans",
+   "verb": "enrol",
+   "stories": [
+    {
+     "id": "US-PLAN-01",
+     "title": "Enrol a member",
+     "test_case": "PLAN-ENROL-001"
+    },
+    {
+     "id": "US-PLAN-02",
+     "title": "Freeze a plan",
+     "test_case": "PLAN-ENROL-002"
+    }
+   ]
+  },
+  {
+   "id": "classes",
+   "title": "Classes",
+   "verb": "schedule",
+   "stories": [
+    {
+     "id": "US-CLAS-01",
+     "title": "Schedule a class",
+     "test_case": "CLAS-SCHEDULE-001"
+    },
+    {
+     "id": "US-CLAS-02",
+     "title": "Cancel a class",
+     "test_case": "CLAS-SCHEDULE-002"
+    }
+   ]
+  },
+  {
+   "id": "access",
+   "title": "Access",
+   "verb": "admit",
+   "stories": [
+    {
+     "id": "US-ACCE-01",
+     "title": "Admit a member",
+     "test_case": "ACCE-ADMIT-001"
+    },
+    {
+     "id": "US-ACCE-02",
+     "title": "Issue a card",
+     "test_case": "ACCE-ADMIT-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership_plan",
+   "description": "A membership plan of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.MembershipPlans",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "MembershipPlan",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "door-controller",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Fit:DoorEndpoint",
+  "FitTrack:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "plans.enrol.access_lost",
+   "level": "Warning",
+   "area": "plans",
+   "story": "US-PLAN-01",
+   "test_case": "PLAN-ENROL-005",
+   "category": "FitTrack.Application.Services.PlansService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "plans.enrol.not_found",
+   "level": "Warning",
+   "area": "plans",
+   "story": "US-PLAN-02",
+   "test_case": "PLAN-ENROL-006",
+   "category": "FitTrack.Application.Services.PlansService",
+   "template": "membership plan {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "classes.schedule.duplicate_entry",
+   "level": "Warning",
+   "area": "classes",
+   "story": "US-CLAS-01",
+   "test_case": "CLAS-SCHEDULE-007",
+   "category": "FitTrack.Application.Services.ClassesService",
+   "template": "membership plan {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "classes.schedule.dependency_failed",
+   "level": "Error",
+   "area": "classes",
+   "story": "US-CLAS-02",
+   "test_case": "CLAS-SCHEDULE-008",
+   "category": "FitTrack.Application.Services.ClassesService",
+   "template": "Call to {Dependency} failed for membership plan {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "access.admit.config_invalid",
+   "level": "Error",
+   "area": "access",
+   "story": "US-ACCE-01",
+   "test_case": "ACCE-ADMIT-009",
+   "category": "FitTrack.Application.Services.AccessService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "access.admit.timed_out",
+   "level": "Error",
+   "area": "access",
+   "story": "US-ACCE-02",
+   "test_case": "ACCE-ADMIT-010",
+   "category": "FitTrack.Application.Services.AccessService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "plans.enrol.unhandled_error",
+   "level": "Error",
+   "area": "plans",
+   "story": "US-PLAN-01",
+   "test_case": "PLAN-ENROL-011",
+   "category": "FitTrack.Application.Services.PlansService",
+   "template": "Unhandled error while handling membership plan {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "plans.enrol.input_rejected",
+   "level": "Warning",
+   "area": "plans",
+   "story": "US-PLAN-02",
+   "test_case": "PLAN-ENROL-012",
+   "category": "FitTrack.Application.Services.PlansService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "classes.schedule.high_volume",
+   "level": "Warning",
+   "area": "classes",
+   "story": "US-CLAS-01",
+   "test_case": "CLAS-SCHEDULE-013",
+   "category": "FitTrack.Application.Services.ClassesService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "classes.schedule.component_failed",
+   "level": "Error",
+   "area": "classes",
+   "story": "US-CLAS-02",
+   "test_case": "CLAS-SCHEDULE-014",
+   "category": "FitTrack.Application.Services.ClassesService",
+   "template": "Component {Component} failed for membership plan {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "plans-enrol-access-lost",
+   "log_key": "plans.enrol.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-PLAN-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "plans-enrol-not-found",
+   "log_key": "plans.enrol.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "membership plan {RecordId} was not found when it was saved. See story US-PLAN-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "classes-schedule-duplicate-entry",
+   "log_key": "classes.schedule.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "membership plan {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-CLAS-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "classes-schedule-dependency-failed",
+   "log_key": "classes.schedule.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for membership plan {RecordId}. See story US-CLAS-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "access-admit-config-invalid",
+   "log_key": "access.admit.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-ACCE-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "access-admit-timed-out",
+   "log_key": "access.admit.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-ACCE-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "plans-enrol-unhandled-error",
+   "log_key": "plans.enrol.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling membership plan {RecordId}. See story US-PLAN-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "plans-enrol-input-rejected",
+   "log_key": "plans.enrol.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-PLAN-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "classes-schedule-high-volume",
+   "log_key": "classes.schedule.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-CLAS-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "classes-schedule-component-failed",
+   "log_key": "classes.schedule.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for membership plan {RecordId}. See story US-CLAS-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

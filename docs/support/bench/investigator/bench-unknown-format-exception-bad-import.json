@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "id": "bench-unknown-format-exception-bad-import",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "external_input",
+  "trigger": "unknown",
+  "class": "answerable",
+  "world_dir": "worlds/bench-unknown-format-exception-bad-import",
+  "incident_id": "INC-bench-unknown-format-exception-bad-import",
+  "budget_override": null,
+  "prompt": {
+    "incident": {
+      "trigger": "unknown",
+      "severity": "Error",
+      "environment": "prod",
+      "signature": {
+        "kind": "none",
+        "id": null,
+        "log_key": null,
+        "template_id": "t-21ee60e9732b",
+        "template": "Row {Row} of the import could not be read: {Reason}"
+      },
+      "count": 3,
+      "rate_per_hour": 1,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T12:30:00.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T12:30:00.000Z",
+              "Level": "Error",
+              "Category": "MyApp.Application.Services.ImportService",
+              "MessageTemplate": "Row {Row} of the import could not be read: {Reason}",
+              "Message": "Row 14 of the import could not be read: the date is not valid",
+              "TraceId": "18899d890dca5c08b4639de2abf60dae",
+              "SpanId": "2f40e432a61424ff",
+              "Properties": {
+                "Row": "14",
+                "Reason": "bad_date"
+              },
+              "Exception": {
+                "Type": "System.FormatException",
+                "Message": "String '31/02/2026' was not recognized as a valid DateTime",
+                "Frames": [
+                  "MyApp.Application.Services.ImportService.ParseRow"
+                ]
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": null,
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "explained",
+    "abstain_reason": null,
+    "cause_category": "external_input",
+    "area": null,
+    "user_story": null,
+    "supporting_evidence": [
+      {
+        "tool": "logs_by_correlation",
+        "arguments": {
+          "trace_id": "18899d890dca5c08b4639de2abf60dae"
+        }
+      }
+    ],
+    "min_calls": 1
+  }
+}

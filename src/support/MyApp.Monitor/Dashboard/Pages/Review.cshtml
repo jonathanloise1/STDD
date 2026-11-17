@@ -1,0 +1,39 @@
+@page "/review"
+@model ReviewModel
+@{
+    ViewData["Title"] = "Review";
+    ViewData["Section"] = "review";
+}
+<h1>Review</h1>
+<p class="muted">Closed incidents whose outcome changes knowledge. Each one goes back to the repository as a pull request, never a direct commit; <code>fix.agent.md</code> performs the change for a coding agent from the downloaded report.</p>
+@if (Model.Message is not null) { <div class="message @(Model.MessageIsError ? "error" : "")">@Model.Message</div> }
+@if (Model.Incidents.Count == 0) { <p class="muted">No closed incident is waiting for a repository change.</p> }
+else
+{
+    <div class="scroll"><table>
+        <thead><tr><th>Incident</th><th>Outcome</th><th>Repository change</th><th>Ticket</th><th>Pull request</th><th>Closed</th><th>Note</th><th>Report</th></tr></thead>
+        <tbody>
+        @foreach (var i in Model.Incidents)
+        {
+            var outcome = i.Report["outcome"];
+            <tr>
+                <td><a href="/incidents/@i.Id">@i.Id</a><br /><code>@(i.SignatureId ?? i.TemplateId)</code></td>
+                <td><span class="pill">@i.Outcome</span></td>
+                <td>@Outcomes.RepositoryChange[i.Outcome!]</td>
+                <td>@Fmt.At(outcome, "ticket")</td>
+                <td>
+                    @if (Fmt.At(outcome, "pull_request") is { Length: > 0 } pr) { @pr }
+                    else
+                    {
+                        <span class="muted">pending</span>
+                        <form method="post" asp-page-handler="PullRequest"><input type="hidden" name="id" value="@i.Id" /><input name="pullRequest" placeholder="pull request link" /> <button type="submit" class="secondary">Record</button></form>
+                    }
+                </td>
+                <td>@Fmt.At(outcome, "closed_by")<br />@Fmt.At(outcome, "closed_at")</td>
+                <td>@Fmt.At(outcome, "note")</td>
+                <td><a href="/api/incidents/@i.Id?download=true">Download JSON</a></td>
+            </tr>
+        }
+        </tbody>
+    </table></div>
+}

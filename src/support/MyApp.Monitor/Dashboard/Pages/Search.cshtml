@@ -1,0 +1,42 @@
+@page "/search"
+@model SearchModel
+@{
+    ViewData["Title"] = "Search";
+    ViewData["Section"] = "search";
+}
+<h1>Search</h1>
+@if (Model.Message is not null) { <div class="message @(Model.MessageIsError ? "error" : "")">@Model.Message</div> }
+<div class="grid">
+    <form method="get" class="card">
+        <strong>By trace id</strong> <span class="muted">(the Reference shown under an error message)</span>
+        <p><input name="trace" size="40" placeholder="32 hex characters" value="@Model.Trace" /> <button type="submit">Search logs</button></p>
+    </form>
+    <form method="get" class="card">
+        <strong>By entity and id</strong>
+        <p>
+            <select name="entity">@foreach (var e in Model.Entities) { <option value="@e" selected="@(Model.Entity == e)">@e</option> }</select>
+            <input name="id" size="38" value="@Model.EntityId" />
+            <button type="submit">Search audit trail</button>
+        </p>
+    </form>
+</div>
+
+@if (Model.Result is { } result)
+{
+    <h2>Result for @Model.Searched</h2>
+    <div class="card">
+        <div>Tool <code>@result.Tool</code> as <code>dashboard:@Model.CurrentUser</code>: <span class="pill">@result.Status</span>, @result.Rows row(s)@(result.Truncated ? ", truncated" : "")@(result.Error is null ? "" : " - " + result.Error)</div>
+        @if (result.Data is not null) { <pre>@Fmt.Pretty(result.Data)</pre> }
+    </div>
+    @if (result.IsSuccess)
+    {
+        <form method="post" asp-page-handler="OpenIncident" class="card">
+            <input type="hidden" name="trace" value="@Model.Trace" />
+            <input type="hidden" name="entity" value="@Model.Entity" />
+            <input type="hidden" name="entityId" value="@Model.EntityId" />
+            <label>Note <input name="note" size="50" maxlength="300" /></label>
+            <button type="submit">Open incident</button>
+            <span class="muted">Creates a manual incident for this search.</span>
+        </form>
+    }
+}

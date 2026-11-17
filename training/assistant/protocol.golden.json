@@ -1,0 +1,716 @@
+{
+  "schema_version": 1,
+  "protocol_sha256": "3c84307bb5efd4ce7bd5ab70984c0c5aa1095371c8d56d3646320afe584818a0",
+  "format": {
+    "description": "Language-neutral golden cases of the assistant protocol (models.md 3.7). Every implementation loads protocol.json, then for each case checks that its output equals `expected` exactly.",
+    "render": "render_messages(protocol, lang, app_name, sections, question) -> (system, user). `expected.question` is the normalised question (also the value that is substituted into `user`). Compare strings code point for code point.",
+    "parse": "parse_answer(protocol, lang, output, k) -> outcome in refused|answered|invalid, and `cited` (the cited positions; empty unless answered).",
+    "select": "select_sections(protocol, ranked, max_sections) -> ids of the selected sections in order. `max_sections` null means the protocol value; a value can only lower it.",
+    "lengths": "All lengths (question cut, body characters, section characters) are counted in Unicode code points. Implementations whose strings are UTF-16 (TypeScript, C#) must count code points, not code units; case r12-astral-cut checks it.",
+    "whitespace": "Whitespace for trimming and collapsing is exactly this set: U+0009 to U+000D, U+0020, U+00A0, U+1680, U+2000 to U+200A, U+2028, U+2029, U+202F, U+205F, U+3000, U+FEFF.",
+    "normalisation": "Unicode NFC, then CRLF to LF, for the question, the application name and every section title and text. Question: then trim, collapse whitespace runs to one space, cut at context.max_question_chars. Parsing: CRLF to LF and trailing whitespace trimmed before any test.",
+    "substitution": "One left-to-right pass over a template; only the placeholders of models.md 3.2 are replaced; substituted values are never scanned again."
+  },
+  "render": [
+    {
+      "id": "r01-one-section-en",
+      "description": "One section, English",
+      "lang": "en",
+      "app_name": "TaskFlow",
+      "sections": [
+        {
+          "title": "Create a task - Steps",
+          "text": "1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\"."
+        }
+      ],
+      "question": "how do i make a task",
+      "expected": {
+        "question": "how do i make a task",
+        "system": "You answer questions from users of TaskFlow. Use only the numbered manual sections in the user message.\nRules:\n1. Use only facts stated in the sections. Never add steps, labels, limits or features that the sections do not state.\n2. Users often use other words than the manual. Match the meaning, not the words: if a section states what the user needs, answer from it.\n3. If no section states the answer, reply with exactly this sentence and nothing else: I can't find this in the manual.\n4. Answer in English. Write button, field and message names exactly as the sections write them.\n5. Be short: at most three sentences, or at most six numbered steps.\n6. End with a last line that starts with \"Source:\" and lists the numbers of the sections you used, for example: Source: [2]",
+        "user": "Manual sections:\n\n[1] Create a task - Steps\n1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\".\n\nQuestion: how do i make a task"
+      }
+    },
+    {
+      "id": "r02-two-sections-en",
+      "description": "Two sections, the example of models.md 3.2",
+      "lang": "en",
+      "app_name": "TaskFlow",
+      "sections": [
+        {
+          "title": "Create a task - Steps",
+          "text": "1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\"."
+        },
+        {
+          "title": "Create a task - If something goes wrong",
+          "text": "What you see: \"You no longer have access to this organization.\". What to do: Ask an admin of the organization to add them back."
+        }
+      ],
+      "question": "how do i put a new thing on the team list",
+      "expected": {
+        "question": "how do i put a new thing on the team list",
+        "system": "You answer questions from users of TaskFlow. Use only the numbered manual sections in the user message.\nRules:\n1. Use only facts stated in the sections. Never add steps, labels, limits or features that the sections do not state.\n2. Users often use other words than the manual. Match the meaning, not the words: if a section states what the user needs, answer from it.\n3. If no section states the answer, reply with exactly this sentence and nothing else: I can't find this in the manual.\n4. Answer in English. Write button, field and message names exactly as the sections write them.\n5. Be short: at most three sentences, or at most six numbered steps.\n6. End with a last line that starts with \"Source:\" and lists the numbers of the sections you used, for example: Source: [2]",
+        "user": "Manual sections:\n\n[1] Create a task - Steps\n1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\".\n\n[2] Create a task - If something goes wrong\nWhat you see: \"You no longer have access to this organization.\". What to do: Ask an admin of the organization to add them back.\n\nQuestion: how do i put a new thing on the team list"
+      }
+    },
+    {
+      "id": "r03-three-sections-it-accents",
+      "description": "Three sections, Italian accents and an apostrophe",
+      "lang": "it",
+      "app_name": "Biblioteca Viva",
+      "sections": [
+        {
+          "title": "Registrare un prestito - Passaggi",
+          "text": "1. Apri la pagina Prestiti.\n2. Fai clic su \"Nuovo prestito\".\n3. Nel campo \"Titolo\" scrivi il titolo del libro."
+        },
+        {
+          "title": "Registrare un prestito - Da sapere",
+          "text": "- Un socio può avere al massimo cinque prestiti.\n- Perché è già in prestito? Il libro è già fuori."
+        },
+        {
+          "title": "Restituire un libro - Passaggi",
+          "text": "1. Apri la scheda del socio.\n2. Fai clic su \"Restituisci\"."
+        }
+      ],
+      "question": "Perché non riesco a registrare un prestito? L'elenco è vuoto",
+      "expected": {
+        "question": "Perché non riesco a registrare un prestito? L'elenco è vuoto",
+        "system": "You answer questions from users of Biblioteca Viva. Use only the numbered manual sections in the user message.\nRules:\n1. Use only facts stated in the sections. Never add steps, labels, limits or features that the sections do not state.\n2. Users often use other words than the manual. Match the meaning, not the words: if a section states what the user needs, answer from it.\n3. If no section states the answer, reply with exactly this sentence and nothing else: Non trovo questa informazione nel manuale.\n4. Answer in Italian. Write button, field and message names exactly as the sections write them.\n5. Be short: at most three sentences, or at most six numbered steps.\n6. End with a last line that starts with \"Source:\" and lists the numbers of the sections you used, for example: Source: [2]",
+        "user": "Manual sections:\n\n[1] Registrare un prestito - Passaggi\n1. Apri la pagina Prestiti.\n2. Fai clic su \"Nuovo prestito\".\n3. Nel campo \"Titolo\" scrivi il titolo del libro.\n\n[2] Registrare un prestito - Da sapere\n- Un socio può avere al massimo cinque prestiti.\n- Perché è già in prestito? Il libro è già fuori.\n\n[3] Restituire un libro - Passaggi\n1. Apri la scheda del socio.\n2. Fai clic su \"Restituisci\".\n\nQuestion: Perché non riesco a registrare un prestito? L'elenco è vuoto"
+      }
+    },
+    {
+      "id": "r04-four-sections-it",
+      "description": "Four sections, Italian",
+      "lang": "it",
+      "app_name": "Biblioteca Viva",
+      "sections": [
+        {
+          "title": "Registrare un prestito - Passaggi",
+          "text": "1. Apri la pagina Prestiti.\n2. Fai clic su \"Nuovo prestito\".\n3. Nel campo \"Titolo\" scrivi il titolo del libro."
+        },
+        {
+          "title": "Registrare un prestito - Da sapere",
+          "text": "- Un socio può avere al massimo cinque prestiti.\n- Perché è già in prestito? Il libro è già fuori."
+        },
+        {
+          "title": "Restituire un libro - Passaggi",
+          "text": "1. Apri la scheda del socio.\n2. Fai clic su \"Restituisci\"."
+        },
+        {
+          "title": "Pagina iniziale",
+          "text": "Usa questa pagina per vedere i prestiti in scadenza oggi."
+        }
+      ],
+      "question": "dove vedo i prestiti di oggi",
+      "expected": {
+        "question": "dove vedo i prestiti di oggi",
+        "system": "You answer questions from users of Biblioteca Viva. Use only the numbered manual sections in the user message.\nRules:\n1. Use only facts stated in the sections. Never add steps, labels, limits or features that the sections do not state.\n2. Users often use other words than the manual. Match the meaning, not the words: if a section states what the user needs, answer from it.\n3. If no section states the answer, reply with exactly this sentence and nothing else: Non trovo questa informazione nel manuale.\n4. Answer in Italian. Write button, field and message names exactly as the sections write them.\n5. Be short: at most three sentences, or at most six numbered steps.\n6. End with a last line that starts with \"Source:\" and lists the numbers of the sections you used, for example: Source: [2]",
+        "user": "Manual sections:\n\n[1] Registrare un prestito - Passaggi\n1. Apri la pagina Prestiti.\n2. Fai clic su \"Nuovo prestito\".\n3. Nel campo \"Titolo\" scrivi il titolo del libro.\n\n[2] Registrare un prestito - Da sapere\n- Un socio può avere al massimo cinque prestiti.\n- Perché è già in prestito? Il libro è già fuori.\n\n[3] Restituire un libro - Passaggi\n1. Apri la scheda del socio.\n2. Fai clic su \"Restituisci\".\n\n[4] Pagina iniziale\nUsa questa pagina per vedere i prestiti in scadenza oggi.\n\nQuestion: dove vedo i prestiti di oggi"
+      }
+    },
+    {
+      "id": "r05-braces-in-question",
+      "description": "Braces in the question stay literal and are not substituted again",
+      "lang": "en",
+      "app_name": "TaskFlow",
+      "sections": [
+        {
+          "title": "Create a task - Steps",
+          "text": "1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\"."
+        }
+      ],
+      "question": "what does {question} or {sections} or {n} mean in {app_name}?",
+      "expected": {
+        "question": "what does {question} or {sections} or {n} mean in {app_name}?",
+        "system": "You answer questions from users of TaskFlow. Use only the numbered manual sections in the user message.\nRules:\n1. Use only facts stated in the sections. Never add steps, labels, limits or features that the sections do not state.\n2. Users often use other words than the manual. Match the meaning, not the words: if a section states what the user needs, answer from it.\n3. If no section states the answer, reply with exactly this sentence and nothing else: I can't find this in the manual.\n4. Answer in English. Write button, field and message names exactly as the sections write them.\n5. Be short: at most three sentences, or at most six numbered steps.\n6. End with a last line that starts with \"Source:\" and lists the numbers of the sections you used, for example: Source: [2]",
+        "user": "Manual sections:\n\n[1] Create a task - Steps\n1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\".\n\nQuestion: what does {question} or {sections} or {n} mean in {app_name}?"
+      }
+    },
+    {
+      "id": "r06-quotes-and-backslash",
+      "description": "Quotes and a backslash in the question",
+      "lang": "en",
+      "app_name": "TaskFlow",
+      "sections": [
+        {
+          "title": "Create a task - Steps",
+          "text": "1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\"."
+        }
+      ],
+      "question": "Where is the \"New Task\" button? I typed C:\\tasks\\ and 'it' failed",
+      "expected": {
+        "question": "Where is the \"New Task\" button? I typed C:\\tasks\\ and 'it' failed",
+        "system": "You answer questions from users of TaskFlow. Use only the numbered manual sections in the user message.\nRules:\n1. Use only facts stated in the sections. Never add steps, labels, limits or features that the sections do not state.\n2. Users often use other words than the manual. Match the meaning, not the words: if a section states what the user needs, answer from it.\n3. If no section states the answer, reply with exactly this sentence and nothing else: I can't find this in the manual.\n4. Answer in English. Write button, field and message names exactly as the sections write them.\n5. Be short: at most three sentences, or at most six numbered steps.\n6. End with a last line that starts with \"Source:\" and lists the numbers of the sections you used, for example: Source: [2]",
+        "user": "Manual sections:\n\n[1] Create a task - Steps\n1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\".\n\nQuestion: Where is the \"New Task\" button? I typed C:\\tasks\\ and 'it' failed"
+      }
+    },
+    {
+      "id": "r07-crlf-input",
+      "description": "CRLF in the question and in a section text",
+      "lang": "en",
+      "app_name": "TaskFlow",
+      "sections": [
+        {
+          "title": "Create a task - Steps",
+          "text": "1. Open the Tasks page.\r\n2. Click \"New Task\"."
+        }
+      ],
+      "question": "how do i\r\nmake a task\r\n",
+      "expected": {
+        "question": "how do i make a task",
+        "system": "You answer questions from users of TaskFlow. Use only the numbered manual sections in the user message.\nRules:\n1. Use only facts stated in the sections. Never add steps, labels, limits or features that the sections do not state.\n2. Users often use other words than the manual. Match the meaning, not the words: if a section states what the user needs, answer from it.\n3. If no section states the answer, reply with exactly this sentence and nothing else: I can't find this in the manual.\n4. Answer in English. Write button, field and message names exactly as the sections write them.\n5. Be short: at most three sentences, or at most six numbered steps.\n6. End with a last line that starts with \"Source:\" and lists the numbers of the sections you used, for example: Source: [2]",
+        "user": "Manual sections:\n\n[1] Create a task - Steps\n1. Open the Tasks page.\n2. Click \"New Task\".\n\nQuestion: how do i make a task"
+      }
+    },
+    {
+      "id": "r08-over-long-question",
+      "description": "A question of 400 characters is cut at 300 code points",
+      "lang": "en",
+      "app_name": "TaskFlow",
+      "sections": [
+        {
+          "title": "Create a task - Steps",
+          "text": "1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\"."
+        }
+      ],
+      "question": "how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task ",
+      "expected": {
+        "question": "how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do",
+        "system": "You answer questions from users of TaskFlow. Use only the numbered manual sections in the user message.\nRules:\n1. Use only facts stated in the sections. Never add steps, labels, limits or features that the sections do not state.\n2. Users often use other words than the manual. Match the meaning, not the words: if a section states what the user needs, answer from it.\n3. If no section states the answer, reply with exactly this sentence and nothing else: I can't find this in the manual.\n4. Answer in English. Write button, field and message names exactly as the sections write them.\n5. Be short: at most three sentences, or at most six numbered steps.\n6. End with a last line that starts with \"Source:\" and lists the numbers of the sections you used, for example: Source: [2]",
+        "user": "Manual sections:\n\n[1] Create a task - Steps\n1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\".\n\nQuestion: how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do i make a task how do"
+      }
+    },
+    {
+      "id": "r09-braces-in-app-name",
+      "description": "Braces in the application name and in section titles and texts stay literal",
+      "lang": "en",
+      "app_name": "{sections} Pro",
+      "sections": [
+        {
+          "title": "Export {format} - Steps",
+          "text": "1. Type {name} in the \"Template\" field.\n2. Click \"Export {format}\"."
+        }
+      ],
+      "question": "how do i export",
+      "expected": {
+        "question": "how do i export",
+        "system": "You answer questions from users of {sections} Pro. Use only the numbered manual sections in the user message.\nRules:\n1. Use only facts stated in the sections. Never add steps, labels, limits or features that the sections do not state.\n2. Users often use other words than the manual. Match the meaning, not the words: if a section states what the user needs, answer from it.\n3. If no section states the answer, reply with exactly this sentence and nothing else: I can't find this in the manual.\n4. Answer in English. Write button, field and message names exactly as the sections write them.\n5. Be short: at most three sentences, or at most six numbered steps.\n6. End with a last line that starts with \"Source:\" and lists the numbers of the sections you used, for example: Source: [2]",
+        "user": "Manual sections:\n\n[1] Export {format} - Steps\n1. Type {name} in the \"Template\" field.\n2. Click \"Export {format}\".\n\nQuestion: how do i export"
+      }
+    },
+    {
+      "id": "r10-nfd-input",
+      "description": "Decomposed input (e + combining acute) is normalised to NFC",
+      "lang": "it",
+      "app_name": "Biblioteca Viva",
+      "sections": [
+        {
+          "title": "Perché - Passaggi",
+          "text": "1. Apri la pagina Prestiti."
+        }
+      ],
+      "question": "Perché non vedo i libri",
+      "expected": {
+        "question": "Perché non vedo i libri",
+        "system": "You answer questions from users of Biblioteca Viva. Use only the numbered manual sections in the user message.\nRules:\n1. Use only facts stated in the sections. Never add steps, labels, limits or features that the sections do not state.\n2. Users often use other words than the manual. Match the meaning, not the words: if a section states what the user needs, answer from it.\n3. If no section states the answer, reply with exactly this sentence and nothing else: Non trovo questa informazione nel manuale.\n4. Answer in Italian. Write button, field and message names exactly as the sections write them.\n5. Be short: at most three sentences, or at most six numbered steps.\n6. End with a last line that starts with \"Source:\" and lists the numbers of the sections you used, for example: Source: [2]",
+        "user": "Manual sections:\n\n[1] Perché - Passaggi\n1. Apri la pagina Prestiti.\n\nQuestion: Perché non vedo i libri"
+      }
+    },
+    {
+      "id": "r11-whitespace-runs",
+      "description": "Tabs, non-breaking spaces and runs of spaces collapse to one space",
+      "lang": "en",
+      "app_name": "TaskFlow",
+      "sections": [
+        {
+          "title": "Create a task - Steps",
+          "text": "1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\"."
+        }
+      ],
+      "question": "  how\tdo   i  make a task  ",
+      "expected": {
+        "question": "how do i make a task",
+        "system": "You answer questions from users of TaskFlow. Use only the numbered manual sections in the user message.\nRules:\n1. Use only facts stated in the sections. Never add steps, labels, limits or features that the sections do not state.\n2. Users often use other words than the manual. Match the meaning, not the words: if a section states what the user needs, answer from it.\n3. If no section states the answer, reply with exactly this sentence and nothing else: I can't find this in the manual.\n4. Answer in English. Write button, field and message names exactly as the sections write them.\n5. Be short: at most three sentences, or at most six numbered steps.\n6. End with a last line that starts with \"Source:\" and lists the numbers of the sections you used, for example: Source: [2]",
+        "user": "Manual sections:\n\n[1] Create a task - Steps\n1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\".\n\nQuestion: how do i make a task"
+      }
+    },
+    {
+      "id": "r12-astral-cut",
+      "description": "The cut counts code points, not UTF-16 units: an emoji straddles the limit",
+      "lang": "en",
+      "app_name": "TaskFlow",
+      "sections": [
+        {
+          "title": "Create a task - Steps",
+          "text": "1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\"."
+        }
+      ],
+      "question": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa😀😀",
+      "expected": {
+        "question": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa😀",
+        "system": "You answer questions from users of TaskFlow. Use only the numbered manual sections in the user message.\nRules:\n1. Use only facts stated in the sections. Never add steps, labels, limits or features that the sections do not state.\n2. Users often use other words than the manual. Match the meaning, not the words: if a section states what the user needs, answer from it.\n3. If no section states the answer, reply with exactly this sentence and nothing else: I can't find this in the manual.\n4. Answer in English. Write button, field and message names exactly as the sections write them.\n5. Be short: at most three sentences, or at most six numbered steps.\n6. End with a last line that starts with \"Source:\" and lists the numbers of the sections you used, for example: Source: [2]",
+        "user": "Manual sections:\n\n[1] Create a task - Steps\n1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type the title.\n4. Click \"Create Task\".\n\nQuestion: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa😀"
+      }
+    }
+  ],
+  "parse": [
+    {
+      "id": "p01-refused-en",
+      "lang": "en",
+      "k": 2,
+      "output": "I can't find this in the manual.",
+      "expected": {
+        "outcome": "refused",
+        "cited": []
+      }
+    },
+    {
+      "id": "p02-refused-it",
+      "lang": "it",
+      "k": 3,
+      "output": "Non trovo questa informazione nel manuale.",
+      "expected": {
+        "outcome": "refused",
+        "cited": []
+      }
+    },
+    {
+      "id": "p03-refused-trailing-whitespace",
+      "lang": "en",
+      "k": 2,
+      "output": "I can't find this in the manual.\n\n  \n",
+      "expected": {
+        "outcome": "refused",
+        "cited": []
+      }
+    },
+    {
+      "id": "p04-answered-one",
+      "lang": "en",
+      "k": 2,
+      "output": "Click \"New Task\" on the Tasks page, type a title and click \"Create Task\".\nSource: [1]",
+      "expected": {
+        "outcome": "answered",
+        "cited": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "p05-answered-two",
+      "lang": "it",
+      "k": 4,
+      "output": "Apri la scheda del socio e fai clic su \"Restituisci\".\nSource: [2], [3]",
+      "expected": {
+        "outcome": "answered",
+        "cited": [
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "p06-answered-crlf",
+      "lang": "en",
+      "k": 2,
+      "output": "1. Open the Tasks page.\r\n2. Click \"New Task\".\r\nSource: [1]\r\n",
+      "expected": {
+        "outcome": "answered",
+        "cited": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "p07-answered-max-lines",
+      "lang": "en",
+      "k": 4,
+      "output": "1. Step 1.\n2. Step 2.\n3. Step 3.\n4. Step 4.\n5. Step 5.\n6. Step 6.\nSource: [1], [2], [3], [4]",
+      "expected": {
+        "outcome": "answered",
+        "cited": [
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "id": "p08-invalid-refusal-plus-text",
+      "lang": "en",
+      "k": 2,
+      "output": "I can't find this in the manual.\nSource: [1]",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    },
+    {
+      "id": "p09-invalid-refusal-other-language",
+      "lang": "it",
+      "k": 2,
+      "output": "I can't find this in the manual.",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    },
+    {
+      "id": "p10-invalid-no-source",
+      "lang": "en",
+      "k": 2,
+      "output": "Click \"New Task\".",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    },
+    {
+      "id": "p11-invalid-source-only",
+      "lang": "en",
+      "k": 2,
+      "output": "Source: [1]",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    },
+    {
+      "id": "p12-invalid-reference-beyond-context",
+      "lang": "en",
+      "k": 2,
+      "output": "Click \"New Task\".\nSource: [3]",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    },
+    {
+      "id": "p13-invalid-descending",
+      "lang": "en",
+      "k": 3,
+      "output": "Click \"New Task\".\nSource: [2], [1]",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    },
+    {
+      "id": "p14-invalid-duplicate",
+      "lang": "en",
+      "k": 3,
+      "output": "Click \"New Task\".\nSource: [1], [1]",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    },
+    {
+      "id": "p15-invalid-body-too-long",
+      "lang": "en",
+      "k": 2,
+      "output": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nSource: [1]",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    },
+    {
+      "id": "p16-answered-body-exactly-600",
+      "lang": "en",
+      "k": 2,
+      "output": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nSource: [1]",
+      "expected": {
+        "outcome": "answered",
+        "cited": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "p17-invalid-too-many-lines",
+      "lang": "en",
+      "k": 2,
+      "output": "Line 1\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6\nLine 7\nLine 8\nSource: [1]",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    },
+    {
+      "id": "p18-invalid-source-line-in-body",
+      "lang": "en",
+      "k": 2,
+      "output": "Source: [1]\nClick \"New Task\".\nSource: [1]",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    },
+    {
+      "id": "p19-invalid-source-with-extra-text",
+      "lang": "en",
+      "k": 2,
+      "output": "Click \"New Task\".\nSource: [1] and more",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    },
+    {
+      "id": "p20-invalid-source-lowercase",
+      "lang": "en",
+      "k": 2,
+      "output": "Click \"New Task\".\nsource: [1]",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    },
+    {
+      "id": "p21-invalid-source-double-digit",
+      "lang": "en",
+      "k": 4,
+      "output": "Click \"New Task\".\nSource: [10]",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    },
+    {
+      "id": "p22-invalid-source-no-space",
+      "lang": "en",
+      "k": 3,
+      "output": "Click \"New Task\".\nSource: [1],[2]",
+      "expected": {
+        "outcome": "invalid",
+        "cited": []
+      }
+    }
+  ],
+  "select": [
+    {
+      "id": "c01-four-fit",
+      "description": "Four short sections: all four are selected",
+      "max_sections": null,
+      "ranked": [
+        {
+          "id": "s1",
+          "title": "Section 1",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s2",
+          "title": "Section 2",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s3",
+          "title": "Section 3",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s4",
+          "title": "Section 4",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s5",
+          "title": "Section 5",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s6",
+          "title": "Section 6",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      ],
+      "expected": {
+        "selected_ids": [
+          "s1",
+          "s2",
+          "s3",
+          "s4"
+        ]
+      }
+    },
+    {
+      "id": "c02-skip-over-budget",
+      "description": "A section that would pass 4,000 characters is skipped, later smaller ones are taken",
+      "max_sections": null,
+      "ranked": [
+        {
+          "id": "s1",
+          "title": "Section 1",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s2",
+          "title": "Section 2",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s3",
+          "title": "Section 3",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s4",
+          "title": "Section 4",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s5",
+          "title": "Section 5",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s6",
+          "title": "Section 6",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      ],
+      "expected": {
+        "selected_ids": [
+          "s1",
+          "s2",
+          "s3",
+          "s5"
+        ]
+      }
+    },
+    {
+      "id": "c03-scan-limit",
+      "description": "Only the first 8 ranked sections are scanned",
+      "max_sections": null,
+      "ranked": [
+        {
+          "id": "s1",
+          "title": "Section 1",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s2",
+          "title": "Section 2",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s3",
+          "title": "Section 3",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s4",
+          "title": "Section 4",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s5",
+          "title": "Section 5",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s6",
+          "title": "Section 6",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s7",
+          "title": "Section 7",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s8",
+          "title": "Section 8",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s9",
+          "title": "Section 9",
+          "text": "aaaaaaaaaa"
+        }
+      ],
+      "expected": {
+        "selected_ids": [
+          "s1",
+          "s2",
+          "s3"
+        ]
+      }
+    },
+    {
+      "id": "c04-lower-limit",
+      "description": "A lower max_sections (training draws K from 2 to 4)",
+      "max_sections": 2,
+      "ranked": [
+        {
+          "id": "s1",
+          "title": "Section 1",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s2",
+          "title": "Section 2",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s3",
+          "title": "Section 3",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s4",
+          "title": "Section 4",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      ],
+      "expected": {
+        "selected_ids": [
+          "s1",
+          "s2"
+        ]
+      }
+    },
+    {
+      "id": "c05-never-cut",
+      "description": "Exactly 4,000 characters fit: the budget is inclusive and no section is cut",
+      "max_sections": null,
+      "ranked": [
+        {
+          "id": "s1",
+          "title": "Section 1",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s2",
+          "title": "Section 2",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s3",
+          "title": "Section 3",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s4",
+          "title": "Section 4",
+          "text": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        {
+          "id": "s5",
+          "title": "Section 5",
+          "text": "a"
+        }
+      ],
+      "expected": {
+        "selected_ids": [
+          "s1",
+          "s2",
+          "s3",
+          "s4"
+        ]
+      }
+    }
+  ]
+}

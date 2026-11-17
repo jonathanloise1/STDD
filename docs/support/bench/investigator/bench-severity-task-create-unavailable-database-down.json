@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "id": "bench-severity-task-create-unavailable-database-down",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "dependency",
+  "trigger": "severity",
+  "class": "answerable",
+  "world_dir": "worlds/bench-severity-task-create-unavailable-database-down",
+  "incident_id": "INC-bench-severity-task-create-unavailable-database-down",
+  "budget_override": null,
+  "prompt": {
+    "incident": {
+      "trigger": "severity",
+      "severity": "Error",
+      "environment": "prod",
+      "signature": {
+        "kind": "keyed",
+        "id": "task.create.unavailable",
+        "log_key": "task.create.unavailable",
+        "template_id": null,
+        "template": null
+      },
+      "count": 3,
+      "rate_per_hour": 1,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T13:15:00.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T13:15:00.000Z",
+              "Level": "Error",
+              "Category": "MyApp.Application.Services.TaskItemService",
+              "LogKey": "task.create.unavailable",
+              "MessageTemplate": "Task not created: the service did not answer ({ExceptionType} at {TopFrame})",
+              "Message": "Task not created: the service did not answer (Microsoft.Data.SqlClient.SqlException at MyApp.Infrastructure.Repositories.TaskRepository.GetAsync)",
+              "TraceId": "1e5745aa52cdc8683677cec61c149edb",
+              "SpanId": "136a91078a010744",
+              "Properties": {
+                "ExceptionType": "Microsoft.Data.SqlClient.SqlException",
+                "TopFrame": "MyApp.Infrastructure.Repositories.TaskRepository.GetAsync"
+              },
+              "Exception": {
+                "Type": "Microsoft.Data.SqlClient.SqlException",
+                "Message": "Timeout expired while reading from the database",
+                "Frames": [
+                  "MyApp.Infrastructure.Repositories.TaskRepository.GetAsync"
+                ]
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": {
+      "signature": {
+        "id": "task.create.unavailable",
+        "kind": "keyed",
+        "match": {
+          "log_key": "task.create.unavailable"
+        },
+        "area": "tasks",
+        "user_story": "US-TASK-01",
+        "test_case": "TASK-CREATE-008",
+        "severity": "Error",
+        "message": "The service did not answer. Try again in a few minutes.",
+        "runbook": {
+          "anchor": "task-create-unavailable",
+          "path": "docs/areas/tasks/operations.md",
+          "text": "### Meaning\n\nA member saved a new task and the service did not answer. The form stays open with what was typed. Whether the task was stored is not known to the user.\n\n### Check\n\n1. Ask the user for the Reference under the message (a 32-character trace id) and open it with `logs_by_correlation`. Find the request that failed (the request that creates the task) and read the dependency call and the exception under it: a timeout, a refused connection or a database error each point to a different fix.\n2. Read `health_status`. A check that is not healthy (database first, then storage or the sign-in provider if listed) is the cause; note which one and since when.\n3. Count the entries with this log key in the last hour. A few isolated entries with a healthy service are a short interruption that has ended. Many entries from different organizations are an outage: do not investigate user by user.\n4. Check that no duplicate was created: ask the user to look at the Tasks list for the title before typing it again. If the task is there, the save succeeded and only the answer was lost.\n5. Ask the user to try again once the checks above are healthy. If it fails again with a healthy service, collect the new Reference.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| health_status | - | status == \"Healthy\" |\n| logs_by_correlation | trace_id={signal.TraceId} | records exists |\n\n### Resolve\n\n1. No action when the service is healthy again and the entries stop: the user only has to try again.\n2. When a dependency stays unhealthy, hand over to development or the platform owner with the unhealthy check, the first entry time and one trace id.\n3. When the service is healthy and the entry repeats for the same request, hand over to development with the trace id: it is a code or data defect, not an outage.\n\n### History\n\nNone."
+        },
+        "rate": {
+          "expected_per_hour": 0
+        },
+        "fingerprint_by": [],
+        "cause_category": "dependency_unavailable",
+        "status": "active",
+        "fixed_in": null,
+        "noise": null,
+        "rule_checks": [
+          {
+            "tool": "health_status",
+            "arguments": {},
+            "expect": "status == \"Healthy\""
+          },
+          {
+            "tool": "logs_by_correlation",
+            "arguments": {
+              "trace_id": "{signal.TraceId}"
+            },
+            "expect": "records exists"
+          }
+        ],
+        "history": []
+      },
+      "runbook": "### Meaning\n\nA member saved a new task and the service did not answer. The form stays open with what was typed. Whether the task was stored is not known to the user.\n\n### Check\n\n1. Ask the user for the Reference under the message (a 32-character trace id) and open it with `logs_by_correlation`. Find the request that failed (the request that creates the task) and read the dependency call and the exception under it: a timeout, a refused connection or a database error each point to a different fix.\n2. Read `health_status`. A check that is not healthy (database first, then storage or the sign-in provider if listed) is the cause; note which one and since when.\n3. Count the entries with this log key in the last hour. A few isolated entries with a healthy service are a short interruption that has ended. Many entries from different organizations are an outage: do not investigate user by user.\n4. Check that no duplicate was created: ask the user to look at the Tasks list for the title before typing it again. If the task is there, the save succeeded and only the answer was lost.\n5. Ask the user to try again once the checks above are healthy. If it fails again with a healthy service, collect the new Reference.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| health_status | - | status == \"Healthy\" |\n| logs_by_correlation | trace_id={signal.TraceId} | records exists |\n\n### Resolve\n\n1. No action when the service is healthy again and the entries stop: the user only has to try again.\n2. When a dependency stays unhealthy, hand over to development or the platform owner with the unhealthy check, the first entry time and one trace id.\n3. When the service is healthy and the entry repeats for the same request, hand over to development with the trace id: it is a code or data defect, not an outage.\n\n### History\n\nNone."
+    },
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "explained",
+    "abstain_reason": null,
+    "cause_category": "dependency_unavailable",
+    "area": "tasks",
+    "user_story": "US-TASK-01",
+    "supporting_evidence": [
+      {
+        "tool": "health_status",
+        "arguments": {}
+      }
+    ],
+    "min_calls": 1
+  }
+}

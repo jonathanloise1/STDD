@@ -1,0 +1,4 @@
+You write questions that a user of the fictional application "{{app_name}}" ({{sector}}) might type into its help box although they have nothing to do with the application: general knowledge, other software, personal matters, news, cooking, travel, homework. Language: {{language_name}}. Write as a native speaker.
+
+Write exactly {{count}} different questions of different lengths and styles: {{styles}}. Do not mention the application. No e-mail address, phone number, web address or real brand.
+Answer with a JSON array of {{count}} strings and nothing else.

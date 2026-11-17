@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w08",
+ "app": "BikeLoop",
+ "sector": "bike sharing",
+ "split": "train",
+ "service": "bikeloop-api",
+ "namespace": "BikeLoop.Application.Services",
+ "record": "trip",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "trips",
+   "title": "Trips",
+   "verb": "unlock",
+   "stories": [
+    {
+     "id": "US-TRIP-01",
+     "title": "Unlock a bike",
+     "test_case": "TRIP-UNLOCK-001"
+    },
+    {
+     "id": "US-TRIP-02",
+     "title": "Lock a bike",
+     "test_case": "TRIP-UNLOCK-002"
+    }
+   ]
+  },
+  {
+   "id": "stations",
+   "title": "Stations",
+   "verb": "balance",
+   "stories": [
+    {
+     "id": "US-STAT-01",
+     "title": "Balance a station",
+     "test_case": "STAT-BALANCE-001"
+    },
+    {
+     "id": "US-STAT-02",
+     "title": "Close a station",
+     "test_case": "STAT-BALANCE-002"
+    }
+   ]
+  },
+  {
+   "id": "riders",
+   "title": "Riders",
+   "verb": "register",
+   "stories": [
+    {
+     "id": "US-RIDE-01",
+     "title": "Register a rider",
+     "test_case": "RIDE-REGISTER-001"
+    },
+    {
+     "id": "US-RIDE-02",
+     "title": "Suspend a rider",
+     "test_case": "RIDE-REGISTER-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "trip",
+   "description": "A trip of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.Trips",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Trip",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "telemetry-hub",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Bike:TelemetryUrl",
+  "BikeLoop:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "trips.unlock.access_lost",
+   "level": "Warning",
+   "area": "trips",
+   "story": "US-TRIP-01",
+   "test_case": "TRIP-UNLOCK-005",
+   "category": "BikeLoop.Application.Services.TripsService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "trips.unlock.not_found",
+   "level": "Warning",
+   "area": "trips",
+   "story": "US-TRIP-02",
+   "test_case": "TRIP-UNLOCK-006",
+   "category": "BikeLoop.Application.Services.TripsService",
+   "template": "trip {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "stations.balance.duplicate_entry",
+   "level": "Warning",
+   "area": "stations",
+   "story": "US-STAT-01",
+   "test_case": "STAT-BALANCE-007",
+   "category": "BikeLoop.Application.Services.StationsService",
+   "template": "trip {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "stations.balance.dependency_failed",
+   "level": "Error",
+   "area": "stations",
+   "story": "US-STAT-02",
+   "test_case": "STAT-BALANCE-008",
+   "category": "BikeLoop.Application.Services.StationsService",
+   "template": "Call to {Dependency} failed for trip {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "riders.register.config_invalid",
+   "level": "Error",
+   "area": "riders",
+   "story": "US-RIDE-01",
+   "test_case": "RIDE-REGISTER-009",
+   "category": "BikeLoop.Application.Services.RidersService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "riders.register.timed_out",
+   "level": "Error",
+   "area": "riders",
+   "story": "US-RIDE-02",
+   "test_case": "RIDE-REGISTER-010",
+   "category": "BikeLoop.Application.Services.RidersService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "trips.unlock.unhandled_error",
+   "level": "Error",
+   "area": "trips",
+   "story": "US-TRIP-01",
+   "test_case": "TRIP-UNLOCK-011",
+   "category": "BikeLoop.Application.Services.TripsService",
+   "template": "Unhandled error while handling trip {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "trips.unlock.input_rejected",
+   "level": "Warning",
+   "area": "trips",
+   "story": "US-TRIP-02",
+   "test_case": "TRIP-UNLOCK-012",
+   "category": "BikeLoop.Application.Services.TripsService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "stations.balance.high_volume",
+   "level": "Warning",
+   "area": "stations",
+   "story": "US-STAT-01",
+   "test_case": "STAT-BALANCE-013",
+   "category": "BikeLoop.Application.Services.StationsService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "stations.balance.component_failed",
+   "level": "Error",
+   "area": "stations",
+   "story": "US-STAT-02",
+   "test_case": "STAT-BALANCE-014",
+   "category": "BikeLoop.Application.Services.StationsService",
+   "template": "Component {Component} failed for trip {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "trips-unlock-access-lost",
+   "log_key": "trips.unlock.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-TRIP-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "trips-unlock-not-found",
+   "log_key": "trips.unlock.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "trip {RecordId} was not found when it was saved. See story US-TRIP-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "stations-balance-duplicate-entry",
+   "log_key": "stations.balance.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "trip {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-STAT-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "stations-balance-dependency-failed",
+   "log_key": "stations.balance.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for trip {RecordId}. See story US-STAT-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "riders-register-config-invalid",
+   "log_key": "riders.register.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-RIDE-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "riders-register-timed-out",
+   "log_key": "riders.register.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-RIDE-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "trips-unlock-unhandled-error",
+   "log_key": "trips.unlock.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling trip {RecordId}. See story US-TRIP-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "trips-unlock-input-rejected",
+   "log_key": "trips.unlock.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-TRIP-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "stations-balance-high-volume",
+   "log_key": "stations.balance.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-STAT-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "stations-balance-component-failed",
+   "log_key": "stations.balance.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for trip {RecordId}. See story US-STAT-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

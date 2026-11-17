@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Playwright .NET Test Configuration
+  Documentation: https://playwright.dev/dotnet/docs/test-runners
+-->
+<RunSettings>
+
+  <!-- ============================================
+       PLAYWRIGHT BROWSER CONFIGURATION
+       ============================================ -->
+  <Playwright>
+    
+    <!-- Browser engine: chromium | firefox | webkit -->
+    <BrowserName>chromium</BrowserName>
+    
+    <LaunchOptions>
+      <!-- 
+        Headless mode:
+        * true  = browser runs in background (no visible window), faster for CI/CD
+        * false = browser window is visible, useful for debugging
+      -->
+      <Headless>true</Headless>
+      
+      <!-- 
+        SlowMo: delay in milliseconds between each Playwright action
+        * 0    = full speed (CI/CD)
+        * 500  = half second pause (light debugging)
+        * 1000 = one second pause (step by step observation)
+        * 2000 = two seconds (very slow, detailed inspection)
+      -->
+      <SlowMo>0</SlowMo>
+      
+      <!-- 
+        Args: Chrome command line arguments
+        In headless mode, UI-related flags (start-maximized, window-position) are ignored.
+        Flags below optimize for CI/background execution:
+        - no-sandbox: avoid sandboxing overhead (safe in CI/local dev)
+        - disable-gpu: skip GPU compositing in headless
+        - disable-dev-shm-usage: avoid /dev/shm issues on constrained environments
+        - disable-extensions: no extension loading overhead
+      -->
+      <Args>["--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage", "--disable-extensions"]</Args>
+    </LaunchOptions>
+    
+    <!-- 
+      ExpectTimeout: max wait time (ms) for assertions like Expect(locator).ToBeVisibleAsync()
+      Default is 5000ms, we use 10000ms for slower environments
+    -->
+    <ExpectTimeout>10000</ExpectTimeout>
+    
+  </Playwright>
+
+  <!-- ============================================
+       NUNIT TEST RUNNER CONFIGURATION
+       ============================================ -->
+  <NUnit>
+    <!-- 
+      NumberOfTestWorkers: parallel test execution
+      * 1 = sequential (recommended for E2E to avoid conflicts)
+      * N = run N tests in parallel (use with caution)
+    -->
+    <NumberOfTestWorkers>1</NumberOfTestWorkers>
+  </NUnit>
+
+  <!-- ============================================
+       DOTNET TEST RUN CONFIGURATION
+       ============================================ -->
+  <RunConfiguration>
+    <!-- MaxCpuCount: CPU cores for test execution (1 = single core) -->
+    <MaxCpuCount>1</MaxCpuCount>
+    
+    <!-- ResultsDirectory: where test results (.trx, screenshots) are saved -->
+    <ResultsDirectory>./TestResults</ResultsDirectory>
+  </RunConfiguration>
+
+</RunSettings>

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "system": {
+    "source": ".github/agents/support.agent.md",
+    "begin": "<!-- protocol:begin -->",
+    "end": "<!-- protocol:end -->"
+  },
+  "turns": {
+    "user": "<incident>{incident}</incident>\n<pack>{pack}</pack>\n<tools>{tools}</tools>\n<constraints>\n{constraints}\n</constraints>\n<budget calls=\"{calls}\" />",
+    "constraint_line": "{id}: {text}",
+    "call": "<call>{call}</call>",
+    "report": "<report>{report}</report>",
+    "result": "<result>{result}</result>\n<budget calls=\"{calls}\" />",
+    "repair": "<validation_error>{errors}</validation_error>"
+  },
+  "result_role": "tool",
+  "budget": { "small": 6, "large": 10, "cap": 12 },
+  "stop_rules": { "duplicate_limit": 2, "consecutive_failures": 2, "context_summary_fraction": 0.75 },
+  "report": { "schema": "docs/support/incident-report.schema.json", "def": "#/$defs/investigation", "repair_turns": 1, "min_confidence_explained": 0.5 },
+  "decoding": { "temperature": 0, "max_new_tokens": 700, "reasoning": "off" }
+}

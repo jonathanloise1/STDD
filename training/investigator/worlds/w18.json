@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w18",
+ "app": "LinguaDesk",
+ "sector": "translation agency",
+ "split": "validation",
+ "service": "linguadesk-api",
+ "namespace": "LinguaDesk.Application.Services",
+ "record": "job",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "jobs",
+   "title": "Jobs",
+   "verb": "assign",
+   "stories": [
+    {
+     "id": "US-JOBS-01",
+     "title": "Assign a job",
+     "test_case": "JOBS-ASSIGN-001"
+    },
+    {
+     "id": "US-JOBS-02",
+     "title": "Deliver a job",
+     "test_case": "JOBS-ASSIGN-002"
+    }
+   ]
+  },
+  {
+   "id": "terms",
+   "title": "Terminology",
+   "verb": "add",
+   "stories": [
+    {
+     "id": "US-TERM-01",
+     "title": "Add a term",
+     "test_case": "TERM-ADD-001"
+    },
+    {
+     "id": "US-TERM-02",
+     "title": "Merge terms",
+     "test_case": "TERM-ADD-002"
+    }
+   ]
+  },
+  {
+   "id": "clients",
+   "title": "Clients",
+   "verb": "quote",
+   "stories": [
+    {
+     "id": "US-CLIE-01",
+     "title": "Send a quote",
+     "test_case": "CLIE-QUOTE-001"
+    },
+    {
+     "id": "US-CLIE-02",
+     "title": "Accept a quote",
+     "test_case": "CLIE-QUOTE-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "job",
+   "description": "A job of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.Jobs",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Job",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "mt-engine",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Lingua:EngineUrl",
+  "LinguaDesk:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "jobs.assign.access_lost",
+   "level": "Warning",
+   "area": "jobs",
+   "story": "US-JOBS-01",
+   "test_case": "JOBS-ASSIGN-005",
+   "category": "LinguaDesk.Application.Services.JobsService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "jobs.assign.not_found",
+   "level": "Warning",
+   "area": "jobs",
+   "story": "US-JOBS-02",
+   "test_case": "JOBS-ASSIGN-006",
+   "category": "LinguaDesk.Application.Services.JobsService",
+   "template": "job {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "terms.add.duplicate_entry",
+   "level": "Warning",
+   "area": "terms",
+   "story": "US-TERM-01",
+   "test_case": "TERM-ADD-007",
+   "category": "LinguaDesk.Application.Services.TermsService",
+   "template": "job {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "terms.add.dependency_failed",
+   "level": "Error",
+   "area": "terms",
+   "story": "US-TERM-02",
+   "test_case": "TERM-ADD-008",
+   "category": "LinguaDesk.Application.Services.TermsService",
+   "template": "Call to {Dependency} failed for job {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "clients.quote.config_invalid",
+   "level": "Error",
+   "area": "clients",
+   "story": "US-CLIE-01",
+   "test_case": "CLIE-QUOTE-009",
+   "category": "LinguaDesk.Application.Services.ClientsService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "clients.quote.timed_out",
+   "level": "Error",
+   "area": "clients",
+   "story": "US-CLIE-02",
+   "test_case": "CLIE-QUOTE-010",
+   "category": "LinguaDesk.Application.Services.ClientsService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "jobs.assign.unhandled_error",
+   "level": "Error",
+   "area": "jobs",
+   "story": "US-JOBS-01",
+   "test_case": "JOBS-ASSIGN-011",
+   "category": "LinguaDesk.Application.Services.JobsService",
+   "template": "Unhandled error while handling job {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "jobs.assign.input_rejected",
+   "level": "Warning",
+   "area": "jobs",
+   "story": "US-JOBS-02",
+   "test_case": "JOBS-ASSIGN-012",
+   "category": "LinguaDesk.Application.Services.JobsService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "terms.add.high_volume",
+   "level": "Warning",
+   "area": "terms",
+   "story": "US-TERM-01",
+   "test_case": "TERM-ADD-013",
+   "category": "LinguaDesk.Application.Services.TermsService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "terms.add.component_failed",
+   "level": "Error",
+   "area": "terms",
+   "story": "US-TERM-02",
+   "test_case": "TERM-ADD-014",
+   "category": "LinguaDesk.Application.Services.TermsService",
+   "template": "Component {Component} failed for job {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "jobs-assign-access-lost",
+   "log_key": "jobs.assign.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-JOBS-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "jobs-assign-not-found",
+   "log_key": "jobs.assign.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "job {RecordId} was not found when it was saved. See story US-JOBS-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "terms-add-duplicate-entry",
+   "log_key": "terms.add.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "job {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-TERM-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "terms-add-dependency-failed",
+   "log_key": "terms.add.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for job {RecordId}. See story US-TERM-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "clients-quote-config-invalid",
+   "log_key": "clients.quote.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-CLIE-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "clients-quote-timed-out",
+   "log_key": "clients.quote.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-CLIE-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "jobs-assign-unhandled-error",
+   "log_key": "jobs.assign.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling job {RecordId}. See story US-JOBS-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "jobs-assign-input-rejected",
+   "log_key": "jobs.assign.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-JOBS-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "terms-add-high-volume",
+   "log_key": "terms.add.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-TERM-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "terms-add-component-failed",
+   "log_key": "terms.add.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for job {RecordId}. See story US-TERM-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

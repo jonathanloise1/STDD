@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "constraints": [
+    {
+      "id": "C01",
+      "type": "access",
+      "text": "Every tool is read-only; no tool can change, delete, send or dequeue anything.",
+      "params": { "allowed_access": ["read"] },
+      "enforced_by": ["pack_verify", "executor"]
+    },
+    {
+      "id": "C02",
+      "type": "access",
+      "text": "Database reads use a read-only connection limited to the bound tables, one record by key or one record's change history.",
+      "params": { "application_intent": "ReadOnly", "statements": ["SELECT TOP"] },
+      "enforced_by": ["executor"]
+    },
+    {
+      "id": "C03",
+      "type": "budget",
+      "text": "An investigation may make at most 12 tool calls, read at most 60000 characters of results and last at most 10 minutes.",
+      "params": { "max_tool_calls": 12, "max_output_chars": 60000, "max_wall_seconds": 600 },
+      "enforced_by": ["investigator_host", "executor"]
+    },
+    {
+      "id": "C04",
+      "type": "scope",
+      "text": "Log searches look back at most 72 hours.",
+      "params": { "max_lookback_hours": 72 },
+      "enforced_by": ["executor"]
+    },
+    {
+      "id": "C05",
+      "type": "scope",
+      "text": "Only the entities listed in the tool list can be read, and only by their key.",
+      "params": { "source": "entities.json" },
+      "enforced_by": ["pack_verify", "executor"]
+    },
+    {
+      "id": "C06",
+      "type": "data",
+      "text": "Every value you receive has been masked by policy; fields not allowed by the policy are removed, and masked values must not be guessed or reconstructed.",
+      "params": { "policy": "masking-policy.json" },
+      "enforced_by": ["executor", "store"]
+    },
+    {
+      "id": "C07",
+      "type": "data",
+      "text": "Credentials, connection strings, tokens and the masking key are never given to the investigator or written to a report.",
+      "params": {},
+      "enforced_by": ["investigator_host", "pack_verify"]
+    },
+    {
+      "id": "C08",
+      "type": "action",
+      "text": "The system never remediates: it reports, and people decide.",
+      "params": { "automatic_remediation": false },
+      "enforced_by": ["notifier", "store"]
+    },
+    {
+      "id": "C09",
+      "type": "action",
+      "text": "A verdict from the investigator never opens a ticket on its own; it becomes a draft for a person to approve.",
+      "params": { "allow_model_verdict_auto_ticket": false },
+      "enforced_by": ["notifier"]
+    },
+    {
+      "id": "C10",
+      "type": "scope",
+      "text": "Tools reach only the sources of the active profile's environment.",
+      "params": {},
+      "enforced_by": ["pack_verify", "executor"]
+    }
+  ]
+}

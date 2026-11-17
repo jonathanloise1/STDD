@@ -1,0 +1,1 @@
+{"Timestamp":"2026-11-06T09:25:00Z","EntityType":"TaskItem","EntityId":"38ead1f5-721c-4f78-a8a6-9808be881658","Action":"Delete","UserId":"4ee6c171-d18c-4fad-a796-2f6dd57e0bef","ChangedProperties":["IsDeleted"],"OldValues":{"Title":"Prepare the audit"},"NewValues":null,"CorrelationId":"168cbd87ea528426cdb159e3900f4052"}

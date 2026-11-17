@@ -1,0 +1,165 @@
+// Styles of the building blocks of src/ui/components, feedback and icons.
+
+// Icons and spinners
+.app-icon {
+	display: inline-block;
+	flex-shrink: 0;
+	vertical-align: -0.2em;
+}
+
+.app-spinner {
+	color: var(--bs-primary);
+	flex-shrink: 0;
+	--bs-spinner-width: 1rem;
+	--bs-spinner-height: 1rem;
+	--bs-spinner-border-width: 0.15em;
+
+	&--md {
+		--bs-spinner-width: 2rem;
+		--bs-spinner-height: 2rem;
+		--bs-spinner-border-width: 0.2em;
+	}
+
+	&--lg {
+		--bs-spinner-width: 3rem;
+		--bs-spinner-height: 3rem;
+		--bs-spinner-border-width: 0.25em;
+	}
+}
+
+.btn .app-spinner {
+	color: inherit;
+}
+
+// Buttons
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+}
+
+.app-icon-btn {
+	min-width: 2.5rem;
+	min-height: 2.5rem;
+	padding-inline: 0.5rem;
+	justify-content: center;
+
+	&--compact {
+		min-width: 0;
+		min-height: 0;
+		padding: 0;
+	}
+}
+
+@include media-breakpoint-down(md) {
+	.btn:not(.btn-sm):not(.btn-link):not(.btn-close),
+	.form-control,
+	.form-select {
+		min-height: 2.75rem;
+	}
+}
+
+// Quiet buttons: tinted background, coloured text, generated from the theme colours.
+@each $name, $value in $theme-colors {
+	$subtle: map-get($theme-colors-bg-subtle, $name);
+	$emphasis: map-get($theme-colors-text, $name);
+
+	.btn-subtle-#{$name} {
+		@include button-variant(
+			$subtle,
+			$subtle,
+			$emphasis,
+			shade-color($subtle, 8%),
+			shade-color($subtle, 8%),
+			$emphasis,
+			shade-color($subtle, 14%),
+			shade-color($subtle, 14%),
+			$emphasis,
+			$subtle,
+			$subtle,
+			$emphasis
+		);
+	}
+}
+
+// Cards
+.card {
+	@include media-breakpoint-up(md) {
+		--bs-card-spacer-x: 1.5rem;
+		--bs-card-spacer-y: 1.5rem;
+		--bs-card-cap-padding-x: 1.5rem;
+	}
+}
+
+.card-header .h6 {
+	font-weight: 600;
+}
+
+// Tables
+.table {
+	--bs-table-color: var(--bs-body-color);
+
+	> thead {
+		--bs-table-bg: var(--bs-light);
+		--bs-table-color: var(--bs-body-color);
+		font-size: var(--bs-body-font-size);
+
+		th {
+			font-weight: 600;
+			white-space: nowrap;
+		}
+	}
+}
+
+// Badges
+.badge {
+	font-weight: 600;
+}
+
+// Fields
+.form-label {
+	font-weight: 500;
+	margin-bottom: 0.25rem;
+}
+
+.form-text {
+	font-size: 0.8125rem;
+}
+
+// Menus
+.app-menu-toggle {
+	background: transparent;
+	border: 0;
+	color: inherit;
+	padding: 0;
+
+	&::after {
+		display: none;
+	}
+}
+
+.dropdown-menu .dropdown-item {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	width: 100%;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+	color: var(--bs-primary);
+	background-color: var(--bs-primary-bg-subtle);
+}
+
+// Focus
+a:focus-visible,
+.app-menu-toggle:focus-visible {
+	outline: 2px solid var(--bs-info);
+	outline-offset: 2px;
+}
+
+// Side panel
+.offcanvas-end {
+	width: var(--app-help-width);
+}

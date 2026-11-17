@@ -1,0 +1,21 @@
+# Line endings: LF for every text file, on every platform (docs/guidelines/models.md 9.4 W3).
+# CRLF would change the SHA-256 that the model pipeline, the manual and the lock compute over these files,
+# and a shell script with CRLF does not run under WSL or Linux.
+* text=auto eol=lf
+
+# Shell scripts must keep LF even where core.autocrlf is set. Set the executable bit (git update-index --chmod=+x) when committing them.
+*.sh text eol=lf
+
+# Binary files are never converted.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+*.zip binary
+*.gguf binary
+*.safetensors binary
+*.onnx binary

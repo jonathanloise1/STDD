@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "gated": {
+    "report_valid": { "op": ">=", "value": 0.99 },
+    "cause_correct": { "op": ">=", "value": 0.80 },
+    "story_correct": { "op": ">=", "value": 0.75 },
+    "grounded": { "op": ">=", "value": 0.95 },
+    "abstain_correct": { "op": ">=", "value": 0.90 },
+    "wrongful_abstain": { "op": "<=", "value": 0.15 },
+    "denied_calls": { "op": "<=", "value": 0.02 },
+    "budget_exhausted": { "op": "<=", "value": 0.05 },
+    "extra_calls": { "op": "<=", "value": 2 }
+  },
+  "reported": ["latency_p95"]
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "note": "Exporter versions are pinned here (models.md 6.5). `tag` values are null until the owner pins them; a real export refuses a null tag. The command templates are the implementer's reading of each tool's command line and are UNVERIFIED against the pinned versions: check them with the first real export. Placeholders: {merged} {out_dir} {variant} {outfile} {bf16_gguf} {script} {quantize_bin}. QWEN3.5 EXPORTS ARE UNVERIFIED (2026-11-16): the models are a hybrid architecture (Gated DeltaNet plus attention) published as multimodal `...ForConditionalGeneration` checkpoints. The converter commands below were written for plain transformer models; whether they export a merged fine-tune of the hybrid architecture is THE FIRST THING TO TEST on the Windows PC (models.md 9.1 step 9), with the untrained candidate, before any training. Browser: transformers.js 4.0.0 or later supports `qwen3_5_text`, and onnx-community/Qwen3.5-0.8B-Text-ONNX shows a text-only q4f16 build of about 0.5 GB running on WebGPU; the export must be text-only (no vision tower), so `text_only` is true. Pin `transformers_js.tag` to a 4.x tag. GGUF: llama.cpp supports the architectures (pin a tag recent enough); a fine-tuned Qwen3.5 may fail to convert with \"BPE pre-tokenizer not recognized\" (models.md 10).",
+  "formats": [
+    "onnx",
+    "gguf"
+  ],
+  "variants": {
+    "onnx": "q4f16",
+    "gguf": "Q4_K_M"
+  },
+  "fallback_variants": {
+    "onnx": "q8",
+    "gguf": "Q8_0"
+  },
+  "transformers_js": {
+    "repo": "https://github.com/huggingface/transformers.js",
+    "tag": null,
+    "checkout_env": "TRANSFORMERS_JS_DIR",
+    "python_env": "TRANSFORMERS_JS_PYTHON",
+    "command": [
+      "python",
+      "{script}",
+      "--model_id",
+      "{merged}",
+      "--output_parent_dir",
+      "{out_dir}",
+      "--quantize",
+      "--quantize_mode",
+      "{variant}",
+      "--task",
+      "text-generation-with-past"
+    ],
+    "script": "scripts/convert.py"
+  },
+  "llama_cpp": {
+    "repo": "https://github.com/ggml-org/llama.cpp",
+    "tag": null,
+    "checkout_env": "LLAMA_CPP_DIR",
+    "python_env": "LLAMA_CPP_PYTHON",
+    "convert_command": [
+      "python",
+      "{script}",
+      "{merged}",
+      "--outfile",
+      "{bf16_gguf}",
+      "--outtype",
+      "bf16"
+    ],
+    "convert_script": "convert_hf_to_gguf.py",
+    "quantize_command": [
+      "{quantize_bin}",
+      "{bf16_gguf}",
+      "{outfile}",
+      "{variant}"
+    ],
+    "quantize_bin": "llama-quantize",
+    "server_bin": "llama-server"
+  },
+  "gguf_name": "{model}-{model_version}-{variant}.gguf",
+  "template_check": {
+    "node_script": "training/assistant/js/template_check.mjs",
+    "node_min": "22.18"
+  },
+  "text_only": true,
+  "first_test_on_pc": [
+    "merge a LoRA on the untrained candidate and save it",
+    "convert the merged folder to GGUF with convert_hf_to_gguf.py",
+    "convert the merged folder to text-only ONNX q4f16 with the transformers.js script",
+    "run the template check (Python, transformers.js, llama.cpp) on the golden cases"
+  ]
+}

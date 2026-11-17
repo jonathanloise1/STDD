@@ -1,0 +1,15 @@
+{
+	"short_name": "MyApp",
+	"name": "MyApp",
+	"icons": [
+		{
+			"src": "myapp-shield.svg",
+			"sizes": "any",
+			"type": "image/svg+xml"
+		}
+	],
+	"start_url": ".",
+	"display": "standalone",
+	"theme_color": "#1E3A5F",
+	"background_color": "#ffffff"
+}

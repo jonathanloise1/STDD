@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "id": "INC-20261106-0007",
+  "fingerprint": "9c41d27a05be3f18",
+  "environment": "prod",
+  "status": "open",
+  "trigger": "rate",
+  "signature": {
+    "kind": "keyed",
+    "id": "task.create.not_allowed",
+    "log_key": "task.create.not_allowed",
+    "template_id": null,
+    "template": null
+  },
+  "area": "tasks",
+  "user_story": "US-TASK-01",
+  "test_case": "TASK-CREATE-005",
+  "severity": "Warning",
+  "first_seen": "2026-11-06T09:12:44.120Z",
+  "last_seen": "2026-11-06T09:58:03.511Z",
+  "count": 41,
+  "rate_per_hour": 41,
+  "previous_incident_id": null,
+  "correlation": {
+    "trace_ids": ["4bf92f3577b34da6a3ce929d0e0e4736", "7d2e0c4f9a1b48e3b5c6d7e8f9a0b1c2"],
+    "entities": [{ "entity": "organization", "id": "0b7d3c52-8a41-4f0e-9d6b-2c1e5a7f3b91" }]
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "source": "signal",
+      "reference": "applogs: myapp-api-20261106.jsonl, 41 records with log key task.create.not_allowed",
+      "observed_at": "2026-11-06T09:58:03.511Z",
+      "excerpt": "Task not created: the role Viewer of user 6f1c2a90-3b7d-4e51-a8c2-9d0e4f6b1a72 in organization 0b7d3c52-8a41-4f0e-9d6b-2c1e5a7f3b91 does not allow it"
+    },
+    {
+      "id": "E2",
+      "source": "audit_trail_by_entity",
+      "reference": "audit_trail_by_entity entity=organization id=0b7d3c52-8a41-4f0e-9d6b-2c1e5a7f3b91",
+      "observed_at": "2026-11-06T10:01:12.004Z",
+      "excerpt": "2026-11-06T09:10:02Z Update ChangedProperties=[IsDeleted] new IsDeleted=true by 1e8b4c7d-55a0-4c3e-9f21-6a7b8c9d0e1f"
+    },
+    {
+      "id": "E3",
+      "source": "health_status",
+      "reference": "health_status",
+      "observed_at": "2026-11-06T10:01:12.250Z",
+      "excerpt": "status=Healthy; sqlserver=Healthy 11 ms"
+    }
+  ],
+  "rule_verdict": {
+    "cause_category": "access",
+    "cause": "A member tried to create a task in an organization they had just been removed from. Expected after team changes.",
+    "confidence": 1.0,
+    "evidence_refs": ["E1", "E3"]
+  },
+  "model_verdict": {
+    "cause_category": "access",
+    "cause": "The organization was deleted at 09:10 while its members still had the Tasks page open; every later save was refused.",
+    "confidence": 0.82,
+    "evidence_refs": ["E1", "E2"]
+  },
+  "investigation": {
+    "verdict": "explained",
+    "abstain_reason": null,
+    "cause_category": "access",
+    "cause": "The organization was deleted at 09:10 while its members still had the Tasks page open; every later save was refused.",
+    "confidence": 0.82,
+    "evidence_refs": ["E1", "E2"],
+    "area": "tasks",
+    "user_story": "US-TASK-01",
+    "reproduction": {
+      "preconditions": ["An editor has the New task form open in an organization."],
+      "steps": ["An admin deletes the organization.", "The editor saves the task."],
+      "expected": "The user sees \"Your role does not allow this change.\"",
+      "observed": "The user sees \"Your role does not allow this change.\"; the entry repeats for every open session."
+    },
+    "next_checks": ["Confirm with the organization's admin that the deletion was intended."]
+  },
+  "model": {
+    "model_id": "investigator",
+    "version": "1.0.0",
+    "tier": "small",
+    "device": "cpu",
+    "tool_calls": 3,
+    "abstained": false
+  },
+  "reproduction": {
+    "preconditions": ["An editor has the New task form open in an organization."],
+    "steps": ["An admin deletes the organization.", "The editor saves the task."],
+    "expected": "The user sees \"Your role does not allow this change.\"",
+    "observed": "The user sees \"Your role does not allow this change.\"; the entry repeats for every open session."
+  },
+  "runbook": {
+    "anchor": "task-create-not-allowed",
+    "path": "docs/areas/tasks/operations.md",
+    "checks": [{ "tool": "health_status", "expect": "status == \"Healthy\"", "passed": true, "evidence_id": "E3" }]
+  },
+  "actions_taken": [
+    { "at": "2026-11-06T09:58:03.600Z", "action": "created", "reference": null },
+    { "at": "2026-11-06T10:01:12.260Z", "action": "rule_checks_run", "reference": "E3" },
+    { "at": "2026-11-06T10:01:12.270Z", "action": "investigation_queued", "reference": null },
+    { "at": "2026-11-06T10:04:40.015Z", "action": "investigation_done", "reference": null },
+    { "at": "2026-11-06T10:04:40.120Z", "action": "ticket_draft", "reference": "notification 12" }
+  ],
+  "outcome": null,
+  "pack_version": "1.4.0+2f1b6a0",
+  "monitor_version": "1.4.0"
+}

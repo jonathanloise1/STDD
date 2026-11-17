@@ -1,0 +1,17 @@
+{
+  "goodMorning": "Buongiorno",
+  "goodAfternoon": "Buon pomeriggio",
+  "goodEvening": "Buonasera",
+  "taskOverview": "Ecco la panoramica delle tue attività",
+  "totalTasks": "Attività Totali",
+  "todo": "Da fare",
+  "inProgress": "In corso",
+  "done": "Completate",
+  "recentTasks": "Attività Recenti",
+  "viewAll": "Vedi Tutte",
+  "noTasksDashboard": "Nessuna attività. Vai ad Attività per crearne una.",
+  "taskTitle": "Titolo",
+  "taskStatus": "Stato",
+  "taskDueDate": "Scadenza",
+  "title": "Dashboard"
+}

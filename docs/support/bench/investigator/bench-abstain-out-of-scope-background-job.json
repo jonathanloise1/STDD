@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "id": "bench-abstain-out-of-scope-background-job",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "component",
+  "trigger": "unknown",
+  "class": "abstain",
+  "world_dir": "worlds/bench-abstain-out-of-scope-background-job",
+  "incident_id": "INC-bench-abstain-out-of-scope-background-job",
+  "budget_override": null,
+  "prompt": {
+    "incident": {
+      "trigger": "unknown",
+      "severity": "Error",
+      "environment": "prod",
+      "signature": {
+        "kind": "none",
+        "id": "platform.job.failed",
+        "log_key": "platform.job.failed",
+        "template_id": null,
+        "template": null
+      },
+      "count": 3,
+      "rate_per_hour": 1,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T03:00:05.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T03:00:05.000Z",
+              "Level": "Error",
+              "Category": "MyApp.WebApi.Jobs",
+              "LogKey": "platform.job.failed",
+              "MessageTemplate": "Background job {Job} failed: {ExceptionType} at {TopFrame}",
+              "Message": "Background job nightly-reminders failed: System.IO.IOException at MyApp.Infrastructure.Mail.SmtpSender.SendAsync",
+              "TraceId": "3202b4bb0698276217183c6a18dbe20a",
+              "SpanId": "58485dd22dc2ccc5",
+              "Properties": {
+                "Job": "nightly-reminders",
+                "ExceptionType": "System.IO.IOException",
+                "TopFrame": "MyApp.Infrastructure.Mail.SmtpSender.SendAsync"
+              },
+              "Exception": {
+                "Type": "System.IO.IOException",
+                "Message": "Unable to read data from the transport connection",
+                "Frames": [
+                  "MyApp.Infrastructure.Mail.SmtpSender.SendAsync"
+                ]
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": null,
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "abstain",
+    "abstain_reason": "out_of_scope",
+    "cause_category": "unknown",
+    "area": null,
+    "user_story": null,
+    "supporting_evidence": [],
+    "min_calls": 2
+  },
+  "note": "The cause is the mail server, which no tool reads."
+}

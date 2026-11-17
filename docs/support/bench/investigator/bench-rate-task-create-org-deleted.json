@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "id": "bench-rate-task-create-org-deleted",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "access",
+  "trigger": "rate",
+  "class": "answerable",
+  "world_dir": "worlds/bench-rate-task-create-org-deleted",
+  "incident_id": "INC-bench-rate-task-create-org-deleted",
+  "budget_override": null,
+  "prompt": {
+    "incident": {
+      "trigger": "rate",
+      "severity": "Warning",
+      "environment": "prod",
+      "signature": {
+        "kind": "keyed",
+        "id": "task.create.not_allowed",
+        "log_key": "task.create.not_allowed",
+        "template_id": null,
+        "template": null
+      },
+      "count": 40,
+      "rate_per_hour": 180,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T09:41:00.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T09:41:00.000Z",
+              "Level": "Warning",
+              "Category": "MyApp.Application.Services.TaskItemService",
+              "LogKey": "task.create.not_allowed",
+              "MessageTemplate": "Task not created: the role {Role} of user {UserId} in organization {OrganizationId} does not allow it",
+              "Message": "Task not created: the role Viewer of user e431fe00-5470-4241-a156-f9df92481629 in organization 576c16ed-63e2-4a66-a376-9acfe6b0e900 does not allow it",
+              "TraceId": "b0eec55e31f3ca36531f5f89fb6efdd1",
+              "SpanId": "779427bc635961b7",
+              "Properties": {
+                "Role": "Viewer",
+                "UserId": "e431fe00-5470-4241-a156-f9df92481629",
+                "OrganizationId": "576c16ed-63e2-4a66-a376-9acfe6b0e900"
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            },
+            {
+              "Timestamp": "2026-11-06T09:39:00.000Z",
+              "Level": "Warning",
+              "Category": "MyApp.Application.Services.TaskItemService",
+              "LogKey": "task.create.not_allowed",
+              "MessageTemplate": "Task not created: the role {Role} of user {UserId} in organization {OrganizationId} does not allow it",
+              "Message": "Task not created: the role Viewer of user e431fe00-5470-4241-a156-f9df92481629 in organization 576c16ed-63e2-4a66-a376-9acfe6b0e900 does not allow it",
+              "TraceId": "88ac0c078feb29e0205260a74c680969",
+              "SpanId": "3b65ad7e214cca44",
+              "Properties": {
+                "Role": "Viewer",
+                "UserId": "e431fe00-5470-4241-a156-f9df92481629",
+                "OrganizationId": "576c16ed-63e2-4a66-a376-9acfe6b0e900"
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": {
+      "signature": {
+        "id": "task.create.not_allowed",
+        "kind": "keyed",
+        "match": {
+          "log_key": "task.create.not_allowed"
+        },
+        "area": "tasks",
+        "user_story": "US-TASK-01",
+        "test_case": "TASK-CREATE-005",
+        "severity": "Warning",
+        "message": "Your role does not allow this change.",
+        "runbook": {
+          "anchor": "task-create-not-allowed",
+          "path": "docs/areas/tasks/operations.md",
+          "text": "### Meaning\n\nA member whose role does not allow creating tasks (a Viewer) tried to save a new task, usually because their role was lowered while the form was open. The task was not created and the user saw \"Your role does not allow this change.\"\n\n### Check\n\n1. Find the user's role: ask an Admin of the organization named in the entry to open the Team page and read the member's role. The entry is correct when the role is Viewer.\n2. Read the Team history: ask the Admin whether the role was lowered recently, or use `audit_trail_by_entity` (entity `organization`) for the organization to see changes made around the entry time. The usual cause is a role lowered while the user had the form open.\n3. If the role is Admin or Editor, the request was refused although it should have been allowed: keep the trace id and hand over, because the role the server read is different from the role shown.\n4. Count the entries per organization: a Viewer who keeps trying means the screen showed a button it should have hidden for that role.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| logs_by_correlation | trace_id={signal.TraceId} | records exists |\n| audit_trail_by_entity | entity=organization, id={signal.Properties.OrganizationId} | changes exists |\n\n### Resolve\n\n1. No action when the user is a Viewer: tell them their role does not allow changes and that an Admin can change the role on the Team page.\n2. Hand over to development when the user is an Admin or Editor, or when Viewers keep reaching the action from the screen.\n\n### History\n\nNone."
+        },
+        "rate": {
+          "expected_per_hour": 5
+        },
+        "fingerprint_by": [
+          "OrganizationId"
+        ],
+        "cause_category": "access",
+        "status": "active",
+        "fixed_in": null,
+        "noise": null,
+        "rule_checks": [
+          {
+            "tool": "logs_by_correlation",
+            "arguments": {
+              "trace_id": "{signal.TraceId}"
+            },
+            "expect": "records exists"
+          },
+          {
+            "tool": "audit_trail_by_entity",
+            "arguments": {
+              "entity": "organization",
+              "id": "{signal.Properties.OrganizationId}"
+            },
+            "expect": "changes exists"
+          }
+        ],
+        "history": []
+      },
+      "runbook": "### Meaning\n\nA member whose role does not allow creating tasks (a Viewer) tried to save a new task, usually because their role was lowered while the form was open. The task was not created and the user saw \"Your role does not allow this change.\"\n\n### Check\n\n1. Find the user's role: ask an Admin of the organization named in the entry to open the Team page and read the member's role. The entry is correct when the role is Viewer.\n2. Read the Team history: ask the Admin whether the role was lowered recently, or use `audit_trail_by_entity` (entity `organization`) for the organization to see changes made around the entry time. The usual cause is a role lowered while the user had the form open.\n3. If the role is Admin or Editor, the request was refused although it should have been allowed: keep the trace id and hand over, because the role the server read is different from the role shown.\n4. Count the entries per organization: a Viewer who keeps trying means the screen showed a button it should have hidden for that role.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| logs_by_correlation | trace_id={signal.TraceId} | records exists |\n| audit_trail_by_entity | entity=organization, id={signal.Properties.OrganizationId} | changes exists |\n\n### Resolve\n\n1. No action when the user is a Viewer: tell them their role does not allow changes and that an Admin can change the role on the Team page.\n2. Hand over to development when the user is an Admin or Editor, or when Viewers keep reaching the action from the screen.\n\n### History\n\nNone."
+    },
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "explained",
+    "abstain_reason": null,
+    "cause_category": "access",
+    "area": "tasks",
+    "user_story": "US-TASK-01",
+    "supporting_evidence": [
+      {
+        "tool": "audit_trail_by_entity",
+        "arguments": {
+          "entity": "organization",
+          "id": "576c16ed-63e2-4a66-a376-9acfe6b0e900"
+        }
+      }
+    ],
+    "min_calls": 1
+  },
+  "note": "An organization was deleted while members had the page open; the refusals repeat at a high rate."
+}

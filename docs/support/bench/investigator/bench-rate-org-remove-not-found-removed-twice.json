@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "id": "bench-rate-org-remove-not-found-removed-twice",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "data_missing",
+  "trigger": "rate",
+  "class": "answerable",
+  "world_dir": "worlds/bench-rate-org-remove-not-found-removed-twice",
+  "incident_id": "INC-bench-rate-org-remove-not-found-removed-twice",
+  "budget_override": null,
+  "prompt": {
+    "incident": {
+      "trigger": "rate",
+      "severity": "Warning",
+      "environment": "prod",
+      "signature": {
+        "kind": "keyed",
+        "id": "org.remove.not_found",
+        "log_key": "org.remove.not_found",
+        "template_id": null,
+        "template": null
+      },
+      "count": 40,
+      "rate_per_hour": 180,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T11:02:00.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T11:02:00.000Z",
+              "Level": "Warning",
+              "Category": "MyApp.Application.Services.OrganizationService",
+              "LogKey": "org.remove.not_found",
+              "MessageTemplate": "Member not removed: membership {MembershipId} is no longer in organization {OrganizationId}",
+              "Message": "Member not removed: membership 00163c24-5114-4a0b-a7e2-33e1e9accb04 is no longer in organization f3ed1d4d-e0f0-4e65-a443-6dc0bdc3a5a0",
+              "TraceId": "2b6c71d2aa3dbaafc0dc4f106d327eef",
+              "SpanId": "d26b275216ee87c2",
+              "Properties": {
+                "MembershipId": "00163c24-5114-4a0b-a7e2-33e1e9accb04",
+                "OrganizationId": "f3ed1d4d-e0f0-4e65-a443-6dc0bdc3a5a0"
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            },
+            {
+              "Timestamp": "2026-11-06T11:02:00.000Z",
+              "Level": "Warning",
+              "Category": "MyApp.Application.Services.OrganizationService",
+              "LogKey": "org.remove.not_found",
+              "MessageTemplate": "Member not removed: membership {MembershipId} is no longer in organization {OrganizationId}",
+              "Message": "Member not removed: membership 00163c24-5114-4a0b-a7e2-33e1e9accb04 is no longer in organization f3ed1d4d-e0f0-4e65-a443-6dc0bdc3a5a0",
+              "TraceId": "742785c843e36e124aa4935e050924d8",
+              "SpanId": "baf304ab9d8a2056",
+              "Properties": {
+                "MembershipId": "00163c24-5114-4a0b-a7e2-33e1e9accb04",
+                "OrganizationId": "f3ed1d4d-e0f0-4e65-a443-6dc0bdc3a5a0"
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": {
+      "signature": {
+        "id": "org.remove.not_found",
+        "kind": "keyed",
+        "match": {
+          "log_key": "org.remove.not_found"
+        },
+        "area": "organizations",
+        "user_story": "US-ORG-07",
+        "test_case": "ORG-REMOVE-004",
+        "severity": "Warning",
+        "message": "This member is no longer in the team.",
+        "runbook": {
+          "anchor": "org-remove-not-found",
+          "path": "docs/areas/organizations/operations.md",
+          "text": "### Meaning\n\nAn Admin tried to remove a member who was already removed, usually by another Admin a moment before. The Admin sees \"This member is no longer in the team.\" and nothing else changes.\n\n### Check\n\n1. Confirm that the member is gone: read the membership with `sql_entity_read` (entity `membership`) using the id in the entry.\n2. Read its history with `audit_trail_by_entity` (entity `membership`): the removal and the user who made it should appear shortly before the entry.\n3. If the membership still exists, the request was rejected for the wrong reason: keep the trace id and hand over.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| sql_entity_read | entity=membership, id={signal.Properties.MembershipId} | found == false |\n\n### Resolve\n\n1. No action when the membership is gone and the removal is in the history: two Admins acted on the same member.\n2. Ask the Admin to refresh the Team page.\n3. Hand over to development when the membership still exists.\n\n### History\n\nNone."
+        },
+        "rate": {
+          "expected_per_hour": 5
+        },
+        "fingerprint_by": [
+          "OrganizationId"
+        ],
+        "cause_category": "data_missing",
+        "status": "active",
+        "fixed_in": null,
+        "noise": null,
+        "rule_checks": [
+          {
+            "tool": "sql_entity_read",
+            "arguments": {
+              "entity": "membership",
+              "id": "{signal.Properties.MembershipId}"
+            },
+            "expect": "found == false"
+          }
+        ],
+        "history": []
+      },
+      "runbook": "### Meaning\n\nAn Admin tried to remove a member who was already removed, usually by another Admin a moment before. The Admin sees \"This member is no longer in the team.\" and nothing else changes.\n\n### Check\n\n1. Confirm that the member is gone: read the membership with `sql_entity_read` (entity `membership`) using the id in the entry.\n2. Read its history with `audit_trail_by_entity` (entity `membership`): the removal and the user who made it should appear shortly before the entry.\n3. If the membership still exists, the request was rejected for the wrong reason: keep the trace id and hand over.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| sql_entity_read | entity=membership, id={signal.Properties.MembershipId} | found == false |\n\n### Resolve\n\n1. No action when the membership is gone and the removal is in the history: two Admins acted on the same member.\n2. Ask the Admin to refresh the Team page.\n3. Hand over to development when the membership still exists.\n\n### History\n\nNone."
+    },
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "explained",
+    "abstain_reason": null,
+    "cause_category": "data_missing",
+    "area": "organizations",
+    "user_story": "US-ORG-07",
+    "supporting_evidence": [
+      {
+        "tool": "audit_trail_by_entity",
+        "arguments": {
+          "entity": "membership",
+          "id": "00163c24-5114-4a0b-a7e2-33e1e9accb04"
+        }
+      }
+    ],
+    "min_calls": 1
+  }
+}

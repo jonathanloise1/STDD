@@ -1,0 +1,51 @@
+@page "/"
+@model IndexModel
+@{
+    ViewData["Title"] = "Open incidents";
+    ViewData["Section"] = "open";
+}
+<h1>Open incidents</h1>
+@if (Model.Message is not null) { <div class="message @(Model.MessageIsError ? "error" : "")">@Model.Message</div> }
+
+<div class="grid">
+    @foreach (var status in new[] { "open", "acknowledged", "closed" })
+    {
+        <div class="card"><strong>@Model.Counts.GetValueOrDefault(status)</strong> <span class="muted">@status</span></div>
+    }
+</div>
+
+<form method="get" class="card">
+    <label>Severity <select name="severity"><option value="">any</option>@foreach (var s in new[] { "Critical", "Error", "Warning", "Information" }) { <option value="@s" selected="@(Model.Severity == s)">@s</option> }</select></label>
+    <label>Trigger <select name="trigger"><option value="">any</option>@foreach (var t in IndexModel.Triggers) { <option value="@t" selected="@(Model.Trigger == t)">@t</option> }</select></label>
+    <label>Verdict source <select name="verdict"><option value="">any</option>@foreach (var v in new[] { "rule", "model", "none" }) { <option value="@v" selected="@(Model.Verdict == v)">@v</option> }</select></label>
+    <label>Area <select name="area"><option value="">any</option>@foreach (var a in Model.Areas) { <option value="@a" selected="@(Model.Area == a)">@a</option> }</select></label>
+    <label>Status <select name="status"><option value="">open and acknowledged</option>@foreach (var s in new[] { "open", "acknowledged", "closed" }) { <option value="@s" selected="@(Model.Status == s)">@s</option> }</select></label>
+    <button type="submit">Filter</button> <a href="/">Clear</a>
+</form>
+
+@if (Model.Incidents.Count == 0)
+{
+    <p class="muted">No incidents match.</p>
+}
+else
+{
+    <div class="scroll"><table>
+        <thead><tr><th>Incident</th><th>Severity</th><th>Status</th><th>Trigger</th><th>Signature</th><th>Area</th><th>Count</th><th>Last seen</th><th>Verdict</th></tr></thead>
+        <tbody>
+        @foreach (var i in Model.Incidents)
+        {
+            <tr>
+                <td><a href="/incidents/@i.Id">@i.Id</a></td>
+                <td><span class="pill @i.Severity">@i.Severity</span></td>
+                <td>@i.Status</td>
+                <td>@i.Trigger</td>
+                <td><code>@(i.SignatureId ?? i.TemplateId ?? "unknown")</code></td>
+                <td>@i.Area</td>
+                <td>@i.Count</td>
+                <td>@Fmt.Time(i.LastSeen)</td>
+                <td>@i.VerdictSource</td>
+            </tr>
+        }
+        </tbody>
+    </table></div>
+}

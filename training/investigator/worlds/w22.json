@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w22",
+ "app": "PickLine",
+ "sector": "warehouse picking",
+ "split": "holdout",
+ "service": "pickline-api",
+ "namespace": "PickLine.Application.Services",
+ "record": "pick_task",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "picks",
+   "title": "Picks",
+   "verb": "pick",
+   "stories": [
+    {
+     "id": "US-PICK-01",
+     "title": "Release a pick",
+     "test_case": "PICK-PICK-001"
+    },
+    {
+     "id": "US-PICK-02",
+     "title": "Confirm a pick",
+     "test_case": "PICK-PICK-002"
+    }
+   ]
+  },
+  {
+   "id": "bins",
+   "title": "Bins",
+   "verb": "count",
+   "stories": [
+    {
+     "id": "US-BINS-01",
+     "title": "Count a bin",
+     "test_case": "BINS-COUNT-001"
+    },
+    {
+     "id": "US-BINS-02",
+     "title": "Move a bin",
+     "test_case": "BINS-COUNT-002"
+    }
+   ]
+  },
+  {
+   "id": "waves",
+   "title": "Waves",
+   "verb": "build",
+   "stories": [
+    {
+     "id": "US-WAVE-01",
+     "title": "Build a wave",
+     "test_case": "WAVE-BUILD-001"
+    },
+    {
+     "id": "US-WAVE-02",
+     "title": "Close a wave",
+     "test_case": "WAVE-BUILD-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "pick_task",
+   "description": "A pick task of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.PickTasks",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "PickTask",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "scanner-hub",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Pick:ScannerUrl",
+  "PickLine:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "picks.pick.access_lost",
+   "level": "Warning",
+   "area": "picks",
+   "story": "US-PICK-01",
+   "test_case": "PICK-PICK-005",
+   "category": "PickLine.Application.Services.PicksService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "picks.pick.not_found",
+   "level": "Warning",
+   "area": "picks",
+   "story": "US-PICK-02",
+   "test_case": "PICK-PICK-006",
+   "category": "PickLine.Application.Services.PicksService",
+   "template": "pick task {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "bins.count.duplicate_entry",
+   "level": "Warning",
+   "area": "bins",
+   "story": "US-BINS-01",
+   "test_case": "BINS-COUNT-007",
+   "category": "PickLine.Application.Services.BinsService",
+   "template": "pick task {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "bins.count.dependency_failed",
+   "level": "Error",
+   "area": "bins",
+   "story": "US-BINS-02",
+   "test_case": "BINS-COUNT-008",
+   "category": "PickLine.Application.Services.BinsService",
+   "template": "Call to {Dependency} failed for pick task {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "waves.build.config_invalid",
+   "level": "Error",
+   "area": "waves",
+   "story": "US-WAVE-01",
+   "test_case": "WAVE-BUILD-009",
+   "category": "PickLine.Application.Services.WavesService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "waves.build.timed_out",
+   "level": "Error",
+   "area": "waves",
+   "story": "US-WAVE-02",
+   "test_case": "WAVE-BUILD-010",
+   "category": "PickLine.Application.Services.WavesService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "picks.pick.unhandled_error",
+   "level": "Error",
+   "area": "picks",
+   "story": "US-PICK-01",
+   "test_case": "PICK-PICK-011",
+   "category": "PickLine.Application.Services.PicksService",
+   "template": "Unhandled error while handling pick task {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "picks.pick.input_rejected",
+   "level": "Warning",
+   "area": "picks",
+   "story": "US-PICK-02",
+   "test_case": "PICK-PICK-012",
+   "category": "PickLine.Application.Services.PicksService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "bins.count.high_volume",
+   "level": "Warning",
+   "area": "bins",
+   "story": "US-BINS-01",
+   "test_case": "BINS-COUNT-013",
+   "category": "PickLine.Application.Services.BinsService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "bins.count.component_failed",
+   "level": "Error",
+   "area": "bins",
+   "story": "US-BINS-02",
+   "test_case": "BINS-COUNT-014",
+   "category": "PickLine.Application.Services.BinsService",
+   "template": "Component {Component} failed for pick task {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "picks-pick-access-lost",
+   "log_key": "picks.pick.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-PICK-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "picks-pick-not-found",
+   "log_key": "picks.pick.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "pick task {RecordId} was not found when it was saved. See story US-PICK-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "bins-count-duplicate-entry",
+   "log_key": "bins.count.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "pick task {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-BINS-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "bins-count-dependency-failed",
+   "log_key": "bins.count.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for pick task {RecordId}. See story US-BINS-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "waves-build-config-invalid",
+   "log_key": "waves.build.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-WAVE-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "waves-build-timed-out",
+   "log_key": "waves.build.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-WAVE-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "picks-pick-unhandled-error",
+   "log_key": "picks.pick.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling pick task {RecordId}. See story US-PICK-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "picks-pick-input-rejected",
+   "log_key": "picks.pick.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-PICK-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "bins-count-high-volume",
+   "log_key": "bins.count.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-BINS-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "bins-count-component-failed",
+   "log_key": "bins.count.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for pick task {RecordId}. See story US-BINS-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

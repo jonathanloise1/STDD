@@ -1,0 +1,15 @@
+{
+  "title": "Attività",
+  "newTask": "Nuova attività",
+  "createTask": "Crea attività",
+  "update": "Aggiorna",
+  "taskTitle": "Titolo",
+  "taskStatus": "Stato",
+  "statusDone": "Completata",
+  "edit": "Modifica",
+  "titleRequired": "Inserisci un titolo.",
+  "roleChanged": "Il tuo ruolo non consente questa modifica.",
+  "withVar": "Ciao {{name}}",
+  "dupA": "Annulla",
+  "dupB": "Chiudi"
+}

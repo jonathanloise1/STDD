@@ -1,0 +1,90 @@
+# On-premises profile: JSON lines log files tailed with saved offsets, SQL Server with a read-only login.
+# Format: docs/guidelines/operations.md section 12.1. Secrets never appear here: use ${setting:...}.
+schema_version: 1
+name: onprem
+description: Single host or local network. Log files tailed on disk, SQLite store, SMTP; runs as a service or on a developer machine.
+environment: ${setting:Monitor:Environment|prod}
+
+sources:
+  - id: applogs
+    kind: log_files
+    paths:
+      - ${setting:Monitor:Settings:LogGlob|../../backend/MyApp.WebApi/logs/myapp-api-*.jsonl}
+    format: jsonl
+    start_at: end
+    poll_seconds: 5
+  - id: main-db
+    kind: sqlserver
+    connection_setting: Monitor:Connections:main-db
+    authentication: sql
+  - id: api
+    kind: http_health
+    base_url: ${setting:Monitor:Settings:ApiBaseUrl|https://localhost:7342}
+    poll_seconds: 60
+    failures_before_signal: 3
+
+tool_sources:
+  logs_by_correlation: applogs
+  sql_entity_read: main-db
+  audit_trail_by_entity: main-db
+  health_status: api
+  signature_lookup: pack
+
+analyser:
+  window_minutes: 60
+  rate_multiplier: 3
+  rate_min_count: 5
+  unknown_warning_min_count: 3
+  app_namespace_prefix: MyApp.
+
+investigator:
+  tier: small
+  device: auto
+  max_tool_calls: 6
+  timeout_seconds: 600
+  concurrency: 1
+
+gates:
+  ticket:
+    min_severity: Error
+    allow_model_verdict: false
+  email:
+    min_severity: Error
+    digest_time: "08:00"
+
+notifications:
+  email:
+    enabled: ${setting:Monitor:Settings:EmailEnabled|false}
+    smtp_host: ${setting:Monitor:Settings:SmtpHost|localhost}
+    smtp_port: ${setting:Monitor:Settings:SmtpPort|25}
+    use_tls: ${setting:Monitor:Settings:SmtpTls|false}
+    from: ${setting:Monitor:Settings:MailFrom|monitor@localhost}
+    to:
+      - ${setting:Monitor:Settings:MailTo|support@localhost}
+    username_setting: Monitor:Notifications:Smtp:Username
+    password_setting: Monitor:Notifications:Smtp:Password
+    template: templates/email-incident.txt
+  ticket_webhook:
+    enabled: ${setting:Monitor:Settings:TicketWebhookEnabled|false}
+    url: ${setting:Monitor:Settings:TicketWebhookUrl|}
+    method: POST
+    headers:
+      Authorization: ${setting:Monitor:Notifications:Webhook:Authorization|}
+    template: templates/ticket-incident.json
+    id_path: id
+
+suppression: []
+
+store:
+  kind: sqlite
+  path: ${setting:Monitor:Store:Path|data/monitor.db}
+  retention_days: 90
+
+dashboard:
+  enabled: true
+  urls: ${setting:Monitor:Dashboard:Urls|http://localhost:5310}
+  auth: ${setting:Monitor:Settings:DashboardAuth|local}
+  allowed_group_id: ${setting:Monitor:Settings:DashboardGroupId|}
+
+perimeter:
+  evidence_in_notifications: true

@@ -1,0 +1,19 @@
+You are a strict evaluator of answers written by a documentation assistant. You are given numbered manual sections, a user question, the assistant's answer, the numbers of the sections that hold the needed information, and a reference answer written by a careful person.
+Judge two things.
+faithful: true only when EVERY statement of the answer is supported by the numbered sections (any of them, not only the ones the answer cites). Steps, labels, limits, names or features that no section states make it false. Rewording is allowed; added facts are not.
+useful: true only when the answer gives the user what they need to act: the right fact or steps, with nothing missing that the gold sections state and the question needs. A correct but vague answer is not useful.
+Reply with one JSON object and nothing else: {"faithful": true or false, "useful": true or false, "unsupported": ["each unsupported statement, quoted briefly"]}
+=== USER ===
+Numbered sections:
+
+{{sections}}
+
+Question: {{question}}
+
+Gold section numbers: {{gold}}
+
+Reference answer:
+{{reference}}
+
+Assistant's answer:
+{{answer}}

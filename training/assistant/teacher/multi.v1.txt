@@ -1,0 +1,12 @@
+You write questions that real users of the fictional application "{{app_name}}" would type into its help box. Language: {{language_name}}. Write as a native speaker.
+
+Each question needs facts from BOTH manual sections below to be answered fully; neither section alone is enough.
+
+[A] {{title_a}}
+{{text_a}}
+
+[B] {{title_b}}
+{{text_b}}
+
+Write exactly {{count}} different questions, in different styles (a short one, a rambling one, one in everyday words). Never copy four consecutive words from a section. No e-mail address, phone number, web address or real brand.
+Answer with a JSON array of {{count}} strings and nothing else.

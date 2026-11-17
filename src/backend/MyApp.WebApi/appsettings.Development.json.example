@@ -1,0 +1,74 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost,1433;Database=MyApp_LOCAL;User Id=sa;Password=YOUR_PASSWORD_HERE;TrustServerCertificate=True;"
+  },
+  "MyApp": {
+    "Cors": {
+      "AllowedOrigins": [
+        "http://localhost:3147",
+        "https://localhost:3147",
+        "https://dev.myapp.example",
+        "https://app.myapp.example"
+      ]
+    },
+    "Logging": {
+      "File": {
+        "Enabled": true,
+        "Directory": "logs",
+        "FilePrefix": "myapp-api",
+        "MaxFileSizeMB": 100,
+        "RetainedFiles": 14,
+        "MinimumLevel": "Information"
+      }
+    },
+    "Help": {
+      "PackDirectory": "../../frontend/public/help",
+      "Gaps": {
+        "Enabled": true,
+        "RetentionDays": 90
+      }
+    },
+    "Models": {
+      "LockPath": "../../../models/model.lock"
+    },
+    "Assistant": {
+      "Order": "browser-first",
+      "Browser": {
+        "Enabled": true,
+        "ModelBaseUrl": "/models/assistant/",
+        "MinTokensPerSecond": 8,
+        "AskBeforeDownloadMb": 100,
+        "TimeoutSeconds": 20
+      },
+      "Server": {
+        "Enabled": false,
+        "Endpoint": "http://127.0.0.1:8091",
+        "TimeoutSeconds": 20,
+        "MaxConcurrent": 2,
+        "QueueTimeoutSeconds": 5
+      }
+    },
+    "Testing": {
+      "FixedUtcNow": "",
+      "FaultInjection": {
+        "Enabled": false
+      }
+    },
+    "Impersonation": {
+      "Enabled": true,
+      "HeaderName": "X-MyApp-Impersonate-UserId"
+    }
+  },
+  "AzureAd": {
+    "Instance": "https://YOUR_TENANT_ID.ciamlogin.com/",
+    "TenantId": "YOUR_TENANT_ID",
+    "ClientId": "YOUR_API_CLIENT_ID",
+    "KnownAuthorities": [ "YOUR_KNOWN_AUTHORITY" ]
+  }
+}

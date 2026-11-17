@@ -1,0 +1,8 @@
+{
+  "schema_version": 3,
+  "bm25": { "k1": 1.2, "b": 0.75, "field_weights": { "title": 2.0, "text": 1.0, "questions": 1.5 } },
+  "candidates": 10,
+  "diversify": "page",
+  "out_of_scope": { "min_coverage": 0.40, "min_cosine": 0.55, "min_cosine_lexical": -1.0, "min_query_terms": 1 },
+  "fusion": { "method": "rrf", "depth": 30, "rrf_k": 60, "embedding_weight": 1.0 }
+}

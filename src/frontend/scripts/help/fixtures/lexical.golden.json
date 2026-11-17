@@ -1,0 +1,1285 @@
+{
+ "schema_version": 2,
+ "analyzer_version": 2,
+ "stopwords_sha256": {
+  "en": "012d3e5d64b18dd48899b92093fb5a7fc8f374beacd2950d450b67b6874a5161",
+  "it": "ba40f5a6a45776d759867081ce2bf39cc9a3c43b30c13c502c6d540ec4c4ecd5"
+ },
+ "retrieval": {
+  "schema_version": 3,
+  "bm25": {
+   "k1": 1.2,
+   "b": 0.75,
+   "field_weights": {
+    "title": 2,
+    "text": 1,
+    "questions": 1.5
+   }
+  },
+  "candidates": 10,
+  "diversify": "page",
+  "out_of_scope": {
+   "min_coverage": 0.4,
+   "min_cosine": 0.55,
+   "min_cosine_lexical": -1,
+   "min_query_terms": 1
+  },
+  "fusion": {
+   "method": "rrf",
+   "depth": 30,
+   "rrf_k": 60,
+   "embedding_weight": 1
+  }
+ },
+ "analyze": [
+  {
+   "lang": "en",
+   "text": "How do I add something new to the team's to-do list?",
+   "tokens": [
+    "add",
+    "something",
+    "new",
+    "team",
+    "list"
+   ],
+   "stems": [
+    "add",
+    "someth",
+    "new",
+    "team",
+    "list"
+   ]
+  },
+  {
+   "lang": "en",
+   "text": "Running, runs and ran: the tasks were created quickly",
+   "tokens": [
+    "running",
+    "runs",
+    "ran",
+    "tasks",
+    "created",
+    "quickly"
+   ],
+   "stems": [
+    "run",
+    "run",
+    "ran",
+    "task",
+    "creat",
+    "quick"
+   ]
+  },
+  {
+   "lang": "en",
+   "text": "Click \"New Task\" and type a title.",
+   "tokens": [
+    "click",
+    "new",
+    "task",
+    "type",
+    "title"
+   ],
+   "stems": [
+    "click",
+    "new",
+    "task",
+    "type",
+    "titl"
+   ]
+  },
+  {
+   "lang": "en",
+   "text": "Can I set a deadline when I make a new item?",
+   "tokens": [
+    "set",
+    "deadline",
+    "make",
+    "new",
+    "item"
+   ],
+   "stems": [
+    "set",
+    "deadlin",
+    "make",
+    "new",
+    "item"
+   ]
+  },
+  {
+   "lang": "en",
+   "text": "The L'elenco of tasks is empty, 2 of them are done in 2024.",
+   "tokens": [
+    "elenco",
+    "tasks",
+    "empty",
+    "done",
+    "2024"
+   ],
+   "stems": [
+    "elenco",
+    "task",
+    "empti",
+    "done",
+    "2024"
+   ]
+  },
+  {
+   "lang": "en",
+   "text": "UPPER case, MiXeD Case and trailing spaces   ",
+   "tokens": [
+    "upper",
+    "case",
+    "mixed",
+    "case",
+    "trailing",
+    "spaces"
+   ],
+   "stems": [
+    "upper",
+    "case",
+    "mix",
+    "case",
+    "trail",
+    "space"
+   ]
+  },
+  {
+   "lang": "en",
+   "text": "A single x and I do not count; but ok does",
+   "tokens": [
+    "single",
+    "count",
+    "ok"
+   ],
+   "stems": [
+    "singl",
+    "count",
+    "ok"
+   ]
+  },
+  {
+   "lang": "en",
+   "text": "Café, naïve, résumé and façade keep their meaning",
+   "tokens": [
+    "café",
+    "naïve",
+    "résumé",
+    "façade",
+    "keep",
+    "meaning"
+   ],
+   "stems": [
+    "cafe",
+    "naiv",
+    "resume",
+    "facad",
+    "keep",
+    "mean"
+   ]
+  },
+  {
+   "lang": "en",
+   "text": "e-mail addresses like name_surname@example.com split on every symbol",
+   "tokens": [
+    "mail",
+    "addresses",
+    "like",
+    "name",
+    "surname",
+    "example",
+    "com",
+    "split",
+    "every",
+    "symbol"
+   ],
+   "stems": [
+    "mail",
+    "address",
+    "like",
+    "name",
+    "surnam",
+    "exampl",
+    "com",
+    "split",
+    "everi",
+    "symbol"
+   ]
+  },
+  {
+   "lang": "en",
+   "text": "Notifications, notified, notify: what happens when someone assigns me a task?",
+   "tokens": [
+    "notifications",
+    "notified",
+    "notify",
+    "happens",
+    "someone",
+    "assigns",
+    "task"
+   ],
+   "stems": [
+    "notif",
+    "notifi",
+    "notifi",
+    "happen",
+    "someon",
+    "assign",
+    "task"
+   ]
+  },
+  {
+   "lang": "en",
+   "text": "generalization of organization, communities and operational procedures",
+   "tokens": [
+    "generalization",
+    "organization",
+    "communities",
+    "operational",
+    "procedures"
+   ],
+   "stems": [
+    "general",
+    "organiz",
+    "communiti",
+    "oper",
+    "procedur"
+   ]
+  },
+  {
+   "lang": "en",
+   "text": "",
+   "tokens": [],
+   "stems": []
+  },
+  {
+   "lang": "en",
+   "text": "   ",
+   "tokens": [],
+   "stems": []
+  },
+  {
+   "lang": "en",
+   "text": "the and of to a",
+   "tokens": [],
+   "stems": []
+  },
+  {
+   "lang": "en",
+   "text": "Why can I not sign in myself, and why would it log me out?",
+   "tokens": [
+    "sign",
+    "log"
+   ],
+   "stems": [
+    "sign",
+    "log"
+   ]
+  },
+  {
+   "lang": "it",
+   "text": "Come aggiungo un lavoro da fare per il mio team?",
+   "tokens": [
+    "aggiungo",
+    "lavoro",
+    "fare",
+    "team"
+   ],
+   "stems": [
+    "aggiung",
+    "lavor",
+    "far",
+    "team"
+   ]
+  },
+  {
+   "lang": "it",
+   "text": "Dov'è l'elenco dei compiti? Non lo trovo",
+   "tokens": [
+    "elenco",
+    "compiti",
+    "trovo"
+   ],
+   "stems": [
+    "elenc",
+    "comp",
+    "trov"
+   ]
+  },
+  {
+   "lang": "it",
+   "text": "Perché non mi salva se non scrivo il titolo?",
+   "tokens": [
+    "salva",
+    "scrivo",
+    "titolo"
+   ],
+   "stems": [
+    "salv",
+    "scriv",
+    "titol"
+   ]
+  },
+  {
+   "lang": "it",
+   "text": "Posso correggere un errore di battitura?",
+   "tokens": [
+    "correggere",
+    "errore",
+    "battitura"
+   ],
+   "stems": [
+    "corregg",
+    "error",
+    "battitur"
+   ]
+  },
+  {
+   "lang": "it",
+   "text": "Cliccare su \"Nuovo compito\" e scrivere un titolo.",
+   "tokens": [
+    "cliccare",
+    "nuovo",
+    "compito",
+    "scrivere",
+    "titolo"
+   ],
+   "stems": [
+    "clicc",
+    "nuov",
+    "comp",
+    "scriv",
+    "titol"
+   ]
+  },
+  {
+   "lang": "it",
+   "text": "Più attività completate: 3 su 12 nel 2024",
+   "tokens": [
+    "attività",
+    "completate",
+    "12",
+    "2024"
+   ],
+   "stems": [
+    "attiv",
+    "complet",
+    "12",
+    "2024"
+   ]
+  },
+  {
+   "lang": "it",
+   "text": "Le città, le università e la libertà",
+   "tokens": [
+    "città",
+    "università",
+    "libertà"
+   ],
+   "stems": [
+    "citt",
+    "univers",
+    "libert"
+   ]
+  },
+  {
+   "lang": "it",
+   "text": "MAIUSCOLO, Misto e spazi finali   ",
+   "tokens": [
+    "maiuscolo",
+    "misto",
+    "spazi",
+    "finali"
+   ],
+   "stems": [
+    "maiuscol",
+    "mist",
+    "spaz",
+    "final"
+   ]
+  },
+  {
+   "lang": "it",
+   "text": "un'altra volta, quell'uomo e l'altro",
+   "tokens": [
+    "volta",
+    "quell",
+    "uomo"
+   ],
+   "stems": [
+    "volt",
+    "quell",
+    "uom"
+   ]
+  },
+  {
+   "lang": "it",
+   "text": "Notifiche, notificare e notificato: cosa succede quando mi assegnano un compito?",
+   "tokens": [
+    "notifiche",
+    "notificare",
+    "notificato",
+    "succede",
+    "assegnano",
+    "compito"
+   ],
+   "stems": [
+    "notif",
+    "notific",
+    "notific",
+    "succed",
+    "assegn",
+    "comp"
+   ]
+  },
+  {
+   "lang": "it",
+   "text": "organizzazione, organizzazioni e organizzativo",
+   "tokens": [
+    "organizzazione",
+    "organizzazioni",
+    "organizzativo"
+   ],
+   "stems": [
+    "organizz",
+    "organizz",
+    "organizz"
+   ]
+  },
+  {
+   "lang": "it",
+   "text": "il lo la i gli le di a da in con su per",
+   "tokens": [],
+   "stems": []
+  },
+  {
+   "lang": "it",
+   "text": "Posso fare qualcosa? Devo aprire l'elenco, apro e apri: dov'è finito?",
+   "tokens": [
+    "fare",
+    "qualcosa",
+    "aprire",
+    "elenco",
+    "apro",
+    "apri",
+    "finito"
+   ],
+   "stems": [
+    "far",
+    "qualcos",
+    "aprir",
+    "elenc",
+    "apro",
+    "apri",
+    "fin"
+   ]
+  },
+  {
+   "lang": "it",
+   "text": "Faccio, facevo, stavo, sarei e avrebbe sono parole vuote; ogni altro termine resta",
+   "tokens": [
+    "parole",
+    "vuote",
+    "termine",
+    "resta"
+   ],
+   "stems": [
+    "parol",
+    "vuot",
+    "termin",
+    "rest"
+   ]
+  }
+ ],
+ "ranking": [
+  {
+   "lang": "en",
+   "sections": [
+    {
+     "id": "tasks/US-TASK-01#overview",
+     "title": "Create a task",
+     "text": "Use this page to add a task with a title. The team can see what needs to be done.",
+     "questions": [
+      "How do I add something new to the team's to-do list?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-01#steps",
+     "title": "Create a task - Steps",
+     "text": "1. Open the Tasks page.\n2. Click \"New Task\".\n3. In the \"Title\" field, type a value.\n4. Click \"Create Task\".",
+     "questions": [
+      "How do I add something new to the team's to-do list?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-01#problems",
+     "title": "Create a task - If something goes wrong",
+     "text": "\"Enter a title.\". What to do: Type a title in the Title field.",
+     "questions": [
+      "Why does the form refuse to save when the name is blank?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-02#overview",
+     "title": "Edit a task",
+     "text": "Use this page to change the title or the status of a task.",
+     "questions": [
+      "Can I fix a typo in a task?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-02#steps",
+     "title": "Edit a task - Steps",
+     "text": "1. Open the Tasks page.\n2. Click the pencil next to the task.\n3. Change the title or the status.\n4. Click \"Save\".",
+     "questions": [
+      "Can I fix a typo in a task?"
+     ]
+    },
+    {
+     "id": "team/US-TEAM-01#overview",
+     "title": "Invite a colleague",
+     "text": "Send an invitation by e-mail so that a colleague can join your organization.",
+     "questions": []
+    },
+    {
+     "id": "team/US-TEAM-01#rules",
+     "title": "Invite a colleague - Good to know",
+     "text": "- An invitation expires after seven days.\n- Only an admin can invite people.",
+     "questions": []
+    },
+    {
+     "id": "home#overview",
+     "title": "MyApp",
+     "text": "Use this manual to find out how to use MyApp.",
+     "questions": []
+    }
+   ],
+   "glossary": [
+    {
+     "term": "task",
+     "aliases": [
+      "job",
+      "to-do item"
+     ]
+    },
+    {
+     "term": "organization",
+     "aliases": [
+      "company"
+     ]
+    },
+    {
+     "term": "due date",
+     "aliases": [
+      "deadline"
+     ]
+    },
+    {
+     "term": "manual",
+     "aliases": [
+      "guide",
+      "the and of"
+     ]
+    }
+   ],
+   "queries": [
+    {
+     "query": "How do I rename a task?",
+     "stems": [
+      "renam",
+      "task"
+     ],
+     "ranked": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.8770736850535042
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.8292615689167515
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.8624012085135462
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.8025542720112201
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.5504817985850631
+      }
+     ],
+     "coverage": 0.14558042505091282,
+     "in_scope": false
+    },
+    {
+     "query": "add a new task",
+     "stems": [
+      "add",
+      "new",
+      "task"
+     ],
+     "ranked": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 3.699176648238567
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.8770736850535042
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 3.6312923764597596
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.8624012085135462
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.5504817985850631
+      }
+     ],
+     "coverage": 1,
+     "in_scope": true
+    },
+    {
+     "query": "invite someone to my organization",
+     "stems": [
+      "invit",
+      "organiz",
+      "someon"
+     ],
+     "ranked": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 4.130090543441585
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 2.1276963469413306
+      }
+     ],
+     "coverage": 0.5152875706180143,
+     "in_scope": true
+    },
+    {
+     "query": "how long is an invitation valid",
+     "stems": [
+      "invit",
+      "long",
+      "valid"
+     ],
+     "ranked": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 2.1342065777191945
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 2.1276963469413306
+      }
+     ],
+     "coverage": 0.18139229250124322,
+     "in_scope": false
+    },
+    {
+     "query": "pay my invoice",
+     "stems": [
+      "invoic",
+      "pay"
+     ],
+     "ranked": [],
+     "coverage": 0,
+     "in_scope": false
+    },
+    {
+     "query": "what is the weather today",
+     "stems": [
+      "today",
+      "weather"
+     ],
+     "ranked": [],
+     "coverage": 0,
+     "in_scope": false
+    },
+    {
+     "query": "task task task",
+     "stems": [
+      "task"
+     ],
+     "ranked": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.8770736850535042
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.8292615689167515
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.8624012085135462
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.8025542720112201
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.5504817985850631
+      }
+     ],
+     "coverage": 1,
+     "in_scope": true
+    },
+    {
+     "query": "the of and",
+     "stems": [],
+     "ranked": [],
+     "coverage": 0,
+     "in_scope": false
+    },
+    {
+     "query": "",
+     "stems": [],
+     "ranked": [],
+     "coverage": 0,
+     "in_scope": false
+    },
+    {
+     "query": "Edit title status",
+     "stems": [
+      "edit",
+      "status",
+      "titl"
+     ],
+     "ranked": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 3.8830505148626857
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.817696805445394
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 3.189639089238785
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.4685181696065501
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.3921984677701891
+      }
+     ],
+     "coverage": 1,
+     "in_scope": true
+    },
+    {
+     "query": "zzzz qqqq",
+     "stems": [
+      "qqqq",
+      "zzzz"
+     ],
+     "ranked": [],
+     "coverage": 0,
+     "in_scope": false
+    },
+    {
+     "query": "Create Task button",
+     "stems": [
+      "button",
+      "creat",
+      "task"
+     ],
+     "ranked": [
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 2.2427415277261886
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.8770736850535042
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 2.209075560254211
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 1.6061848440330353
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.8624012085135462
+      }
+     ],
+     "coverage": 0.33206267707623793,
+     "in_scope": false
+    },
+    {
+     "query": "rename a job",
+     "stems": [
+      "job",
+      "renam"
+     ],
+     "ranked": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.8205314877042713
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.8025542720112201
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.7412718749425563
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.7370396375613246
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 0.5504817985850631
+      }
+     ],
+     "coverage": 0.14558042505091282,
+     "in_scope": false
+    },
+    {
+     "query": "invite someone to my company",
+     "stems": [
+      "compani",
+      "invit",
+      "someon"
+     ],
+     "ranked": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 4.130090543441585
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 2.1276963469413306
+      }
+     ],
+     "coverage": 0.5152875706180143,
+     "in_scope": true
+    },
+    {
+     "query": "where is the guide",
+     "stems": [
+      "guid"
+     ],
+     "ranked": [
+      {
+       "id": "home#overview",
+       "score": 2.1164407153297833
+      }
+     ],
+     "coverage": 1,
+     "in_scope": true
+    },
+    {
+     "query": "job item task",
+     "stems": [
+      "item",
+      "job",
+      "task"
+     ],
+     "ranked": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 2.518136660462047
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 2.4076628160336604
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 2.344944958398659
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 2.3033408440394005
+      },
+      {
+       "id": "tasks/US-TASK-01#problems",
+       "score": 1.6514453957551893
+      }
+     ],
+     "coverage": 1,
+     "in_scope": true
+    }
+   ]
+  },
+  {
+   "lang": "it",
+   "sections": [
+    {
+     "id": "tasks/US-TASK-01#overview",
+     "title": "Creare un compito",
+     "text": "Usa questa pagina per aggiungere un compito con un titolo. Il team vede cosa c'è da fare.",
+     "questions": [
+      "Come aggiungo un lavoro da fare per il mio team?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-01#steps",
+     "title": "Creare un compito - Passaggi",
+     "text": "1. Apri la pagina Compiti.\n2. Clicca \"Nuovo compito\".\n3. Nel campo \"Titolo\" scrivi un valore.\n4. Clicca \"Crea compito\".",
+     "questions": [
+      "Come aggiungo un lavoro da fare per il mio team?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-02#overview",
+     "title": "Modificare un compito",
+     "text": "Usa questa pagina per cambiare il titolo o lo stato di un compito.",
+     "questions": [
+      "Posso correggere un errore di battitura?"
+     ]
+    },
+    {
+     "id": "tasks/US-TASK-02#steps",
+     "title": "Modificare un compito - Passaggi",
+     "text": "1. Apri la pagina Compiti.\n2. Clicca la matita accanto al compito.\n3. Cambia il titolo o lo stato.\n4. Clicca \"Salva\".",
+     "questions": []
+    },
+    {
+     "id": "team/US-TEAM-01#overview",
+     "title": "Invitare un collega",
+     "text": "Invia un invito per e-mail così che un collega possa entrare nell'organizzazione.",
+     "questions": []
+    },
+    {
+     "id": "team/US-TEAM-01#rules",
+     "title": "Invitare un collega - Da sapere",
+     "text": "- Un invito scade dopo sette giorni.\n- Solo un amministratore può invitare le persone.",
+     "questions": []
+    },
+    {
+     "id": "home#overview",
+     "title": "MyApp",
+     "text": "Usa questo manuale per scoprire come usare MyApp.",
+     "questions": []
+    }
+   ],
+   "glossary": [
+    {
+     "term": "compito",
+     "aliases": [
+      "lavoro",
+      "attività da fare"
+     ]
+    },
+    {
+     "term": "organizzazione",
+     "aliases": [
+      "azienda"
+     ]
+    },
+    {
+     "term": "manuale",
+     "aliases": [
+      "guida"
+     ]
+    }
+   ],
+   "queries": [
+    {
+     "query": "Come rinomino un compito?",
+     "stems": [
+      "comp",
+      "rinomin"
+     ],
+     "ranked": [
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.9572555326016261
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.9403860691707666
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.9231869066570243
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.9139475824201531
+      }
+     ],
+     "coverage": 0.17185550924272538,
+     "in_scope": false
+    },
+    {
+     "query": "aggiungere un nuovo compito",
+     "stems": [
+      "aggiung",
+      "comp",
+      "nuov"
+     ],
+     "ranked": [
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 3.253441472285299
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.9403860691707666
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 2.430965652189442
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.9139475824201531
+      }
+     ],
+     "coverage": 1,
+     "in_scope": true
+    },
+    {
+     "query": "invitare qualcuno nell'organizzazione",
+     "stems": [
+      "invit",
+      "organizz",
+      "qualcun"
+     ],
+     "ranked": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 3.6697967065433312
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 1.9548958257474047
+      }
+     ],
+     "coverage": 0.5057523876015415,
+     "in_scope": true
+    },
+    {
+     "query": "quanto dura un invito",
+     "stems": [
+      "dur",
+      "invit"
+     ],
+     "ranked": [
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 1.9548958257474047
+      },
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 1.882354087934584
+      }
+     ],
+     "coverage": 0.29553551507540293,
+     "in_scope": false
+    },
+    {
+     "query": "pagare la fattura",
+     "stems": [
+      "fattur",
+      "pag"
+     ],
+     "ranked": [],
+     "coverage": 0,
+     "in_scope": false
+    },
+    {
+     "query": "che tempo fa oggi",
+     "stems": [
+      "fa",
+      "oggi",
+      "temp"
+     ],
+     "ranked": [],
+     "coverage": 0,
+     "in_scope": false
+    },
+    {
+     "query": "compito compito compito",
+     "stems": [
+      "comp"
+     ],
+     "ranked": [
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.9572555326016261
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.9403860691707666
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.9231869066570243
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.9139475824201531
+      }
+     ],
+     "coverage": 1,
+     "in_scope": true
+    },
+    {
+     "query": "il lo la di",
+     "stems": [],
+     "ranked": [],
+     "coverage": 0,
+     "in_scope": false
+    },
+    {
+     "query": "",
+     "stems": [],
+     "ranked": [],
+     "coverage": 0,
+     "in_scope": false
+    },
+    {
+     "query": "Modifica titolo e stato",
+     "stems": [
+      "modif",
+      "stat",
+      "titol"
+     ],
+     "ranked": [
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 1.9596688005379805
+      },
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.5835967002360453
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 1.469102703449665
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.46672895670498726
+      }
+     ],
+     "coverage": 0.3853857235852858,
+     "in_scope": false
+    },
+    {
+     "query": "zzzz qqqq",
+     "stems": [
+      "qqqq",
+      "zzzz"
+     ],
+     "ranked": [],
+     "coverage": 0,
+     "in_scope": false
+    },
+    {
+     "query": "Crea un'attività",
+     "stems": [
+      "attiv",
+      "cre"
+     ],
+     "ranked": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 2.580794538444877
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.9403860691707666
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 2.5212760507790497
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.8401596331484827
+      }
+     ],
+     "coverage": 1,
+     "in_scope": true
+    },
+    {
+     "query": "Come rinomino un lavoro?",
+     "stems": [
+      "lavor",
+      "rinomin"
+     ],
+     "ranked": [
+      {
+       "id": "tasks/US-TASK-01#overview",
+       "score": 0.9696023249698601
+      },
+      {
+       "id": "tasks/US-TASK-02#overview",
+       "score": 0.9403860691707666
+      },
+      {
+       "id": "tasks/US-TASK-01#steps",
+       "score": 0.9055073126654983
+      },
+      {
+       "id": "tasks/US-TASK-02#steps",
+       "score": 0.8401596331484827
+      }
+     ],
+     "coverage": 0.17185550924272538,
+     "in_scope": false
+    },
+    {
+     "query": "invitare qualcuno nell'azienda",
+     "stems": [
+      "azi",
+      "invit",
+      "qualcun"
+     ],
+     "ranked": [
+      {
+       "id": "team/US-TEAM-01#overview",
+       "score": 3.6697967065433312
+      },
+      {
+       "id": "team/US-TEAM-01#rules",
+       "score": 1.9548958257474047
+      }
+     ],
+     "coverage": 0.5057523876015415,
+     "in_scope": true
+    },
+    {
+     "query": "dove trovo la guida",
+     "stems": [
+      "guid",
+      "trov"
+     ],
+     "ranked": [
+      {
+       "id": "home#overview",
+       "score": 1.9981234136926598
+      }
+     ],
+     "coverage": 0.3764650634622688,
+     "in_scope": false
+    }
+   ]
+  }
+ ]
+}

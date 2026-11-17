@@ -1,0 +1,24 @@
+# Context of the images built from the repository root (backend, monitor, e2e): only what they read.
+.git
+.github/*
+!.github/agents
+.DS_Store
+**/bin
+**/obj
+**/node_modules
+**/TestResults
+# the frontend image has its own filter (src/frontend/Dockerfile.dockerignore); the E2E image builds the help pack
+# from the frontend sources, so they stay in this context, minus the build output and the pack (built inside the image)
+src/frontend/build
+src/frontend/dist
+src/frontend/coverage
+src/frontend/public/help
+artifacts
+models/*/weights
+training/out
+**/__pycache__
+.pytest_cache
+executionplan_temp*.md
+.env
+backend.local.env
+**/appsettings.Development.json

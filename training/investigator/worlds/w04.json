@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w04",
+ "app": "PermitHub",
+ "sector": "municipal permits",
+ "split": "train",
+ "service": "permithub-api",
+ "namespace": "PermitHub.Application.Services",
+ "record": "permit",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "permits",
+   "title": "Permits",
+   "verb": "issue",
+   "stories": [
+    {
+     "id": "US-PERM-01",
+     "title": "Issue a permit",
+     "test_case": "PERM-ISSUE-001"
+    },
+    {
+     "id": "US-PERM-02",
+     "title": "Revoke a permit",
+     "test_case": "PERM-ISSUE-002"
+    }
+   ]
+  },
+  {
+   "id": "applicants",
+   "title": "Applicants",
+   "verb": "verify",
+   "stories": [
+    {
+     "id": "US-APPL-01",
+     "title": "Verify an applicant",
+     "test_case": "APPL-VERIFY-001"
+    },
+    {
+     "id": "US-APPL-02",
+     "title": "Merge applicants",
+     "test_case": "APPL-VERIFY-002"
+    }
+   ]
+  },
+  {
+   "id": "fees",
+   "title": "Fees",
+   "verb": "charge",
+   "stories": [
+    {
+     "id": "US-FEES-01",
+     "title": "Charge a fee",
+     "test_case": "FEES-CHARGE-001"
+    },
+    {
+     "id": "US-FEES-02",
+     "title": "Refund a fee",
+     "test_case": "FEES-CHARGE-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "permit",
+   "description": "A permit of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.Permits",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Permit",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "registry-service",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Permits:RegistryUrl",
+  "PermitHub:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "permits.issue.access_lost",
+   "level": "Warning",
+   "area": "permits",
+   "story": "US-PERM-01",
+   "test_case": "PERM-ISSUE-005",
+   "category": "PermitHub.Application.Services.PermitsService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "permits.issue.not_found",
+   "level": "Warning",
+   "area": "permits",
+   "story": "US-PERM-02",
+   "test_case": "PERM-ISSUE-006",
+   "category": "PermitHub.Application.Services.PermitsService",
+   "template": "permit {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "applican.verify.duplicate_entry",
+   "level": "Warning",
+   "area": "applicants",
+   "story": "US-APPL-01",
+   "test_case": "APPL-VERIFY-007",
+   "category": "PermitHub.Application.Services.ApplicantsService",
+   "template": "permit {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "applican.verify.dependency_failed",
+   "level": "Error",
+   "area": "applicants",
+   "story": "US-APPL-02",
+   "test_case": "APPL-VERIFY-008",
+   "category": "PermitHub.Application.Services.ApplicantsService",
+   "template": "Call to {Dependency} failed for permit {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "fees.charge.config_invalid",
+   "level": "Error",
+   "area": "fees",
+   "story": "US-FEES-01",
+   "test_case": "FEES-CHARGE-009",
+   "category": "PermitHub.Application.Services.FeesService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "fees.charge.timed_out",
+   "level": "Error",
+   "area": "fees",
+   "story": "US-FEES-02",
+   "test_case": "FEES-CHARGE-010",
+   "category": "PermitHub.Application.Services.FeesService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "permits.issue.unhandled_error",
+   "level": "Error",
+   "area": "permits",
+   "story": "US-PERM-01",
+   "test_case": "PERM-ISSUE-011",
+   "category": "PermitHub.Application.Services.PermitsService",
+   "template": "Unhandled error while handling permit {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "permits.issue.input_rejected",
+   "level": "Warning",
+   "area": "permits",
+   "story": "US-PERM-02",
+   "test_case": "PERM-ISSUE-012",
+   "category": "PermitHub.Application.Services.PermitsService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "applican.verify.high_volume",
+   "level": "Warning",
+   "area": "applicants",
+   "story": "US-APPL-01",
+   "test_case": "APPL-VERIFY-013",
+   "category": "PermitHub.Application.Services.ApplicantsService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "applican.verify.component_failed",
+   "level": "Error",
+   "area": "applicants",
+   "story": "US-APPL-02",
+   "test_case": "APPL-VERIFY-014",
+   "category": "PermitHub.Application.Services.ApplicantsService",
+   "template": "Component {Component} failed for permit {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "permits-issue-access-lost",
+   "log_key": "permits.issue.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-PERM-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "permits-issue-not-found",
+   "log_key": "permits.issue.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "permit {RecordId} was not found when it was saved. See story US-PERM-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "applican-verify-duplicate-entry",
+   "log_key": "applican.verify.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "permit {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-APPL-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "applican-verify-dependency-failed",
+   "log_key": "applican.verify.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for permit {RecordId}. See story US-APPL-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "fees-charge-config-invalid",
+   "log_key": "fees.charge.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-FEES-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "fees-charge-timed-out",
+   "log_key": "fees.charge.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-FEES-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "permits-issue-unhandled-error",
+   "log_key": "permits.issue.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling permit {RecordId}. See story US-PERM-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "permits-issue-input-rejected",
+   "log_key": "permits.issue.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-PERM-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "applican-verify-high-volume",
+   "log_key": "applican.verify.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-APPL-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "applican-verify-component-failed",
+   "log_key": "applican.verify.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for permit {RecordId}. See story US-APPL-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+# Light Python dependencies of the model pipeline: enough for the tests, the data side (generate, validate, estimate,
+# dry run), the lock, card and fetch tools and `python -m training.common.hardware`. No GPU, no model library, no cloud
+# service. The pins are the same as the first block of training/requirements.txt, which also lists the heavy
+# dependencies for train, export and eval (models.md 9.1).
+# Python 3.11 or 3.12 is recommended.
+# Install: python -m venv .venv && . .venv/bin/activate && pip install -r training/requirements-light.txt
+# Run:     python -m pytest training/tests
+pytest==9.2.0
+snowballstemmer==3.1.1
+numpy==1.26.4          # the help embedding table: builder, port and tests (models.md 7.8)

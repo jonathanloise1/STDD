@@ -1,0 +1,312 @@
+# The whole template in Docker (README "Run with Docker", docs/guidelines/architecture.md 8.5).
+#
+#   cp .env.example .env
+#   docker compose up -d --build                     # SQL Server, backend, frontend  -> http://localhost:3147
+#   docker compose --profile monitor up -d           # + the monitor                  -> http://localhost:5310
+#   docker compose --profile assistant-model up      # + a model host (needs a model file, see .env)
+#   docker compose --profile integration run --rm integration   # the integration tests, in their own database
+#
+# Profiles: default (no profile) = application; monitor; assistant-model; investigator-model; teacher; e2e; integration.
+# Everything created here is named myapp-*: containers, volumes (compose project "myapp"). The host ports bound are
+# 3147, 5310, 8091, 8092 and 8093, all on 127.0.0.1 except the frontend when FRONTEND_BIND says otherwise. Never 1433:
+# another SQL Server on the machine may hold it, and this one publishes no port (compose.sqlserver-port.yaml adds one).
+# No part of it needs a cloud service or a GPU; compose.gpu.yaml gives the model hosts an NVIDIA GPU.
+name: myapp
+
+x-backend: &backend
+  build:
+    context: .
+    dockerfile: src/backend/Dockerfile
+  image: myapp-backend
+  healthcheck:
+    test: ["CMD", "http-check", "8080", "/health"]
+    interval: 10s
+    timeout: 5s
+    retries: 12
+    start_period: 90s
+
+x-frontend: &frontend
+  build:
+    # The repository root: the image builds the help pack from docs/manual (src/frontend/Dockerfile)
+    context: .
+    dockerfile: src/frontend/Dockerfile
+  image: myapp-frontend
+  healthcheck:
+    test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8080/nginx-health || exit 1"]
+    interval: 10s
+    timeout: 3s
+    retries: 5
+    start_period: 5s
+
+# One llama.cpp server container per model, CPU unless compose.gpu.yaml is added. The flags that change what the model
+# writes come from src/support/model-host/shared-flags.txt through start.sh, the same file the evaluation reads.
+x-model-host: &model-host
+  image: ${LLAMA_SERVER_IMAGE:-ghcr.io/ggml-org/llama.cpp:server}
+  entrypoint: ["bash", "/opt/model-host/docker-entrypoint.sh"]
+  restart: "no"
+  volumes:
+    - ${MODELS_DIR:?set MODELS_DIR in .env to the folder that holds the model files, outside the repository}:/models:ro
+    - ./src/support/model-host:/opt/model-host:ro
+  healthcheck:
+    test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:$${MODEL_HOST_PORT}/health || exit 1"]
+    interval: 15s
+    timeout: 5s
+    retries: 10
+    start_period: 120s
+
+services:
+  # ---- Application (default profile) ----
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    # The image is amd64 only: on Apple silicon it runs emulated (Docker Desktop, "Use Rosetta for x86_64/amd64 emulation")
+    platform: linux/amd64
+    container_name: myapp-sqlserver
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?copy .env.example to .env and set MSSQL_SA_PASSWORD}
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' -b -o /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  backend:
+    <<: *backend
+    container_name: myapp-backend
+    restart: unless-stopped
+    env_file:
+      - path: backend.local.env
+        required: false
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${APP_ENVIRONMENT:-Development}
+      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=${APP_DATABASE_NAME:-MyApp};User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True
+      MyApp__Logging__File__Enabled: "true"
+      MyApp__Impersonation__Enabled: ${APP_IMPERSONATION:-true}
+      # The assistant's server tier, once a model is trained and models/model.lock is mounted (models.md 7.4)
+      MyApp__Assistant__Server__Endpoint: http://assistant-model:8091
+    volumes:
+      - logs:/logs
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  frontend:
+    <<: *frontend
+    container_name: myapp-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_BIND:-127.0.0.1}:${FRONTEND_PORT:-3147}:8080"
+    environment:
+      BACKEND_UPSTREAM: http://backend:8080
+      # Empty: the browser calls the page's own origin and nginx forwards /api, so there is no CORS
+      VITE_API_BASE_URL: ""
+      VITE_DEV_MOCK_USER_ID: ${VITE_DEV_MOCK_USER_ID:-}
+      VITE_DEV_MOCK_USER_EMAIL: ${VITE_DEV_MOCK_USER_EMAIL:-}
+      VITE_AZURE_AD_B2C_CLIENT_ID: ${VITE_AZURE_AD_B2C_CLIENT_ID:-}
+      VITE_AZURE_AD_B2C_AUTHORITY: ${VITE_AZURE_AD_B2C_AUTHORITY:-}
+      VITE_AZURE_AD_B2C_KNOWN_AUTHORITIES: ${VITE_AZURE_AD_B2C_KNOWN_AUTHORITIES:-}
+      VITE_API_SCOPE: ${VITE_API_SCOPE:-}
+      VITE_API_AUDIENCE: ${VITE_API_AUDIENCE:-}
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  # ---- Monitor (profile "monitor"): on-premises profile reading the backend's log volume ----
+  monitor:
+    profiles: [monitor]
+    build:
+      context: .
+      dockerfile: src/support/MyApp.Monitor/deploy/Dockerfile
+    image: myapp-monitor
+    container_name: myapp-monitor
+    restart: unless-stopped
+    command: ["--profile", "onprem"]
+    environment:
+      Monitor__Masking__HashKey: ${MONITOR_HASH_KEY:?copy .env.example to .env and set MONITOR_HASH_KEY}
+      # Local use: the sa login. A real deployment gives the monitor a read-only login (operations.md 12.3)
+      Monitor__Connections__main-db: Server=sqlserver,1433;Database=${APP_DATABASE_NAME:-MyApp};User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True
+      Monitor__Settings__LogGlob: /logs/myapp-api-*.jsonl
+      Monitor__Settings__ApiBaseUrl: http://backend:8080
+      # dashboard.auth "local" accepts loopback only, inside the container too: the forwarder below shares the network
+      Monitor__Settings__DashboardAuth: local
+      Monitor__Dashboard__Urls: http://127.0.0.1:5310
+      Monitor__Investigator__Endpoint: http://investigator-model:8092
+    volumes:
+      - logs:/logs:ro
+      - monitor-data:/data
+    ports:
+      - "127.0.0.1:${MONITOR_PORT:-5310}:5311"
+    healthcheck:
+      test: ["CMD", "http-check", "5310", "/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  # Publishes the monitor's loopback-only dashboard: it listens on 5311 inside the monitor's network and hands each
+  # connection to 127.0.0.1:5310, so the monitor still sees a loopback caller. The host port is bound to 127.0.0.1 above.
+  monitor-dashboard:
+    profiles: [monitor]
+    image: alpine/socat:1.8.0.3
+    container_name: myapp-monitor-dashboard
+    restart: unless-stopped
+    network_mode: service:monitor
+    command: ["TCP-LISTEN:5311,fork,reuseaddr", "TCP:127.0.0.1:5310"]
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 5311 || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+    depends_on:
+      monitor:
+        condition: service_healthy
+
+  # ---- Model hosts (profiles "assistant-model", "investigator-model", "teacher") ----
+  assistant-model:
+    <<: *model-host
+    profiles: [assistant-model]
+    container_name: myapp-assistant-model
+    ports:
+      - "127.0.0.1:8091:8091"
+    environment:
+      MODEL_HOST_MODEL: /models/${ASSISTANT_MODEL_FILE:-assistant/assistant.gguf}
+      MODEL_HOST_ALIAS: ${ASSISTANT_MODEL_ALIAS:-assistant-0.0.0}
+      MODEL_HOST_PORT: "8091"
+      MODEL_HOST_BIND: 0.0.0.0
+      MODEL_HOST_DEVICE: ${MODEL_HOST_DEVICE:-auto}
+      MODEL_HOST_THREADS: ${MODEL_HOST_THREADS:-}
+      MODEL_HOST_PARALLEL: "2"
+      MODEL_HOST_CTX_SIZE: "4096"
+
+  investigator-model:
+    <<: *model-host
+    profiles: [investigator-model]
+    container_name: myapp-investigator-model
+    ports:
+      - "127.0.0.1:8092:8092"
+    environment:
+      MODEL_HOST_MODEL: /models/${INVESTIGATOR_MODEL_FILE:-investigator/investigator.gguf}
+      MODEL_HOST_ALIAS: ${INVESTIGATOR_MODEL_ALIAS:-investigator-0.0.0}
+      MODEL_HOST_PORT: "8092"
+      MODEL_HOST_BIND: 0.0.0.0
+      MODEL_HOST_DEVICE: ${MODEL_HOST_DEVICE:-auto}
+      MODEL_HOST_THREADS: ${MODEL_HOST_THREADS:-}
+      MODEL_HOST_PARALLEL: "1"
+      MODEL_HOST_CTX_SIZE: "8192"
+
+  # The local, OpenAI-compatible endpoint of the training pipeline's teacher and judge: http://localhost:8093/v1
+  teacher:
+    <<: *model-host
+    profiles: [teacher]
+    container_name: myapp-teacher
+    ports:
+      - "127.0.0.1:8093:8093"
+    environment:
+      MODEL_HOST_MODEL: /models/${TEACHER_MODEL_FILE:-teacher/Qwen3.8-27B-Q4_K_M.gguf}
+      MODEL_HOST_ALIAS: ${TEACHER_MODEL_ALIAS:-qwen3.8-27b}
+      MODEL_HOST_PORT: "8093"
+      MODEL_HOST_BIND: 0.0.0.0
+      MODEL_HOST_DEVICE: ${MODEL_HOST_DEVICE:-auto}
+      MODEL_HOST_THREADS: ${MODEL_HOST_THREADS:-}
+      MODEL_HOST_PARALLEL: ${TEACHER_PARALLEL:-1}
+      MODEL_HOST_CTX_SIZE: ${TEACHER_CTX_SIZE:-8192}
+
+  # ---- E2E tests (profile "e2e"): ready to run, never started by the other profiles ----
+  # Its own backend (Development, fault switch, impersonation, a database ending in _E2E that it drops, migrates and
+  # seeds at start), its own frontend (no mock user, the identity provider stand-in the tests answer) and the runner.
+  # Run: README "Run with Docker" and tests/e2e/MyApp.E2E/README.md. Needs the owner's approval (CLAUDE.md).
+  backend-e2e:
+    <<: *backend
+    profiles: [e2e]
+    container_name: myapp-backend-e2e
+    env_file:
+      - path: backend.local.env
+        required: false
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=${E2E_DATABASE_NAME:-MyApp_E2E};User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True
+      MyApp__Impersonation__Enabled: "true"
+      MyApp__Testing__FaultInjection__Enabled: "true"
+      # The backend refuses this unless the database name ends in _E2E or _Test (development.md 10.3)
+      MyApp__Testing__ResetDatabaseOnStart: "true"
+      MyApp__Logging__File__Enabled: "false"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  frontend-e2e:
+    <<: *frontend
+    profiles: [e2e]
+    container_name: myapp-frontend-e2e
+    environment:
+      BACKEND_UPSTREAM: http://backend-e2e:8080
+      VITE_API_BASE_URL: ""
+      # The values of ApplicationManager.FrontendEnvironment() and IdentityProviderStandIn: no mock user, and an
+      # identity provider on a made-up host that the visitor's browser context answers itself
+      VITE_DEV_MOCK_USER_ID: ""
+      VITE_DEV_MOCK_USER_EMAIL: ""
+      VITE_AZURE_AD_B2C_CLIENT_ID: 00000000-0000-0000-0000-00000000e2e0
+      VITE_AZURE_AD_B2C_AUTHORITY: https://login.e2e.test/e2e-tenant/v2.0
+      VITE_AZURE_AD_B2C_KNOWN_AUTHORITIES: login.e2e.test
+    depends_on:
+      backend-e2e:
+        condition: service_healthy
+
+  e2e:
+    profiles: [e2e]
+    build:
+      context: .
+      dockerfile: tests/e2e/MyApp.E2E/Dockerfile
+    image: myapp-e2e
+    container_name: myapp-e2e
+    # Shares the frontend's network, so the browser reaches the application as http://localhost:8080: a secure
+    # context, which the sign-in library needs (any other http host name is not one)
+    network_mode: service:frontend-e2e
+    environment:
+      E2E_BASE_URL: http://localhost:8080
+      E2E_API_URL: http://localhost:8080
+      E2E_AUTO_START_APPS: "false"
+      E2E_STOP_APPS_AFTER_TESTS: "false"
+      E2E_DATABASE_NAME: ${E2E_DATABASE_NAME:-MyApp_E2E}
+    volumes:
+      - e2e-results:/results
+    depends_on:
+      frontend-e2e:
+        condition: service_healthy
+
+  # ---- Integration tests (profile "integration"): never started by the other profiles ----
+  # The SDK image with the repository copied in (bin and obj of the host stay out), against the compose SQL Server. The run
+  # drops, migrates and seeds its own database, MyApp_Integration_Test (the default name; it must end in _Test or _E2E).
+  # Run: docker compose --profile integration run --rm integration. Needs the owner's approval (CLAUDE.md).
+  integration:
+    profiles: [integration]
+    image: mcr.microsoft.com/dotnet/sdk:10.0
+    container_name: myapp-integration
+    working_dir: /src
+    environment:
+      DOTNET_NOLOGO: "true"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+      IntegrationTests__ConnectionString: Server=sqlserver,1433;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True
+    volumes:
+      - .:/repo:ro
+    entrypoint: ["bash", "-c", "tar -C /repo --exclude=bin --exclude=obj --exclude=node_modules --exclude=.git -cf - . | tar -C /src -xf - && exec dotnet test tests/integration/MyApp.IntegrationTests \"$$@\"", "integration"]
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+volumes:
+  sqlserver-data:
+    name: myapp-sqlserver-data
+  logs:
+    name: myapp-logs
+  monitor-data:
+    name: myapp-monitor-data
+  e2e-results:
+    name: myapp-e2e-results

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "suite_version": 1,
+  "thresholds": "training/investigator/thresholds.json",
+  "thresholds_file_sha256": "05bb67e3585b6dedae7837628504beaf14018cf1efe47758d3189d812364049d",
+  "note": "lock --verify compares the SHA-256 of THIS file (models.md 8.2 L04); the thresholds themselves live in thresholds.json (operations.md 11.4) and are pinned here by their hash. `eval --freeze-sets` writes holdout_set_sha256.",
+  "holdout_set_sha256": null,
+  "suites": {
+    "synthetic-holdout": {
+      "source": "training/out/investigator/scenarios (generate --split holdout)"
+    },
+    "sample-app": {
+      "source": "docs/support/bench/investigator/{scenario id}.json"
+    }
+  },
+  "tiers": [
+    "small",
+    "large"
+  ],
+  "reference_hardware": {
+    "small": "CPU-only virtual machine",
+    "large": "GPU or enough memory (operations.md 11.2)"
+  },
+  "timeout_seconds": 600
+}

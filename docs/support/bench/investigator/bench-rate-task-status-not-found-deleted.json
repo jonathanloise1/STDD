@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "id": "bench-rate-task-status-not-found-deleted",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "data_missing",
+  "trigger": "rate",
+  "class": "answerable",
+  "world_dir": "worlds/bench-rate-task-status-not-found-deleted",
+  "incident_id": "INC-bench-rate-task-status-not-found-deleted",
+  "budget_override": null,
+  "prompt": {
+    "incident": {
+      "trigger": "rate",
+      "severity": "Warning",
+      "environment": "prod",
+      "signature": {
+        "kind": "keyed",
+        "id": "task.status.not_found",
+        "log_key": "task.status.not_found",
+        "template_id": null,
+        "template": null
+      },
+      "count": 40,
+      "rate_per_hour": 180,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T10:05:00.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T10:05:00.000Z",
+              "Level": "Warning",
+              "Category": "MyApp.Application.Services.TaskItemService",
+              "LogKey": "task.status.not_found",
+              "MessageTemplate": "Task status not changed: task {TaskId} does not exist in organization {OrganizationId}",
+              "Message": "Task status not changed: task f672fb88-9013-4199-a483-bcd1970c4cf7 does not exist in organization 41680efd-225d-4db9-a4cf-9c3aae6d1b13",
+              "TraceId": "b49d27ed717fe69c6863bc3a7570b095",
+              "SpanId": "bc77a18481befe8a",
+              "Properties": {
+                "TaskId": "f672fb88-9013-4199-a483-bcd1970c4cf7",
+                "OrganizationId": "41680efd-225d-4db9-a4cf-9c3aae6d1b13"
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            },
+            {
+              "Timestamp": "2026-11-06T10:05:00.000Z",
+              "Level": "Warning",
+              "Category": "MyApp.Application.Services.TaskItemService",
+              "LogKey": "task.status.not_found",
+              "MessageTemplate": "Task status not changed: task {TaskId} does not exist in organization {OrganizationId}",
+              "Message": "Task status not changed: task f672fb88-9013-4199-a483-bcd1970c4cf7 does not exist in organization 41680efd-225d-4db9-a4cf-9c3aae6d1b13",
+              "TraceId": "124b00242b3f0bde464e43edb61bb88f",
+              "SpanId": "9349e84bbba9c932",
+              "Properties": {
+                "TaskId": "f672fb88-9013-4199-a483-bcd1970c4cf7",
+                "OrganizationId": "41680efd-225d-4db9-a4cf-9c3aae6d1b13"
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": {
+      "signature": {
+        "id": "task.status.not_found",
+        "kind": "keyed",
+        "match": {
+          "log_key": "task.status.not_found"
+        },
+        "area": "tasks",
+        "user_story": "US-TASK-03",
+        "test_case": "TASK-STATUS-004",
+        "severity": "Warning",
+        "message": "This task no longer exists.",
+        "runbook": {
+          "anchor": "task-status-not-found",
+          "path": "docs/areas/tasks/operations.md",
+          "text": "### Meaning\n\nA member clicked Change status on a task that was deleted by someone else. The member sees \"This task no longer exists.\" and the list is refreshed.\n\n### Check\n\n1. Confirm the task is gone: `sql_entity_read` with entity `task` and the task id from the entry; `found` must be false.\n2. Read `audit_trail_by_entity` (entity `task`) for the same id: a Delete entry shortly before the entry names who removed it.\n3. If the task still exists, the status change was refused for the wrong reason: keep the trace id and hand over.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| sql_entity_read | entity=task, id={signal.Properties.TaskId} | found == false |\n\n### Resolve\n\n1. No action when the task is gone and the delete is in the history.\n2. Ask the user to reload the Tasks page.\n3. Hand over to development when the task still exists.\n\n### History\n\nNone."
+        },
+        "rate": {
+          "expected_per_hour": 5
+        },
+        "fingerprint_by": [
+          "OrganizationId"
+        ],
+        "cause_category": "data_missing",
+        "status": "active",
+        "fixed_in": null,
+        "noise": null,
+        "rule_checks": [
+          {
+            "tool": "sql_entity_read",
+            "arguments": {
+              "entity": "task",
+              "id": "{signal.Properties.TaskId}"
+            },
+            "expect": "found == false"
+          }
+        ],
+        "history": []
+      },
+      "runbook": "### Meaning\n\nA member clicked Change status on a task that was deleted by someone else. The member sees \"This task no longer exists.\" and the list is refreshed.\n\n### Check\n\n1. Confirm the task is gone: `sql_entity_read` with entity `task` and the task id from the entry; `found` must be false.\n2. Read `audit_trail_by_entity` (entity `task`) for the same id: a Delete entry shortly before the entry names who removed it.\n3. If the task still exists, the status change was refused for the wrong reason: keep the trace id and hand over.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| sql_entity_read | entity=task, id={signal.Properties.TaskId} | found == false |\n\n### Resolve\n\n1. No action when the task is gone and the delete is in the history.\n2. Ask the user to reload the Tasks page.\n3. Hand over to development when the task still exists.\n\n### History\n\nNone."
+    },
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "explained",
+    "abstain_reason": null,
+    "cause_category": "data_missing",
+    "area": "tasks",
+    "user_story": "US-TASK-03",
+    "supporting_evidence": [
+      {
+        "tool": "audit_trail_by_entity",
+        "arguments": {
+          "entity": "task",
+          "id": "f672fb88-9013-4199-a483-bcd1970c4cf7"
+        }
+      }
+    ],
+    "min_calls": 1
+  }
+}

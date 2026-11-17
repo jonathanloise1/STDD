@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "note": "Same pins and UNVERIFIED command templates as training/assistant/config/export.json. The investigator runs only on the server (models.md 7.6): merged weights and GGUF, no ONNX. `tiers` give the context length each export is run with and a memory estimate rule for the lock (operations.md 11.2): memory_mb is the GGUF size times memory_factor plus kv_overhead_mb. QWEN3.5 EXPORTS ARE UNVERIFIED (2026-11-16): the models are a hybrid architecture (Gated DeltaNet plus attention) published as multimodal `...ForConditionalGeneration` checkpoints. The converter commands below were written for plain transformer models; whether they export a merged fine-tune of the hybrid architecture is THE FIRST THING TO TEST on the Windows PC (models.md 9.1 step 9), with the untrained candidate, before any training. GGUF: llama.cpp supports the architectures (pin a tag recent enough); a fine-tuned Qwen3.5 may fail to convert with \"BPE pre-tokenizer not recognized\" (models.md 10).",
+  "formats": [
+    "gguf"
+  ],
+  "variants": {
+    "gguf": "Q4_K_M"
+  },
+  "fallback_variants": {
+    "gguf": "Q8_0"
+  },
+  "transformers_js": {
+    "repo": "https://github.com/huggingface/transformers.js",
+    "tag": null,
+    "checkout_env": "TRANSFORMERS_JS_DIR",
+    "python_env": "TRANSFORMERS_JS_PYTHON",
+    "command": [],
+    "script": ""
+  },
+  "llama_cpp": {
+    "repo": "https://github.com/ggml-org/llama.cpp",
+    "tag": null,
+    "checkout_env": "LLAMA_CPP_DIR",
+    "python_env": "LLAMA_CPP_PYTHON",
+    "convert_command": [
+      "python",
+      "{script}",
+      "{merged}",
+      "--outfile",
+      "{bf16_gguf}",
+      "--outtype",
+      "bf16"
+    ],
+    "convert_script": "convert_hf_to_gguf.py",
+    "quantize_command": [
+      "{quantize_bin}",
+      "{bf16_gguf}",
+      "{outfile}",
+      "{variant}"
+    ],
+    "quantize_bin": "llama-quantize",
+    "server_bin": "llama-server"
+  },
+  "gguf_name": "{model}-{model_version}-{tier}-{variant}.gguf",
+  "tiers": {
+    "small": {
+      "context_length": 8192
+    },
+    "large": {
+      "context_length": 16384
+    }
+  },
+  "memory_factor": 1.25,
+  "kv_overhead_mb": 512,
+  "template_check": {
+    "node_script": "training/assistant/js/template_check.mjs",
+    "node_min": "22.18"
+  },
+  "text_only": true,
+  "first_test_on_pc": [
+    "merge a LoRA on the untrained candidate and save it",
+    "convert the merged folder to GGUF with convert_hf_to_gguf.py",
+    "run the template check (Python, llama.cpp) on the golden cases"
+  ]
+}

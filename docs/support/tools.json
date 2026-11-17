@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "tools": [
+    {
+      "name": "audit_trail_by_entity",
+      "family": "audit",
+      "access": "read",
+      "description": "Lists the most recent recorded changes to one record: when, which action, who (as an id), which fields changed, and the trace id of the request that made the change.",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["entity", "id"],
+        "properties": {
+          "entity": { "type": "string", "x-enum-from": "entities", "description": "Entity name from the tool list" },
+          "id": { "type": "string", "minLength": 1, "maxLength": 100, "description": "Key of the record" },
+          "limit": { "type": "integer", "minimum": 1, "maximum": 50, "description": "Newest changes first; default 20" }
+        }
+      },
+      "limits": { "max_rows": 50, "timeout_seconds": 15, "max_output_chars": 12000, "max_calls_per_incident": 4 },
+      "implementations": {
+        "sqlserver": {
+          "table": "dbo.AuditLogs",
+          "filter": { "entity_type_column": "EntityType", "entity_id_column": "EntityId" },
+          "order_by": "Timestamp DESC",
+          "columns": {
+            "timestamp": "Timestamp",
+            "action": "Action",
+            "user_id": "UserId",
+            "changed_properties": "ChangedProperties",
+            "old_values": "OldValues",
+            "new_values": "NewValues",
+            "correlation_id": "CorrelationId"
+          },
+          "json_columns": ["changed_properties", "old_values", "new_values"]
+        },
+        "world": { "file": "audit.jsonl" }
+      },
+      "output": { "masking": "tools.audit_trail_by_entity" }
+    },
+    {
+      "name": "health_status",
+      "family": "health",
+      "access": "read",
+      "description": "Returns the current health of the application and of each dependency it checks.",
+      "parameters": { "type": "object", "additionalProperties": false, "properties": {} },
+      "limits": { "max_rows": 20, "timeout_seconds": 10, "max_output_chars": 2000, "max_calls_per_incident": 2 },
+      "implementations": {
+        "http_health": { "path": "/health" },
+        "world": { "file": "health.json" }
+      },
+      "output": { "masking": "tools.health_status" }
+    },
+    {
+      "name": "logs_by_correlation",
+      "family": "logs",
+      "access": "read",
+      "description": "Returns the log entries, requests, dependency calls and exceptions of one request, identified by its trace id, oldest first.",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["trace_id"],
+        "properties": {
+          "trace_id": { "type": "string", "pattern": "^[0-9a-f]{32}$", "description": "32 lower-case hex characters" },
+          "limit": { "type": "integer", "minimum": 1, "maximum": 200, "description": "Default 100" }
+        }
+      },
+      "limits": { "max_rows": 200, "timeout_seconds": 30, "max_output_chars": 16000, "max_calls_per_incident": 4, "lookback_hours": 72 },
+      "implementations": {
+        "log_analytics": {
+          "query": "union AppTraces, AppExceptions, AppRequests, AppDependencies | where TimeGenerated > ago({lookback_hours}h) | where OperationId == '{trace_id}' | project TimeGenerated, Type, SeverityLevel, Message, OuterMessage, ExceptionType, Method, ParentId, Properties, Name, ResultCode, DurationMs | order by TimeGenerated asc | take {limit}",
+          "columns": {
+            "timestamp": "TimeGenerated",
+            "kind": "Type",
+            "level": "SeverityLevel",
+            "category": "Properties.CategoryName",
+            "log_key": "Properties.LogKey",
+            "template": "Properties.{OriginalFormat}",
+            "message": "Message|OuterMessage",
+            "span_id": "ParentId",
+            "exception_type": "ExceptionType",
+            "top_frame": "Properties.TopFrame|Method",
+            "name": "Name",
+            "result_code": "ResultCode",
+            "duration_ms": "DurationMs"
+          }
+        },
+        "log_files": {
+          "format": "jsonl",
+          "match_field": "TraceId",
+          "order": "newest_file_first",
+          "columns": {
+            "timestamp": "Timestamp",
+            "kind": "=trace",
+            "level": "Level",
+            "category": "Category",
+            "log_key": "LogKey",
+            "template": "MessageTemplate",
+            "message": "Message",
+            "span_id": "SpanId",
+            "exception_type": "Properties.ExceptionType|Exception.Type",
+            "top_frame": "Properties.TopFrame|Exception.Frames[0]"
+          }
+        },
+        "world": { "file": "logs.jsonl", "format": "jsonl", "match_field": "TraceId" }
+      },
+      "output": { "masking": "tools.logs_by_correlation" }
+    },
+    {
+      "name": "signature_lookup",
+      "family": "signatures",
+      "access": "read",
+      "description": "Returns the known signature for a log key, signature id or template id: what it means, its severity, expected rate, status and runbook.",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "signature_id": { "type": "string", "maxLength": 100 },
+          "log_key": { "type": "string", "pattern": "^[a-z]{2,8}\\.[a-z]{2,12}\\.[a-z]+(_[a-z]+)*$" },
+          "template_id": { "type": "string", "pattern": "^t-[0-9a-f]{12}$" }
+        },
+        "description": "Exactly one of the three properties"
+      },
+      "limits": { "max_rows": 1, "timeout_seconds": 2, "max_output_chars": 8000, "max_calls_per_incident": 4 },
+      "implementations": {
+        "pack": { "file": "signatures.json", "exclude_fields": ["call_site.file", "call_site.line"] }
+      },
+      "output": { "masking": "tools.signature_lookup" }
+    },
+    {
+      "name": "sql_entity_read",
+      "family": "entity",
+      "access": "read",
+      "description": "Reads one record by its key and returns the fields support may see, or found=false when it does not exist.",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["entity", "id"],
+        "properties": {
+          "entity": { "type": "string", "x-enum-from": "entities", "description": "Entity name from the tool list" },
+          "id": { "type": "string", "minLength": 1, "maxLength": 100, "description": "Key of the record" }
+        }
+      },
+      "limits": { "max_rows": 1, "timeout_seconds": 10, "max_output_chars": 4000, "max_calls_per_incident": 6 },
+      "implementations": {
+        "sqlserver": { "statement": "SELECT TOP (1) {columns} FROM {table} WHERE {key} = @id" },
+        "world": { "directory": "entities", "file_pattern": "{entity}.jsonl" }
+      },
+      "output": { "masking": "entities" }
+    }
+  ]
+}

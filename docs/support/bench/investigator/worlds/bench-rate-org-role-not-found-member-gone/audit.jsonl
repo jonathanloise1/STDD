@@ -1,0 +1,1 @@
+{"Timestamp":"2026-11-06T16:20:00Z","EntityType":"OrganizationUser","EntityId":"b456d3d9-7480-42cc-abb3-0e961bf2a424","Action":"Delete","UserId":"9c8b842b-7b07-42f1-af87-82fc2cc43095","ChangedProperties":["Status"],"OldValues":{"Status":"Active"},"NewValues":null,"CorrelationId":"70df44c6b38bb184edc2bab6b787d428"}

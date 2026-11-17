@@ -1,0 +1,93 @@
+@page "/signals"
+@model SignalsModel
+@{
+    ViewData["Title"] = "Signals";
+    ViewData["Section"] = "signals";
+}
+<h1>Signals</h1>
+@if (Model.Message is not null) { <div class="message @(Model.MessageIsError ? "error" : "")">@Model.Message</div> }
+
+<h2>Counters per signature</h2>
+<p class="muted">Every record is counted, including the ones that open nothing (accepted noise, suppressed, below the thresholds). Retention keeps 30 days.</p>
+@if (Model.Counters.Count == 0) { <p class="muted">Nothing counted yet.</p> }
+else
+{
+    <div class="scroll"><table>
+        <thead><tr><th>Signature or template</th><th>Environment</th><th>Status</th><th>Severity</th><th>Expected per hour</th><th>Total</th><th>Last hour</th><th>Last bucket</th></tr></thead>
+        <tbody>
+        @foreach (var c in Model.Counters)
+        {
+            var sig = Model.Signatures.GetValueOrDefault(c.SignatureOrTemplate);
+            <tr>
+                <td><code>@c.SignatureOrTemplate</code></td><td>@c.Environment</td><td>@(sig?.Status ?? "unmatched")</td><td>@sig?.Severity</td><td>@(sig is null ? "" : sig.Rate.ExpectedPerHour.ToString())</td>
+                <td>@c.Total</td><td>@c.LastHour</td><td>@Fmt.Time(c.LastBucket)</td>
+            </tr>
+        }
+        </tbody>
+    </table></div>
+}
+
+<h2>Accepted noise</h2>
+@if (Model.Noise.Count == 0) { <p class="muted">No signature is accepted as noise.</p> }
+else
+{
+    <table>
+        <thead><tr><th>Signature</th><th>Rationale</th><th>Expires</th><th>Counted</th><th>Last hour</th></tr></thead>
+        <tbody>
+        @foreach (var n in Model.Noise)
+        {
+            <tr><td><code>@n.Id</code></td><td>@n.Rationale</td><td class="@(n.Expired ? "failed" : "")">@n.Expires@(n.Expired ? " (expired: treated as active)" : "")</td><td>@n.Total</td><td>@n.LastHour</td></tr>
+        }
+        </tbody>
+    </table>
+}
+
+<h2>Unknown templates</h2>
+<p class="muted">Copy these five values into a runbook of <code>unkeyed-runbooks.md</code> (the template id is computed from them), or give the failure a test case and a log key.</p>
+@if (Model.Unknown.Count == 0) { <p class="muted">No unknown template seen.</p> }
+else
+{
+    <div class="scroll"><table>
+        <thead><tr><th>Template id</th><th>Event name</th><th>Category</th><th>Exception type</th><th>Top frame</th><th>Template</th><th>Level</th><th>Count</th><th>First seen</th><th>Last seen</th><th>Sample trace</th></tr></thead>
+        <tbody>
+        @foreach (var u in Model.Unknown)
+        {
+            <tr>
+                <td><code>@u.TemplateId</code></td><td><code>@u.EventName</code></td><td><code>@u.Category</code></td><td><code>@u.ExceptionType</code></td><td><code>@u.TopFrame</code></td>
+                <td><code>@u.Template</code></td><td>@u.Level</td><td>@u.Count</td><td>@Fmt.Time(u.FirstSeen)</td><td>@Fmt.Time(u.LastSeen)</td>
+                <td>@if (u.SampleTraceId is not null) { <a href="/search?trace=@u.SampleTraceId"><code>@u.SampleTraceId</code></a> }</td>
+            </tr>
+        }
+        </tbody>
+    </table></div>
+}
+
+<h2>Suppression windows</h2>
+<p class="muted">Inside a window, matching records update counters only; a summary is written when the window ends. Weekly windows use the monitor's local time.</p>
+@if (Model.Windows.Count == 0) { <p class="muted">No window.</p> }
+else
+{
+    <table>
+        <thead><tr><th>Name</th><th>Source</th><th>Match</th><th>When</th></tr></thead>
+        <tbody>
+        @foreach (var w in Model.Windows)
+        {
+            <tr><td>@w.Name</td><td>@w.Origin</td><td><code>@w.Match</code></td>
+                <td>@(w.StartsAt is not null ? Fmt.Time(w.StartsAt) + " to " + Fmt.Time(w.EndsAt) : $"{w.Day} {w.From:HH\\:mm} to {w.To:HH\\:mm}")</td></tr>
+        }
+        </tbody>
+    </table>
+}
+<form method="post" asp-page-handler="AddWindow" class="card">
+    <strong>New window</strong>
+    <p>
+        <label>Name <input name="name" required maxlength="100" /></label>
+        <label>Match <input name="match" required placeholder="task.* or t-*" /></label>
+    </p>
+    <p>
+        <label>Starts (UTC) <input name="startsAt" required placeholder="2026-11-07 08:00" /></label>
+        <label>Ends (UTC) <input name="endsAt" required placeholder="2026-11-07 10:00" /></label>
+    </p>
+    <p><label>Reason <input name="reason" size="50" maxlength="300" /></label></p>
+    <button type="submit">Add window</button>
+</form>

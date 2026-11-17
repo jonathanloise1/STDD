@@ -1,0 +1,7 @@
+You check a question for a help box. Decide whether the manual sections below answer it, fully or in part.
+
+{{sections}}
+
+Question: {{question}}
+
+Answer with one JSON object and nothing else: {"answered": false}

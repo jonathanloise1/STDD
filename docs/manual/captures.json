@@ -1,0 +1,565 @@
+{
+  "schema_version": 1,
+  "images": [
+    {
+      "path": "docs/manual/en/audit/images/audit-log-default.png",
+      "lang": "en",
+      "capture": "Audit/AuditLogCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "0ed4754bb9c6b2438e4fe8571f78a7d8bfacba922531a5431c54d5a7619474b3"
+    },
+    {
+      "path": "docs/manual/en/audit/images/audit-log-details-dialog-open.png",
+      "lang": "en",
+      "capture": "Audit/AuditLogCapture.DetailsDialogOpen",
+      "viewport": "1280x800",
+      "sha256": "6297a5d5e8b9d4de0386f94170001d98c7b6b2a6dfb81912e2ebc80752f19ed0"
+    },
+    {
+      "path": "docs/manual/en/audit/images/audit-log-filtered-by-type.png",
+      "lang": "en",
+      "capture": "Audit/AuditLogCapture.FilteredByType",
+      "viewport": "1280x800",
+      "sha256": "c6ccdf04e147d82df438576fcae67395fe4998ccc4f373d8a0d5afc61934fd49"
+    },
+    {
+      "path": "docs/manual/en/audit/images/audit-log-list-unavailable.png",
+      "lang": "en",
+      "capture": "Audit/AuditLogCapture.ListUnavailable",
+      "viewport": "1280x800",
+      "sha256": "6e98570abab34369236f8d9a4031529647156f778349e21c6582fd678342f2d9"
+    },
+    {
+      "path": "docs/manual/en/authentication/images/header-menus-avatar-menu-open-as-editor.png",
+      "lang": "en",
+      "capture": "Authentication/HeaderMenusCapture.AvatarMenuOpenAsEditor",
+      "viewport": "1280x800",
+      "sha256": "d6244afe1f65888305cd80097be00cfe77f6d2cb1b184e4817e13380be34aa96"
+    },
+    {
+      "path": "docs/manual/en/authentication/images/header-menus-avatar-menu-open.png",
+      "lang": "en",
+      "capture": "Authentication/HeaderMenusCapture.AvatarMenuOpen",
+      "viewport": "1280x800",
+      "sha256": "96efe358f391f6db9f3bb76096be7695fdf4c4e8847b2cf412bba16dff27f3b8"
+    },
+    {
+      "path": "docs/manual/en/authentication/images/header-menus-language-menu-open.png",
+      "lang": "en",
+      "capture": "Authentication/HeaderMenusCapture.LanguageMenuOpen",
+      "viewport": "1280x800",
+      "sha256": "0fc9852f0cee9e6638457b0c5f42180726bd1f8f68a29f2fcd5b0d9d26aebfc2"
+    },
+    {
+      "path": "docs/manual/en/authentication/images/not-found-default.png",
+      "lang": "en",
+      "capture": "Authentication/NotFoundCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "4806c360b164d67592243485cd9a6927190e9837671678d9eb95f8862ec940e3"
+    },
+    {
+      "path": "docs/manual/en/authentication/images/shortcuts-dialog-open-as-viewer.png",
+      "lang": "en",
+      "capture": "Authentication/ShortcutsCapture.DialogOpenAsViewer",
+      "viewport": "1280x800",
+      "sha256": "16d57ce65dc3e5c98b5cfb71f2797ee6c089bbfaea8b47b336f56691caa5ed28"
+    },
+    {
+      "path": "docs/manual/en/authentication/images/shortcuts-dialog-open.png",
+      "lang": "en",
+      "capture": "Authentication/ShortcutsCapture.DialogOpen",
+      "viewport": "1280x800",
+      "sha256": "9b7146f7ecb48fdefc76de787ac31118c77d23f4afcb95aada5c5a171fc84ff9"
+    },
+    {
+      "path": "docs/manual/en/authentication/images/sidebar-menu-as-admin.png",
+      "lang": "en",
+      "capture": "Authentication/SidebarCapture.MenuAsAdmin",
+      "viewport": "1280x800",
+      "sha256": "4b35412ef278df22780b69554b0d3b73adb1f7626124eb9816950570d98137e9"
+    },
+    {
+      "path": "docs/manual/en/authentication/images/sidebar-menu-as-editor.png",
+      "lang": "en",
+      "capture": "Authentication/SidebarCapture.MenuAsEditor",
+      "viewport": "1280x800",
+      "sha256": "449823e43e997fad03770f3977a41397f23bd2903e0e6f671d42bfab28ad12ca"
+    },
+    {
+      "path": "docs/manual/en/dashboard/images/dashboard-counts-unavailable.png",
+      "lang": "en",
+      "capture": "Dashboard/DashboardCapture.CountsUnavailable",
+      "viewport": "1280x800",
+      "sha256": "05e8c2226a4afdc316c989675e075252f1bc70bfdfef0acb39aadc25cb60fd49"
+    },
+    {
+      "path": "docs/manual/en/dashboard/images/dashboard-default-mobile.png",
+      "lang": "en",
+      "capture": "Dashboard/DashboardCapture.DefaultMobile",
+      "viewport": "390x844",
+      "sha256": "cdfbafc308e74d51279a4ed4980c199d5b00eb88f1ede503de437656695cb3c1"
+    },
+    {
+      "path": "docs/manual/en/dashboard/images/dashboard-default.png",
+      "lang": "en",
+      "capture": "Dashboard/DashboardCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "4b35412ef278df22780b69554b0d3b73adb1f7626124eb9816950570d98137e9"
+    },
+    {
+      "path": "docs/manual/en/dashboard/images/dashboard-no-tasks.png",
+      "lang": "en",
+      "capture": "Dashboard/DashboardCapture.NoTasks",
+      "viewport": "1280x800",
+      "sha256": "d353935f0fa45dfd6aa2d18adc61111a5f7026c46d33196a71c340f7656ddcee"
+    },
+    {
+      "path": "docs/manual/en/dashboard/images/dashboard-recent-tasks-unavailable.png",
+      "lang": "en",
+      "capture": "Dashboard/DashboardCapture.RecentTasksUnavailable",
+      "viewport": "1280x800",
+      "sha256": "b1fa445c8a065c713d7ad7d3d4922555ab8cc9c5b325cb2cd2e55dcd4037295c"
+    },
+    {
+      "path": "docs/manual/en/onboarding/images/setup-create-unavailable.png",
+      "lang": "en",
+      "capture": "Onboarding/SetupCapture.CreateUnavailable",
+      "viewport": "1280x800",
+      "sha256": "b6cc7da7fcf242dc4ce5a343b452a7c4b68f3441202aee39f91c34689ef73d9b"
+    },
+    {
+      "path": "docs/manual/en/onboarding/images/setup-default.png",
+      "lang": "en",
+      "capture": "Onboarding/SetupCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "bed33bd15713a09105192810a3449adc79fd9d89765a48d6c592821d40e66329"
+    },
+    {
+      "path": "docs/manual/en/onboarding/images/setup-name-missing.png",
+      "lang": "en",
+      "capture": "Onboarding/SetupCapture.NameMissing",
+      "viewport": "1280x800",
+      "sha256": "4789e4fe7cff5162576a2d59864b81d834607252726e4394466b0125ae838a06"
+    },
+    {
+      "path": "docs/manual/en/organizations/images/organization-default.png",
+      "lang": "en",
+      "capture": "Organizations/OrganizationCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "8fdd404dd4ee5d95bf577ec069a0d7f7ce306713648cd98963513644043d7eee"
+    },
+    {
+      "path": "docs/manual/en/organizations/images/organization-unavailable.png",
+      "lang": "en",
+      "capture": "Organizations/OrganizationCapture.Unavailable",
+      "viewport": "1280x800",
+      "sha256": "a042844e6660aca0d12f455ebd8289628e3d6366c150a19f0627b7514826f94d"
+    },
+    {
+      "path": "docs/manual/en/organizations/images/team-default.png",
+      "lang": "en",
+      "capture": "Organizations/TeamCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "18ebefd10ddf00f50829f2965ec286a260ffde69477d234bf3841cfa69d49189"
+    },
+    {
+      "path": "docs/manual/en/organizations/images/team-edit-member-dialog-open.png",
+      "lang": "en",
+      "capture": "Organizations/TeamCapture.EditMemberDialogOpen",
+      "viewport": "1280x800",
+      "sha256": "b8fa6b6ba671837faf148d2cfe8d5035a72eac8a55ec27a54a7de7e39b8af5d0"
+    },
+    {
+      "path": "docs/manual/en/organizations/images/team-invite-dialog-open.png",
+      "lang": "en",
+      "capture": "Organizations/TeamCapture.InviteDialogOpen",
+      "viewport": "1280x800",
+      "sha256": "1f7dfe1e5c2392e635059f7efc328b59b586115cdb411fd68ed550fa9456985f"
+    },
+    {
+      "path": "docs/manual/en/organizations/images/team-list-unavailable.png",
+      "lang": "en",
+      "capture": "Organizations/TeamCapture.ListUnavailable",
+      "viewport": "1280x800",
+      "sha256": "5b0cda7eca8e95f67cc5dd36200dc64ba49807e716cd6b2cd1a15797b7c0ac82"
+    },
+    {
+      "path": "docs/manual/en/organizations/images/team-remove-member-dialog-open.png",
+      "lang": "en",
+      "capture": "Organizations/TeamCapture.RemoveMemberDialogOpen",
+      "viewport": "1280x800",
+      "sha256": "d580cdb1fd62dbbf4ab4b080076e4387d19c9b17c2abc7f58bdccf1dd244dc70"
+    },
+    {
+      "path": "docs/manual/en/organizations/images/update-organization-default.png",
+      "lang": "en",
+      "capture": "Organizations/UpdateOrganizationCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "814b5abfcc28e5eed35c68f31c7e8688925ba78185c5e8fc4a7d95253c926990"
+    },
+    {
+      "path": "docs/manual/en/organizations/images/update-organization-required-field-missing.png",
+      "lang": "en",
+      "capture": "Organizations/UpdateOrganizationCapture.RequiredFieldMissing",
+      "viewport": "1280x800",
+      "sha256": "739a89d7445fdb96379feab3adfb6cd0cd2b180f55cb5d29ab7ae41de6cc45ef"
+    },
+    {
+      "path": "docs/manual/en/organizations/images/update-organization-save-unavailable.png",
+      "lang": "en",
+      "capture": "Organizations/UpdateOrganizationCapture.SaveUnavailable",
+      "viewport": "1280x800",
+      "sha256": "b2c7efd60c138187e08412ea8fc263c1b34bbe23781aa3365321a301b1f686fb"
+    },
+    {
+      "path": "docs/manual/en/organizations/images/update-organization-unsaved-changes.png",
+      "lang": "en",
+      "capture": "Organizations/UpdateOrganizationCapture.UnsavedChanges",
+      "viewport": "1280x800",
+      "sha256": "e1cf85315df987607e1eee924884910c2fafbbdc75e28c275669821ddd8ef601"
+    },
+    {
+      "path": "docs/manual/en/tasks/images/tasks-default-as-viewer.png",
+      "lang": "en",
+      "capture": "Tasks/TasksCapture.DefaultAsViewer",
+      "viewport": "1280x800",
+      "sha256": "0705f8c0d8449b42da69836a8f265954398744b467553b79074584bb667f09a6"
+    },
+    {
+      "path": "docs/manual/en/tasks/images/tasks-default.png",
+      "lang": "en",
+      "capture": "Tasks/TasksCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "fb8cd3a3942249ecd30ed1021d51fd1070882e91ae1a7d6b9b9318365715ae13"
+    },
+    {
+      "path": "docs/manual/en/tasks/images/tasks-delete-task-dialog-open.png",
+      "lang": "en",
+      "capture": "Tasks/TasksCapture.DeleteTaskDialogOpen",
+      "viewport": "1280x800",
+      "sha256": "ab5ae2e059d498018b5e46e12c6b32f0a726f2df654b806d220976c860d7c472"
+    },
+    {
+      "path": "docs/manual/en/tasks/images/tasks-edit-task-form-open.png",
+      "lang": "en",
+      "capture": "Tasks/TasksCapture.EditTaskFormOpen",
+      "viewport": "1280x800",
+      "sha256": "f81ae4166c75c32521026a09a514e519a6819fe0c874624180db4efba513cfe6"
+    },
+    {
+      "path": "docs/manual/en/tasks/images/tasks-list-unavailable.png",
+      "lang": "en",
+      "capture": "Tasks/TasksCapture.ListUnavailable",
+      "viewport": "1280x800",
+      "sha256": "9d8823aa01208d1fdbc415bb0a3809f65160044e062c34b43fc11eb4990d32bb"
+    },
+    {
+      "path": "docs/manual/en/tasks/images/tasks-new-task-form-open.png",
+      "lang": "en",
+      "capture": "Tasks/TasksCapture.NewTaskFormOpen",
+      "viewport": "1280x800",
+      "sha256": "0979f1450f84362df830e4c25e62228c8dd248bf91009808eaed1c4489268ad9"
+    },
+    {
+      "path": "docs/manual/en/tasks/images/tasks-new-task-title-missing.png",
+      "lang": "en",
+      "capture": "Tasks/TasksCapture.NewTaskTitleMissing",
+      "viewport": "1280x800",
+      "sha256": "ec9cc49240b575349b132be410549eac975441f581a8192ce8edbdd252054253"
+    },
+    {
+      "path": "docs/manual/en/tasks/images/tasks-no-tasks.png",
+      "lang": "en",
+      "capture": "Tasks/TasksCapture.NoTasks",
+      "viewport": "1280x800",
+      "sha256": "de2f180fdc1491b458ed80767b42c94558b7a6b74890123230cb117f3de4ff06"
+    },
+    {
+      "path": "docs/manual/en/tasks/images/tasks-save-unavailable.png",
+      "lang": "en",
+      "capture": "Tasks/TasksCapture.SaveUnavailable",
+      "viewport": "1280x800",
+      "sha256": "dcc9184d81ebd1e29bec09de3577e717f726c6c7ab1be2b4eb276f511ac4611e"
+    },
+    {
+      "path": "docs/manual/it/audit/images/audit-log-default.png",
+      "lang": "it",
+      "capture": "Audit/AuditLogCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "138c05ad5a64f8509978cd297a0541fcc713dd1fa35ef478214425065fb9e06d"
+    },
+    {
+      "path": "docs/manual/it/audit/images/audit-log-details-dialog-open.png",
+      "lang": "it",
+      "capture": "Audit/AuditLogCapture.DetailsDialogOpen",
+      "viewport": "1280x800",
+      "sha256": "40cbfa901284f4940643b507fb3cfe8aa3f0c82697300fc67987d69f59a642ad"
+    },
+    {
+      "path": "docs/manual/it/audit/images/audit-log-filtered-by-type.png",
+      "lang": "it",
+      "capture": "Audit/AuditLogCapture.FilteredByType",
+      "viewport": "1280x800",
+      "sha256": "5f9458687e0e6ba515f1275299e39df384e77c4fbb4006095460df8903dac949"
+    },
+    {
+      "path": "docs/manual/it/audit/images/audit-log-list-unavailable.png",
+      "lang": "it",
+      "capture": "Audit/AuditLogCapture.ListUnavailable",
+      "viewport": "1280x800",
+      "sha256": "3c4c1c63e45aa45128d7307b322c65fc098431e990351ac0febd8d607643720f"
+    },
+    {
+      "path": "docs/manual/it/authentication/images/header-menus-avatar-menu-open-as-editor.png",
+      "lang": "it",
+      "capture": "Authentication/HeaderMenusCapture.AvatarMenuOpenAsEditor",
+      "viewport": "1280x800",
+      "sha256": "7fbd3d2a253c998854d68830139b01d7a1303d5c9de91624c742b86deb4058bf"
+    },
+    {
+      "path": "docs/manual/it/authentication/images/header-menus-avatar-menu-open.png",
+      "lang": "it",
+      "capture": "Authentication/HeaderMenusCapture.AvatarMenuOpen",
+      "viewport": "1280x800",
+      "sha256": "0f664583ce88c87796bd9fcaebcd68e92cdc7c26a479b377d14c322e223fd47f"
+    },
+    {
+      "path": "docs/manual/it/authentication/images/header-menus-language-menu-open.png",
+      "lang": "it",
+      "capture": "Authentication/HeaderMenusCapture.LanguageMenuOpen",
+      "viewport": "1280x800",
+      "sha256": "a4150b30b3ca8309e9ddd77b577139a33f96fd203c948422543727131b57745c"
+    },
+    {
+      "path": "docs/manual/it/authentication/images/not-found-default.png",
+      "lang": "it",
+      "capture": "Authentication/NotFoundCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "af10cc77f449ed902386fcb03df4ced807af2ae653ec6bed95fbb311b5d482bc"
+    },
+    {
+      "path": "docs/manual/it/authentication/images/shortcuts-dialog-open-as-viewer.png",
+      "lang": "it",
+      "capture": "Authentication/ShortcutsCapture.DialogOpenAsViewer",
+      "viewport": "1280x800",
+      "sha256": "6511053666abb2bf4fc52c80c90320716564d2e6436839f26be28e057ebc8d51"
+    },
+    {
+      "path": "docs/manual/it/authentication/images/shortcuts-dialog-open.png",
+      "lang": "it",
+      "capture": "Authentication/ShortcutsCapture.DialogOpen",
+      "viewport": "1280x800",
+      "sha256": "79db6c0e5ebc8ba2b52d71344020dfc75c0366e972e9bc2b44e1d998f725974f"
+    },
+    {
+      "path": "docs/manual/it/authentication/images/sidebar-menu-as-admin.png",
+      "lang": "it",
+      "capture": "Authentication/SidebarCapture.MenuAsAdmin",
+      "viewport": "1280x800",
+      "sha256": "5670468b6024a7883fded9c1f4ad252c1a0dacdc069064cf3df2e82248289c92"
+    },
+    {
+      "path": "docs/manual/it/authentication/images/sidebar-menu-as-editor.png",
+      "lang": "it",
+      "capture": "Authentication/SidebarCapture.MenuAsEditor",
+      "viewport": "1280x800",
+      "sha256": "59b928ce00f6c86f38a749d943dac347b7128bb602c7a755839f825eb7c794c2"
+    },
+    {
+      "path": "docs/manual/it/dashboard/images/dashboard-counts-unavailable.png",
+      "lang": "it",
+      "capture": "Dashboard/DashboardCapture.CountsUnavailable",
+      "viewport": "1280x800",
+      "sha256": "e92c7ea6938387e45b629e2422b5bcc5b20095fe145645c878dc8ed083587b00"
+    },
+    {
+      "path": "docs/manual/it/dashboard/images/dashboard-default-mobile.png",
+      "lang": "it",
+      "capture": "Dashboard/DashboardCapture.DefaultMobile",
+      "viewport": "390x844",
+      "sha256": "2022b38e6ce57c626d7ade95a1c6a35cf99291074a00a04c9f7519195bd90994"
+    },
+    {
+      "path": "docs/manual/it/dashboard/images/dashboard-default.png",
+      "lang": "it",
+      "capture": "Dashboard/DashboardCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "5670468b6024a7883fded9c1f4ad252c1a0dacdc069064cf3df2e82248289c92"
+    },
+    {
+      "path": "docs/manual/it/dashboard/images/dashboard-no-tasks.png",
+      "lang": "it",
+      "capture": "Dashboard/DashboardCapture.NoTasks",
+      "viewport": "1280x800",
+      "sha256": "9bb1ecb269b54a6aa7b796062e4196176b8c02c784ed638417c6b55c80e18139"
+    },
+    {
+      "path": "docs/manual/it/dashboard/images/dashboard-recent-tasks-unavailable.png",
+      "lang": "it",
+      "capture": "Dashboard/DashboardCapture.RecentTasksUnavailable",
+      "viewport": "1280x800",
+      "sha256": "64a8c525319297ecbcbdb8874ed5265ce83f053e3bd5ffafe3b2ad6d5c169826"
+    },
+    {
+      "path": "docs/manual/it/onboarding/images/setup-create-unavailable.png",
+      "lang": "it",
+      "capture": "Onboarding/SetupCapture.CreateUnavailable",
+      "viewport": "1280x800",
+      "sha256": "5326b20a8024f8a2c716da59ba805de604a87670591f1da40a5360c836542dff"
+    },
+    {
+      "path": "docs/manual/it/onboarding/images/setup-default.png",
+      "lang": "it",
+      "capture": "Onboarding/SetupCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "2d28f9ad331796d01b0313b9c02893bdbc065b1cf2abd6f10b36c81de2b4aadc"
+    },
+    {
+      "path": "docs/manual/it/onboarding/images/setup-name-missing.png",
+      "lang": "it",
+      "capture": "Onboarding/SetupCapture.NameMissing",
+      "viewport": "1280x800",
+      "sha256": "a4bed397c7a61a2a1e0f75f87c5cabc57a229d48ab49904f023a7c947c720bb9"
+    },
+    {
+      "path": "docs/manual/it/organizations/images/organization-default.png",
+      "lang": "it",
+      "capture": "Organizations/OrganizationCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "55ae315f67ae30102d11c5187e46be268044d601c0a3f99df6845d992c0b0225"
+    },
+    {
+      "path": "docs/manual/it/organizations/images/organization-unavailable.png",
+      "lang": "it",
+      "capture": "Organizations/OrganizationCapture.Unavailable",
+      "viewport": "1280x800",
+      "sha256": "6380a44d4c5181a965ad5c7ba65f33cc4079f04f85bed2a09950e18d20f1eac2"
+    },
+    {
+      "path": "docs/manual/it/organizations/images/team-default.png",
+      "lang": "it",
+      "capture": "Organizations/TeamCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "cf171ac4a520665d6f02bc5f5b591ecf184dbfb1d9250425564e60e294bdfd41"
+    },
+    {
+      "path": "docs/manual/it/organizations/images/team-edit-member-dialog-open.png",
+      "lang": "it",
+      "capture": "Organizations/TeamCapture.EditMemberDialogOpen",
+      "viewport": "1280x800",
+      "sha256": "bb090139e8015f49f192d6e4874d7ead57f4ac53fd46fc8595be6b0e2837617d"
+    },
+    {
+      "path": "docs/manual/it/organizations/images/team-invite-dialog-open.png",
+      "lang": "it",
+      "capture": "Organizations/TeamCapture.InviteDialogOpen",
+      "viewport": "1280x800",
+      "sha256": "ba758ff9cb89f0011b7d93c2c1b8e56dae8aa4b4d379daad9f95e9dddcc275d9"
+    },
+    {
+      "path": "docs/manual/it/organizations/images/team-list-unavailable.png",
+      "lang": "it",
+      "capture": "Organizations/TeamCapture.ListUnavailable",
+      "viewport": "1280x800",
+      "sha256": "d2f2988b7ee1f290601f1b3e4d0ea586ad43ce6c7fb48e1a64cb2e67078d230b"
+    },
+    {
+      "path": "docs/manual/it/organizations/images/team-remove-member-dialog-open.png",
+      "lang": "it",
+      "capture": "Organizations/TeamCapture.RemoveMemberDialogOpen",
+      "viewport": "1280x800",
+      "sha256": "9bd44d0e5f06d42cf497bece8b4c2083f373f790670c0b14ce65102a52bc031a"
+    },
+    {
+      "path": "docs/manual/it/organizations/images/update-organization-default.png",
+      "lang": "it",
+      "capture": "Organizations/UpdateOrganizationCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "8e74a67d59a1d677bb20212cfe344f10b0ba4a0801a562cb392a10167224ee19"
+    },
+    {
+      "path": "docs/manual/it/organizations/images/update-organization-required-field-missing.png",
+      "lang": "it",
+      "capture": "Organizations/UpdateOrganizationCapture.RequiredFieldMissing",
+      "viewport": "1280x800",
+      "sha256": "dde3de41e76d61e54a12c56726e57919e4dc551be29a592286095ec403325f8e"
+    },
+    {
+      "path": "docs/manual/it/organizations/images/update-organization-save-unavailable.png",
+      "lang": "it",
+      "capture": "Organizations/UpdateOrganizationCapture.SaveUnavailable",
+      "viewport": "1280x800",
+      "sha256": "a59830db7e0a4d5a727b1b72096fe811eefa8cc52afcef7ac76b0ad0f8aa5d1a"
+    },
+    {
+      "path": "docs/manual/it/organizations/images/update-organization-unsaved-changes.png",
+      "lang": "it",
+      "capture": "Organizations/UpdateOrganizationCapture.UnsavedChanges",
+      "viewport": "1280x800",
+      "sha256": "8d4a9218ae42984737fed99ec82fe34ac95efae3848539bc295c6dba44aeac40"
+    },
+    {
+      "path": "docs/manual/it/tasks/images/tasks-default-as-viewer.png",
+      "lang": "it",
+      "capture": "Tasks/TasksCapture.DefaultAsViewer",
+      "viewport": "1280x800",
+      "sha256": "78525bb54da12f573fb0e4b5ebbf015edc9adfcf860bd5815bf55c3af81a73f2"
+    },
+    {
+      "path": "docs/manual/it/tasks/images/tasks-default.png",
+      "lang": "it",
+      "capture": "Tasks/TasksCapture.Default",
+      "viewport": "1280x800",
+      "sha256": "c3cd81b3352060cbbbeb5850c3c0f050cd965e53e087fe1de8c24f8116da8e83"
+    },
+    {
+      "path": "docs/manual/it/tasks/images/tasks-delete-task-dialog-open.png",
+      "lang": "it",
+      "capture": "Tasks/TasksCapture.DeleteTaskDialogOpen",
+      "viewport": "1280x800",
+      "sha256": "c18a1149bd3ee15e97bbdacc527a3a91f359fb81f20a92d75b705fb1809aae95"
+    },
+    {
+      "path": "docs/manual/it/tasks/images/tasks-edit-task-form-open.png",
+      "lang": "it",
+      "capture": "Tasks/TasksCapture.EditTaskFormOpen",
+      "viewport": "1280x800",
+      "sha256": "d2d3df5e83f74f400c769750de79a0e37a5ade7896f594ce74e97ad62b948f56"
+    },
+    {
+      "path": "docs/manual/it/tasks/images/tasks-list-unavailable.png",
+      "lang": "it",
+      "capture": "Tasks/TasksCapture.ListUnavailable",
+      "viewport": "1280x800",
+      "sha256": "7f6fa027a2ea9a54d6c0892b57c7f3170162d3efc381d41999c934cb8943e355"
+    },
+    {
+      "path": "docs/manual/it/tasks/images/tasks-new-task-form-open.png",
+      "lang": "it",
+      "capture": "Tasks/TasksCapture.NewTaskFormOpen",
+      "viewport": "1280x800",
+      "sha256": "d752f3edf74035e0a8fc1b85e8798054e3af17e418cd3ff62bcb8d4407d5d0e2"
+    },
+    {
+      "path": "docs/manual/it/tasks/images/tasks-new-task-title-missing.png",
+      "lang": "it",
+      "capture": "Tasks/TasksCapture.NewTaskTitleMissing",
+      "viewport": "1280x800",
+      "sha256": "a594221521e1bc662dbb5c8091c64622a859bbd587ddbce7caeab5f41189dc1d"
+    },
+    {
+      "path": "docs/manual/it/tasks/images/tasks-no-tasks.png",
+      "lang": "it",
+      "capture": "Tasks/TasksCapture.NoTasks",
+      "viewport": "1280x800",
+      "sha256": "488f74c493136ec4ec1d3ab25507dd821bdf4aed7cffa1b83f30e0b76f522965"
+    },
+    {
+      "path": "docs/manual/it/tasks/images/tasks-save-unavailable.png",
+      "lang": "it",
+      "capture": "Tasks/TasksCapture.SaveUnavailable",
+      "viewport": "1280x800",
+      "sha256": "837430a2d121ec4d3f154af59a8055fd011fa00bb629654f643f7e69130676e1"
+    }
+  ]
+}

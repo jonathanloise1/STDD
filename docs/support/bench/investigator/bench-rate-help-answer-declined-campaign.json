@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "id": "bench-rate-help-answer-declined-campaign",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "expected",
+  "trigger": "rate",
+  "class": "expected_behaviour",
+  "world_dir": "worlds/bench-rate-help-answer-declined-campaign",
+  "incident_id": "INC-bench-rate-help-answer-declined-campaign",
+  "budget_override": null,
+  "prompt": {
+    "incident": {
+      "trigger": "rate",
+      "severity": "Information",
+      "environment": "prod",
+      "signature": {
+        "kind": "keyed",
+        "id": "help.answer.declined",
+        "log_key": "help.answer.declined",
+        "template_id": null,
+        "template": null
+      },
+      "count": 40,
+      "rate_per_hour": 240,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T14:20:00.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T14:20:00.000Z",
+              "Level": "Information",
+              "Category": "MyApp.Application.Services.HelpService",
+              "LogKey": "help.answer.declined",
+              "MessageTemplate": "The assistant declined to answer: {Reason}",
+              "Message": "The assistant declined to answer: no section of the manual covers the question",
+              "TraceId": "c76ac69dfb5190b0ed1eb673ab96dae0",
+              "SpanId": "82ad2d5e9d9b4f70",
+              "Properties": {
+                "Reason": "no_section"
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": {
+      "signature": {
+        "id": "help.answer.declined",
+        "kind": "keyed",
+        "match": {
+          "log_key": "help.answer.declined"
+        },
+        "area": "help",
+        "user_story": "US-HELP-05",
+        "test_case": "HELP-ANSWER-004",
+        "severity": "Information",
+        "message": "The assistant could not answer this from the manual. These sections are the closest:",
+        "runbook": {
+          "anchor": "help-answer-declined",
+          "path": "docs/areas/help/operations.md",
+          "text": "### Meaning\n\nThe assistant declined to answer a question, or its answer could not be used (no valid source), so the panel showed the closest manual sections instead. Expected for questions the manual does not cover; the user is not blocked.\n\n### Check\n\n1. Do not treat a single entry as a fault: declining is the designed answer when the manual does not support one.\n2. Watch the rate. A sudden rise right after a release suggests a new assistant or a new manual that no longer matches: compare the model version and the pack version in the release notes with the previous release.\n3. To see which questions are declined, ask an Admin to download the unanswered questions from the Unanswered questions page and look at the outcomes `refused` and `invalid`.\n4. A question the manual does answer but the assistant keeps declining is a documentation or model gap, not an incident.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| signature_lookup | log_key=help.answer.declined | found == true |\n\n### Resolve\n\n1. No action for a normal rate.\n2. When the rate stays high, send the downloaded questions to the documentation owner: add the user's wording to the story's questions, or record an out-of-scope question; hand over to development when the assistant model should be re-evaluated.\n\n### History\n\nNone."
+        },
+        "rate": {
+          "expected_per_hour": 20
+        },
+        "fingerprint_by": [],
+        "cause_category": "expected_behaviour",
+        "status": "active",
+        "fixed_in": null,
+        "noise": null,
+        "rule_checks": [
+          {
+            "tool": "signature_lookup",
+            "arguments": {
+              "log_key": "help.answer.declined"
+            },
+            "expect": "found == true"
+          }
+        ],
+        "history": []
+      },
+      "runbook": "### Meaning\n\nThe assistant declined to answer a question, or its answer could not be used (no valid source), so the panel showed the closest manual sections instead. Expected for questions the manual does not cover; the user is not blocked.\n\n### Check\n\n1. Do not treat a single entry as a fault: declining is the designed answer when the manual does not support one.\n2. Watch the rate. A sudden rise right after a release suggests a new assistant or a new manual that no longer matches: compare the model version and the pack version in the release notes with the previous release.\n3. To see which questions are declined, ask an Admin to download the unanswered questions from the Unanswered questions page and look at the outcomes `refused` and `invalid`.\n4. A question the manual does answer but the assistant keeps declining is a documentation or model gap, not an incident.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| signature_lookup | log_key=help.answer.declined | found == true |\n\n### Resolve\n\n1. No action for a normal rate.\n2. When the rate stays high, send the downloaded questions to the documentation owner: add the user's wording to the story's questions, or record an out-of-scope question; hand over to development when the assistant model should be re-evaluated.\n\n### History\n\nNone."
+    },
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "explained",
+    "abstain_reason": null,
+    "cause_category": "expected_behaviour",
+    "area": "help",
+    "user_story": "US-HELP-05",
+    "supporting_evidence": [
+      {
+        "tool": "health_status",
+        "arguments": {}
+      }
+    ],
+    "min_calls": 2
+  },
+  "note": "Many questions outside the manual after a training session: the rate is high and the behaviour is the designed one."
+}

@@ -1,0 +1,10 @@
+You check an answer written for a help box. The answer must use only facts stated in the numbered manual sections.
+
+{{sections}}
+
+Question: {{question}}
+
+Answer to check:
+{{answer}}
+
+Decide two things. "supported": is every statement of the answer supported by the sections (steps, labels, limits, features)? "answers_question": does the answer give the user what the question needs? Answer with one JSON object and nothing else: {"supported": true, "answers_question": true}

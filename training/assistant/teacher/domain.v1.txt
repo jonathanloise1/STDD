@@ -1,0 +1,17 @@
+You design a fictional web application for a training dataset. Everything is invented: the application name, the organisation, the people and the products. Never use a real brand, product, person, e-mail address, phone number or web address.
+
+Sector: {{sector}}
+Application: {{app}}
+Users: {{users}}
+
+Write the application as exactly {{n_areas}} areas with exactly {{n_stories}} user stories in total (every area has at least two). An area is a part of the application that users recognise (for example a list of items and its forms). A story is one goal a user completes in one sitting.
+
+Rules:
+- Titles are in English, sentence case, start with a verb for stories and name the user goal; at most 60 characters.
+- Use only these roles: Visitor, Signed-in user, Admin, Editor, Viewer.
+- `folder` is lower case letters with hyphens; `code` is 2 to 8 upper case letters, unique.
+- `route` is the page path of the screen where the story happens, for example "/loans".
+- Describe what users see and do, never implementation details.
+
+Answer with one JSON object and nothing else:
+{"app_name": "...", "roles": ["Admin", "Editor"], "areas": [{"folder": "...", "code": "...", "title": "...", "overview": "two to four sentences", "business_rules": ["a rule that applies to several stories"], "ui_flow": ["Screen name: what the user does there and which screen comes next."], "stories": [{"title": "...", "priority": "Critical|High|Medium|Low", "user_input": "Yes|No", "goal": "one sentence in the user's words", "screen": "screen name", "route": "/..."}]}]}

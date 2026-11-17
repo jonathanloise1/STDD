@@ -1,0 +1,17 @@
+[{{severity}}] {{id}} {{environment}}: {{signature.id}} ({{trigger}})
+Incident {{id}} in {{environment}}
+Severity: {{severity}}    Trigger: {{trigger}}    Status: {{status}}
+Signature: {{signature.kind}} {{signature.id}}
+Area: {{area}}    Story: {{user_story}}    Test case: {{test_case}}
+Seen: {{count}} times from {{first_seen}} to {{last_seen}} ({{rate_per_hour}} per hour)
+First trace id: {{correlation.trace_ids.0}}
+
+Rule verdict: {{rule_verdict.cause}} (confidence {{rule_verdict.confidence}})
+Model verdict: {{model_verdict.cause}} (confidence {{model_verdict.confidence}})
+
+Runbook: {{runbook.path}}#{{runbook.anchor}}
+
+Evidence:
+{{evidence_lines}}
+
+Open the incident: {{dashboard_url}}

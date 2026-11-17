@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "id": "bench-rate-org-invite-already-member-bulk",
+  "domain": "myapp",
+  "split": "bench",
+  "fault": "expected",
+  "trigger": "rate",
+  "class": "expected_behaviour",
+  "world_dir": "worlds/bench-rate-org-invite-already-member-bulk",
+  "incident_id": "INC-bench-rate-org-invite-already-member-bulk",
+  "budget_override": null,
+  "prompt": {
+    "incident": {
+      "trigger": "rate",
+      "severity": "Information",
+      "environment": "prod",
+      "signature": {
+        "kind": "keyed",
+        "id": "org.invite.already_member",
+        "log_key": "org.invite.already_member",
+        "template_id": null,
+        "template": null
+      },
+      "count": 40,
+      "rate_per_hour": 240,
+      "first_seen": "2026-11-06T09:12:44.120Z",
+      "last_seen": "2026-11-06T15:10:00.000Z",
+      "evidence": [
+        {
+          "id": "E1",
+          "source": "signal",
+          "records": [
+            {
+              "Timestamp": "2026-11-06T15:10:00.000Z",
+              "Level": "Information",
+              "Category": "MyApp.Application.Services.OrganizationService",
+              "LogKey": "org.invite.already_member",
+              "MessageTemplate": "Invitation not sent: the person is already a member of organization {OrganizationId}",
+              "Message": "Invitation not sent: the person is already a member of organization 22ac5b1a-ac55-48e4-abfe-21609fa93bf0",
+              "TraceId": "4a124fdd84a16d672c34f756fa2c860c",
+              "SpanId": "ab652e414693b86b",
+              "Properties": {
+                "OrganizationId": "22ac5b1a-ac55-48e4-abfe-21609fa93bf0"
+              },
+              "Service": "myapp-api",
+              "Version": "1.4.0",
+              "Host": "app01",
+              "Environment": "Production"
+            }
+          ]
+        }
+      ]
+    },
+    "pack": {
+      "signature": {
+        "id": "org.invite.already_member",
+        "kind": "keyed",
+        "match": {
+          "log_key": "org.invite.already_member"
+        },
+        "area": "organizations",
+        "user_story": "US-ORG-05",
+        "test_case": "ORG-INVITE-005",
+        "severity": "Information",
+        "message": "User is already a member of this organization.",
+        "runbook": {
+          "anchor": "org-invite-already-member",
+          "path": "docs/areas/organizations/operations.md",
+          "text": "### Meaning\n\nAn Admin invited an email address that already belongs to a member of the organization. The Admin sees a message and no invitation is created.\n\n### Check\n\n1. No investigation is needed for a single entry: the invitation was not necessary.\n2. Ask the Admin to open the Team page and search the email: the person is listed with a role.\n3. If the person says they cannot get in, check their role: they may be a Viewer who expected to edit. The role is changed with the Edit button on the Team page.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| signature_lookup | log_key=org.invite.already_member | found == true |\n\n### Resolve\n\n1. Tell the Admin that the person is already a member and which role they have; change the role from the Team page if it is the wrong one.\n2. No further action.\n\n### History\n\nNone."
+        },
+        "rate": {
+          "expected_per_hour": 10
+        },
+        "fingerprint_by": [
+          "OrganizationId"
+        ],
+        "cause_category": "expected_behaviour",
+        "status": "active",
+        "fixed_in": null,
+        "noise": null,
+        "rule_checks": [
+          {
+            "tool": "signature_lookup",
+            "arguments": {
+              "log_key": "org.invite.already_member"
+            },
+            "expect": "found == true"
+          }
+        ],
+        "history": []
+      },
+      "runbook": "### Meaning\n\nAn Admin invited an email address that already belongs to a member of the organization. The Admin sees a message and no invitation is created.\n\n### Check\n\n1. No investigation is needed for a single entry: the invitation was not necessary.\n2. Ask the Admin to open the Team page and search the email: the person is listed with a role.\n3. If the person says they cannot get in, check their role: they may be a Viewer who expected to edit. The role is changed with the Edit button on the Team page.\n\n### Rule checks\n\n| Tool | Arguments | Expect |\n|------|-----------|--------|\n| signature_lookup | log_key=org.invite.already_member | found == true |\n\n### Resolve\n\n1. Tell the Admin that the person is already a member and which role they have; change the role from the Team page if it is the wrong one.\n2. No further action.\n\n### History\n\nNone."
+    },
+    "entities": [
+      {
+        "name": "membership",
+        "description": "The link between a user and an organization, with the user's role and status in it."
+      },
+      {
+        "name": "organization",
+        "description": "A tenant: the workspace that owns members and data."
+      },
+      {
+        "name": "task",
+        "description": "A work item of an organization, with a status, an optional assignee and an optional due date."
+      },
+      {
+        "name": "user",
+        "description": "A person who can sign in."
+      }
+    ]
+  },
+  "gold": {
+    "verdict": "explained",
+    "abstain_reason": null,
+    "cause_category": "expected_behaviour",
+    "area": "organizations",
+    "user_story": "US-ORG-05",
+    "supporting_evidence": [
+      {
+        "tool": "logs_by_correlation",
+        "arguments": {
+          "trace_id": "4a124fdd84a16d672c34f756fa2c860c"
+        }
+      }
+    ],
+    "min_calls": 1
+  }
+}

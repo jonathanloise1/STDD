@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "suite_version": 1,
+  "test_set_sha256": null,
+  "validation_set_sha256": null,
+  "freeze": "Run `python -m training.assistant.eval --freeze-sets` after `validate` has produced the test and validation sets (models.md 9.1 step 5). A real evaluation refuses a null or different value.",
+  "model_thresholds": {
+    "format_valid": { "op": ">=", "value": 0.99 },
+    "faithful": { "op": ">=", "value": 0.95 },
+    "useful": { "op": ">=", "value": 0.75 },
+    "wrongful_refusal": { "op": "<=", "value": 0.10 },
+    "wrongful_refusal_distant": { "op": "<=", "value": 0.15 },
+    "oos_refusal": { "op": ">=", "value": 0.95 },
+    "near_miss_refusal": { "op": ">=", "value": 0.80 },
+    "correct_source": { "op": ">=", "value": 0.90 }
+  },
+  "transfer_gap": { "op": "<=", "value": 0.10 },
+  "export_loss": { "useful_drop_max": 0.05, "faithful_drop_max": 0.02 },
+  "sample_app": {
+    "source": "manual.md 8.3",
+    "min_in_scope_items_to_gate": 20,
+    "gates": {
+      "faithful": { "op": ">=", "value": 0.95 },
+      "useful": { "op": ">=", "value": 0.65 },
+      "wrongful_refusal": { "op": "<=", "value": 0.15 },
+      "oos_refusal": { "op": ">=", "value": 0.90 },
+      "correct_source": { "op": ">=", "value": 0.85 }
+    }
+  },
+  "latency": {
+    "items": 100,
+    "max_new_tokens": 120,
+    "metric": "time to last token, p95, milliseconds",
+    "blocks_release": false,
+    "targets": {
+      "browser-webgpu": { "p95_ms": 6000, "hardware": "laptop with an integrated GPU, WebGPU" },
+      "server-gpu": { "p95_ms": 3000, "hardware": "server with a GPU" },
+      "server-cpu": { "p95_ms": 10000, "hardware": "server CPU with 8 cores" }
+    }
+  },
+  "judge": {
+    "base_url": "http://localhost:8093/v1",
+    "model": "qwen3.8-27b",
+    "api_key_env": null,
+    "prompt_version": 1,
+    "template": "judge.v1",
+    "min_human_agreement": 0.90,
+    "human_labels": "training/assistant/eval/human-labels.jsonl",
+    "audit_items": 30,
+    "tokens_per_second": 0,
+    "prompt_tokens_per_second": 0
+  }
+}

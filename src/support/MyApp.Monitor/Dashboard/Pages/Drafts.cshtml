@@ -1,0 +1,28 @@
+@page "/drafts"
+@model DraftsModel
+@{
+    ViewData["Title"] = "Drafts";
+    ViewData["Section"] = "drafts";
+}
+<h1>Drafts</h1>
+<p class="muted">Ticket and e-mail drafts wait here for a person to send them. A model verdict never creates a ticket on its own.</p>
+@if (Model.Message is not null) { <div class="message @(Model.MessageIsError ? "error" : "")">@Model.Message</div> }
+@if (Model.Drafts.Count == 0) { <p class="muted">No drafts awaiting approval.</p> }
+else
+{
+    <div class="scroll"><table>
+        <thead><tr><th>Id</th><th>Incident</th><th>Channel</th><th>Event</th><th>Drafted</th><th>Note</th><th>Content</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var d in Model.Drafts)
+        {
+            <tr>
+                <td>@d.Id</td>
+                <td>@if (d.IncidentId.StartsWith("INC-")) { <a href="/incidents/@d.IncidentId">@d.IncidentId</a> } else { @d.IncidentId }</td>
+                <td>@d.Channel</td><td>@d.Event</td><td>@Fmt.Time(d.At)</td><td>@d.Error</td>
+                <td><pre>@d.Body</pre></td>
+                <td><form method="post" asp-page-handler="Send"><input type="hidden" name="notificationId" value="@d.Id" /><button type="submit">Send draft</button></form></td>
+            </tr>
+        }
+        </tbody>
+    </table></div>
+}

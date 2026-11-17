@@ -1,0 +1,1 @@
+{"Timestamp":"2026-11-06T09:58:00Z","EntityType":"TaskItem","EntityId":"f672fb88-9013-4199-a483-bcd1970c4cf7","Action":"Delete","UserId":"d99556df-0418-4065-ae2c-6177144fb74e","ChangedProperties":["IsDeleted"],"OldValues":{"Title":"Send the quote"},"NewValues":null,"CorrelationId":"37f1a4cb3712de537a328084d4dba62f"}

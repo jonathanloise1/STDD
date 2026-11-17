@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "entities": [
+    {
+      "name": "membership",
+      "description": "The link between a user and an organization, with the user's role and status in it.",
+      "source_kind": "sqlserver",
+      "table": "dbo.OrganizationUsers",
+      "key": "Id",
+      "key_type": "guid",
+      "audit_entity_type": "OrganizationUser"
+    },
+    {
+      "name": "organization",
+      "description": "A tenant: the workspace that owns members and data.",
+      "source_kind": "sqlserver",
+      "table": "dbo.Organizations",
+      "key": "Id",
+      "key_type": "guid",
+      "audit_entity_type": "Organization"
+    },
+    {
+      "name": "task",
+      "description": "A work item of an organization, with a status, an optional assignee and an optional due date.",
+      "source_kind": "sqlserver",
+      "table": "dbo.TaskItems",
+      "key": "Id",
+      "key_type": "guid",
+      "audit_entity_type": "TaskItem"
+    },
+    {
+      "name": "user",
+      "description": "A person who can sign in.",
+      "source_kind": "sqlserver",
+      "table": "dbo.Users",
+      "key": "Id",
+      "key_type": "guid",
+      "audit_entity_type": "User"
+    }
+  ]
+}

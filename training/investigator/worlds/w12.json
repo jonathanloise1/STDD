@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w12",
+ "app": "SudsPro",
+ "sector": "laundry service",
+ "split": "train",
+ "service": "sudspro-api",
+ "namespace": "SudsPro.Application.Services",
+ "record": "pickup",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "pickups",
+   "title": "Pickups",
+   "verb": "collect",
+   "stories": [
+    {
+     "id": "US-PICK-01",
+     "title": "Plan a pickup",
+     "test_case": "PICK-COLLECT-001"
+    },
+    {
+     "id": "US-PICK-02",
+     "title": "Confirm a pickup",
+     "test_case": "PICK-COLLECT-002"
+    }
+   ]
+  },
+  {
+   "id": "tickets",
+   "title": "Tickets",
+   "verb": "tag",
+   "stories": [
+    {
+     "id": "US-TICK-01",
+     "title": "Tag a garment",
+     "test_case": "TICK-TAG-001"
+    },
+    {
+     "id": "US-TICK-02",
+     "title": "Merge tickets",
+     "test_case": "TICK-TAG-002"
+    }
+   ]
+  },
+  {
+   "id": "routes",
+   "title": "Routes",
+   "verb": "route",
+   "stories": [
+    {
+     "id": "US-ROUT-01",
+     "title": "Build a route",
+     "test_case": "ROUT-ROUTE-001"
+    },
+    {
+     "id": "US-ROUT-02",
+     "title": "Reassign a route",
+     "test_case": "ROUT-ROUTE-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "pickup",
+   "description": "A pickup of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.Pickups",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Pickup",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "maps-service",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Suds:MapsUrl",
+  "SudsPro:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "pickups.collect.access_lost",
+   "level": "Warning",
+   "area": "pickups",
+   "story": "US-PICK-01",
+   "test_case": "PICK-COLLECT-005",
+   "category": "SudsPro.Application.Services.PickupsService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "pickups.collect.not_found",
+   "level": "Warning",
+   "area": "pickups",
+   "story": "US-PICK-02",
+   "test_case": "PICK-COLLECT-006",
+   "category": "SudsPro.Application.Services.PickupsService",
+   "template": "pickup {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "tickets.tag.duplicate_entry",
+   "level": "Warning",
+   "area": "tickets",
+   "story": "US-TICK-01",
+   "test_case": "TICK-TAG-007",
+   "category": "SudsPro.Application.Services.TicketsService",
+   "template": "pickup {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "tickets.tag.dependency_failed",
+   "level": "Error",
+   "area": "tickets",
+   "story": "US-TICK-02",
+   "test_case": "TICK-TAG-008",
+   "category": "SudsPro.Application.Services.TicketsService",
+   "template": "Call to {Dependency} failed for pickup {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "routes.route.config_invalid",
+   "level": "Error",
+   "area": "routes",
+   "story": "US-ROUT-01",
+   "test_case": "ROUT-ROUTE-009",
+   "category": "SudsPro.Application.Services.RoutesService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "routes.route.timed_out",
+   "level": "Error",
+   "area": "routes",
+   "story": "US-ROUT-02",
+   "test_case": "ROUT-ROUTE-010",
+   "category": "SudsPro.Application.Services.RoutesService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "pickups.collect.unhandled_error",
+   "level": "Error",
+   "area": "pickups",
+   "story": "US-PICK-01",
+   "test_case": "PICK-COLLECT-011",
+   "category": "SudsPro.Application.Services.PickupsService",
+   "template": "Unhandled error while handling pickup {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "pickups.collect.input_rejected",
+   "level": "Warning",
+   "area": "pickups",
+   "story": "US-PICK-02",
+   "test_case": "PICK-COLLECT-012",
+   "category": "SudsPro.Application.Services.PickupsService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "tickets.tag.high_volume",
+   "level": "Warning",
+   "area": "tickets",
+   "story": "US-TICK-01",
+   "test_case": "TICK-TAG-013",
+   "category": "SudsPro.Application.Services.TicketsService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "tickets.tag.component_failed",
+   "level": "Error",
+   "area": "tickets",
+   "story": "US-TICK-02",
+   "test_case": "TICK-TAG-014",
+   "category": "SudsPro.Application.Services.TicketsService",
+   "template": "Component {Component} failed for pickup {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "pickups-collect-access-lost",
+   "log_key": "pickups.collect.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-PICK-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "pickups-collect-not-found",
+   "log_key": "pickups.collect.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "pickup {RecordId} was not found when it was saved. See story US-PICK-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "tickets-tag-duplicate-entry",
+   "log_key": "tickets.tag.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "pickup {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-TICK-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "tickets-tag-dependency-failed",
+   "log_key": "tickets.tag.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for pickup {RecordId}. See story US-TICK-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "routes-route-config-invalid",
+   "log_key": "routes.route.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-ROUT-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "routes-route-timed-out",
+   "log_key": "routes.route.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-ROUT-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "pickups-collect-unhandled-error",
+   "log_key": "pickups.collect.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling pickup {RecordId}. See story US-PICK-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "pickups-collect-input-rejected",
+   "log_key": "pickups.collect.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-PICK-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "tickets-tag-high-volume",
+   "log_key": "tickets.tag.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-TICK-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "tickets-tag-component-failed",
+   "log_key": "tickets.tag.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for pickup {RecordId}. See story US-TICK-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

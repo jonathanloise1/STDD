@@ -1,0 +1,56 @@
+// react-toastify, restyled with the theme (frontend.md 10.1).
+
+:root {
+	--toastify-z-index: 1090;
+	--toastify-toast-width: 22rem;
+	--toastify-toast-min-height: 3rem;
+	--toastify-font-family: inherit;
+	--toastify-color-light: var(--app-surface);
+	--toastify-text-color-light: var(--bs-body-color);
+	--toastify-color-info: var(--bs-info);
+	--toastify-color-success: var(--bs-success);
+	--toastify-color-warning: var(--bs-warning);
+	--toastify-color-error: var(--bs-danger);
+	--toastify-icon-color-info: var(--bs-info);
+	--toastify-icon-color-success: var(--bs-success);
+	--toastify-icon-color-warning: var(--bs-warning);
+	--toastify-icon-color-error: var(--bs-danger);
+}
+
+.Toastify__toast {
+	align-items: flex-start;
+	padding: 0.75rem 1rem;
+	border-radius: var(--bs-border-radius-lg);
+	border-left: 4px solid var(--bs-border-color);
+	box-shadow: var(--bs-box-shadow);
+	font-size: var(--bs-body-font-size);
+
+	&--info {
+		border-left-color: var(--bs-info);
+	}
+
+	&--success {
+		border-left-color: var(--bs-success);
+	}
+
+	&--warning {
+		border-left-color: var(--bs-warning);
+	}
+
+	&--error {
+		border-left-color: var(--bs-danger);
+	}
+
+	> .btn-close {
+		flex-shrink: 0;
+		align-self: flex-start;
+		margin-inline-start: 0.5rem;
+	}
+}
+
+// Below md the container clears the bottom navigation (react-toastify goes full width under 480px).
+@include media-breakpoint-down(md) {
+	.Toastify__toast-container--bottom-right {
+		bottom: calc(var(--app-bottomnav-height) + env(safe-area-inset-bottom) + 0.5rem);
+	}
+}

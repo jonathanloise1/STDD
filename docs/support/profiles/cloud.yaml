@@ -1,0 +1,95 @@
+# Cloud profile: Application Insights through Log Analytics, SQL Server with Entra authentication.
+# Format: docs/guidelines/operations.md section 12.1. Secrets never appear here: use ${setting:...}.
+schema_version: 1
+name: cloud
+description: Azure deployment. Logs from Log Analytics discovered by tag; developer sign-in locally, managed identity when deployed.
+environment: ${setting:Monitor:Environment|prod}
+
+sources:
+  - id: appinsights
+    kind: log_analytics
+    workspace_id: ${setting:Monitor:Settings:WorkspaceId|}
+    discovery:
+      tag_name: myapp-role
+      tag_value: observability
+      resource_type: Microsoft.OperationalInsights/workspaces
+    app_role_names: [myapp-api]
+    min_level: 2
+    poll_seconds: 60
+    lookback_minutes_first_run: 60
+    max_rows_per_poll: 5000
+  - id: main-db
+    kind: sqlserver
+    connection_setting: Monitor:Connections:main-db
+    authentication: entra
+  - id: api
+    kind: http_health
+    base_url: ${setting:Monitor:Settings:ApiBaseUrl}
+    poll_seconds: 60
+    failures_before_signal: 3
+
+tool_sources:
+  logs_by_correlation: appinsights
+  sql_entity_read: main-db
+  audit_trail_by_entity: main-db
+  health_status: api
+  signature_lookup: pack
+
+analyser:
+  window_minutes: 60
+  rate_multiplier: 3
+  rate_min_count: 5
+  unknown_warning_min_count: 3
+  app_namespace_prefix: MyApp.
+
+investigator:
+  tier: small
+  device: auto
+  max_tool_calls: 6
+  timeout_seconds: 600
+  concurrency: 1
+
+gates:
+  ticket:
+    min_severity: Error
+    allow_model_verdict: false
+  email:
+    min_severity: Error
+    digest_time: "08:00"
+
+notifications:
+  email:
+    enabled: ${setting:Monitor:Settings:EmailEnabled|false}
+    smtp_host: ${setting:Monitor:Settings:SmtpHost}
+    smtp_port: ${setting:Monitor:Settings:SmtpPort|587}
+    use_tls: true
+    from: ${setting:Monitor:Settings:MailFrom}
+    to:
+      - ${setting:Monitor:Settings:MailTo}
+    username_setting: Monitor:Notifications:Smtp:Username
+    password_setting: Monitor:Notifications:Smtp:Password
+    template: templates/email-incident.txt
+  ticket_webhook:
+    enabled: ${setting:Monitor:Settings:TicketWebhookEnabled|false}
+    url: ${setting:Monitor:Settings:TicketWebhookUrl|}
+    method: POST
+    headers:
+      Authorization: ${setting:Monitor:Notifications:Webhook:Authorization|}
+    template: templates/ticket-incident.json
+    id_path: id
+
+suppression: []
+
+store:
+  kind: sqlite
+  path: ${setting:Monitor:Store:Path|data/monitor.db}
+  retention_days: 90
+
+dashboard:
+  enabled: true
+  urls: ${setting:Monitor:Dashboard:Urls|http://localhost:5310}
+  auth: ${setting:Monitor:Settings:DashboardAuth|entra}
+  allowed_group_id: ${setting:Monitor:Settings:DashboardGroupId|}
+
+perimeter:
+  evidence_in_notifications: true

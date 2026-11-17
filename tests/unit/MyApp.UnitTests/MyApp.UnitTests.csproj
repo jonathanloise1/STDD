@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>MyApp.UnitTests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageReference Include="NUnit" Version="4.5.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="6.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\tools\MyApp.DocTools\MyApp.DocTools.csproj" />
+    <ProjectReference Include="..\..\..\src\backend\MyApp.WebApi\MyApp.WebApi.csproj" Aliases="WebApi" />
+    <ProjectReference Include="..\..\..\src\backend\MyApp.Infrastructure\MyApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\src\backend\MyApp.Application\MyApp.Application.csproj" />
+  </ItemGroup>
+</Project>

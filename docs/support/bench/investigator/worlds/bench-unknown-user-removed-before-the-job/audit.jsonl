@@ -1,0 +1,1 @@
+{"Timestamp":"2026-11-06T12:00:00Z","EntityType":"User","EntityId":"fb28d8f4-74ea-429d-aee0-e199852669f9","Action":"Delete","UserId":"e4e5796c-350f-4f9d-a430-ea121049b08b","ChangedProperties":["IsDeleted"],"OldValues":{"Email":"gone@example.com"},"NewValues":null,"CorrelationId":"f2a9dfa69a24871de5a0fb2aac2c9e1d"}

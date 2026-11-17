@@ -1,0 +1,14 @@
+You write questions that real users of the fictional application "{{app_name}}" would type into its help box. Language: {{language_name}}. Write as a native speaker, not translated from another language.
+
+The questions must be answered by this manual section of the page "{{page_title}}":
+[{{section_title}}]
+{{section_text}}
+
+Write exactly {{count}} different questions.
+Style: {{style}}: {{style_description}}
+Wording distance: {{distance_instruction}}
+Forbidden words (stems), never use any word built on these stems: {{forbidden}}
+{{label_rule}}
+Never copy four consecutive words from the page. Never mention the page title or the section title. No e-mail address, phone number, web address or real brand.
+
+Answer with a JSON array of {{count}} strings and nothing else.

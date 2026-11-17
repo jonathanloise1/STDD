@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w15",
+ "app": "EnrolWise",
+ "sector": "student enrolment",
+ "split": "train",
+ "service": "enrolwise-api",
+ "namespace": "EnrolWise.Application.Services",
+ "record": "enrolment",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "courses",
+   "title": "Courses",
+   "verb": "open",
+   "stories": [
+    {
+     "id": "US-COUR-01",
+     "title": "Open a course",
+     "test_case": "COUR-OPEN-001"
+    },
+    {
+     "id": "US-COUR-02",
+     "title": "Close a course",
+     "test_case": "COUR-OPEN-002"
+    }
+   ]
+  },
+  {
+   "id": "students",
+   "title": "Students",
+   "verb": "enrol",
+   "stories": [
+    {
+     "id": "US-STUD-01",
+     "title": "Enrol a student",
+     "test_case": "STUD-ENROL-001"
+    },
+    {
+     "id": "US-STUD-02",
+     "title": "Transfer a student",
+     "test_case": "STUD-ENROL-002"
+    }
+   ]
+  },
+  {
+   "id": "grades",
+   "title": "Grades",
+   "verb": "record",
+   "stories": [
+    {
+     "id": "US-GRAD-01",
+     "title": "Record a grade",
+     "test_case": "GRAD-RECORD-001"
+    },
+    {
+     "id": "US-GRAD-02",
+     "title": "Amend a grade",
+     "test_case": "GRAD-RECORD-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "enrolment",
+   "description": "A enrolment of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.Enrolments",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Enrolment",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "identity-provider",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Enrol:IdpUrl",
+  "EnrolWise:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "courses.open.access_lost",
+   "level": "Warning",
+   "area": "courses",
+   "story": "US-COUR-01",
+   "test_case": "COUR-OPEN-005",
+   "category": "EnrolWise.Application.Services.CoursesService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "courses.open.not_found",
+   "level": "Warning",
+   "area": "courses",
+   "story": "US-COUR-02",
+   "test_case": "COUR-OPEN-006",
+   "category": "EnrolWise.Application.Services.CoursesService",
+   "template": "enrolment {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "students.enrol.duplicate_entry",
+   "level": "Warning",
+   "area": "students",
+   "story": "US-STUD-01",
+   "test_case": "STUD-ENROL-007",
+   "category": "EnrolWise.Application.Services.StudentsService",
+   "template": "enrolment {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "students.enrol.dependency_failed",
+   "level": "Error",
+   "area": "students",
+   "story": "US-STUD-02",
+   "test_case": "STUD-ENROL-008",
+   "category": "EnrolWise.Application.Services.StudentsService",
+   "template": "Call to {Dependency} failed for enrolment {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "grades.record.config_invalid",
+   "level": "Error",
+   "area": "grades",
+   "story": "US-GRAD-01",
+   "test_case": "GRAD-RECORD-009",
+   "category": "EnrolWise.Application.Services.GradesService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "grades.record.timed_out",
+   "level": "Error",
+   "area": "grades",
+   "story": "US-GRAD-02",
+   "test_case": "GRAD-RECORD-010",
+   "category": "EnrolWise.Application.Services.GradesService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "courses.open.unhandled_error",
+   "level": "Error",
+   "area": "courses",
+   "story": "US-COUR-01",
+   "test_case": "COUR-OPEN-011",
+   "category": "EnrolWise.Application.Services.CoursesService",
+   "template": "Unhandled error while handling enrolment {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "courses.open.input_rejected",
+   "level": "Warning",
+   "area": "courses",
+   "story": "US-COUR-02",
+   "test_case": "COUR-OPEN-012",
+   "category": "EnrolWise.Application.Services.CoursesService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "students.enrol.high_volume",
+   "level": "Warning",
+   "area": "students",
+   "story": "US-STUD-01",
+   "test_case": "STUD-ENROL-013",
+   "category": "EnrolWise.Application.Services.StudentsService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "students.enrol.component_failed",
+   "level": "Error",
+   "area": "students",
+   "story": "US-STUD-02",
+   "test_case": "STUD-ENROL-014",
+   "category": "EnrolWise.Application.Services.StudentsService",
+   "template": "Component {Component} failed for enrolment {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "courses-open-access-lost",
+   "log_key": "courses.open.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-COUR-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "courses-open-not-found",
+   "log_key": "courses.open.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "enrolment {RecordId} was not found when it was saved. See story US-COUR-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "students-enrol-duplicate-entry",
+   "log_key": "students.enrol.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "enrolment {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-STUD-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "students-enrol-dependency-failed",
+   "log_key": "students.enrol.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for enrolment {RecordId}. See story US-STUD-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "grades-record-config-invalid",
+   "log_key": "grades.record.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-GRAD-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "grades-record-timed-out",
+   "log_key": "grades.record.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-GRAD-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "courses-open-unhandled-error",
+   "log_key": "courses.open.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling enrolment {RecordId}. See story US-COUR-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "courses-open-input-rejected",
+   "log_key": "courses.open.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-COUR-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "students-enrol-high-volume",
+   "log_key": "students.enrol.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-STUD-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "students-enrol-component-failed",
+   "log_key": "students.enrol.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for enrolment {RecordId}. See story US-STUD-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+{
+  "description": "Current version of every STDD contract format. Rules for changing a version: docs/guidelines/development.md section 13.",
+  "contracts": {
+    "identifiers": { "version": 1, "spec": "docs/guidelines/development.md#3-identifiers-and-registries" },
+    "roadmap-features": { "version": 1, "spec": "docs/guidelines/development.md#33-roadmap-features" },
+    "area-layout": { "version": 1, "spec": "docs/guidelines/development.md#4-area-layout" },
+    "area-index": { "version": 1, "spec": "docs/guidelines/development.md#5-area-index" },
+    "user-story": { "version": 1, "spec": "docs/guidelines/development.md#6-user-story-file" },
+    "test-case": { "version": 1, "spec": "docs/guidelines/development.md#8-test-case-file" },
+    "test-suite": { "version": 1, "spec": "docs/guidelines/development.md#9-test-suite" },
+    "code-tags": { "version": 1, "spec": "docs/guidelines/development.md#11-traceability-tags-in-code-and-tests" },
+    "baseline": { "version": 1, "spec": "docs/guidelines/development.md#123-baseline" }
+  }
+}

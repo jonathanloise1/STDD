@@ -1,0 +1,396 @@
+{
+ "schema_version": 1,
+ "id": "w01",
+ "app": "LibraryDesk",
+ "sector": "library loans",
+ "split": "train",
+ "service": "librarydesk-api",
+ "namespace": "LibraryDesk.Application.Services",
+ "record": "loan",
+ "version_before": "2.3.1",
+ "version_after": "2.4.0",
+ "areas": [
+  {
+   "id": "loans",
+   "title": "Loans",
+   "verb": "lend",
+   "stories": [
+    {
+     "id": "US-LOAN-01",
+     "title": "Register a loan",
+     "test_case": "LOAN-LEND-001"
+    },
+    {
+     "id": "US-LOAN-02",
+     "title": "Return a book",
+     "test_case": "LOAN-LEND-002"
+    }
+   ]
+  },
+  {
+   "id": "catalog",
+   "title": "Catalog",
+   "verb": "catalog",
+   "stories": [
+    {
+     "id": "US-CATA-01",
+     "title": "Add a title",
+     "test_case": "CATA-CATALOG-001"
+    },
+    {
+     "id": "US-CATA-02",
+     "title": "Edit a title",
+     "test_case": "CATA-CATALOG-002"
+    }
+   ]
+  },
+  {
+   "id": "patrons",
+   "title": "Patrons",
+   "verb": "enrol",
+   "stories": [
+    {
+     "id": "US-PATR-01",
+     "title": "Enrol a patron",
+     "test_case": "PATR-ENROL-001"
+    },
+    {
+     "id": "US-PATR-02",
+     "title": "Block a patron",
+     "test_case": "PATR-ENROL-002"
+    }
+   ]
+  }
+ ],
+ "entities": [
+  {
+   "name": "account",
+   "description": "A person who can sign in to the application.",
+   "table": "dbo.Accounts",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Account",
+   "masking": {
+    "Id": "id",
+    "Email": "hash",
+    "Phone": "hash",
+    "DisplayName": "free_text",
+    "Status": "code",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "site",
+   "description": "A tenant: the workspace that owns members and data.",
+   "table": "dbo.Sites",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Site",
+   "masking": {
+    "Id": "id",
+    "Name": "free_text",
+    "Status": "code",
+    "IsDeleted": "boolean",
+    "CreatedAt": "timestamp"
+   }
+  },
+  {
+   "name": "membership",
+   "description": "The link between a person and a site, with the role and status in it.",
+   "table": "dbo.SiteMembers",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "SiteMember",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "AccountId": "id",
+    "Role": "code",
+    "Status": "code",
+    "ChangedAt": "timestamp"
+   }
+  },
+  {
+   "name": "loan",
+   "description": "A loan of a site, with a status, a reference, a quantity and a due date.",
+   "table": "dbo.Loans",
+   "key": "Id",
+   "key_type": "guid",
+   "audit_entity_type": "Loan",
+   "masking": {
+    "Id": "id",
+    "SiteId": "id",
+    "OwnerAccountId": "id",
+    "Status": "code",
+    "Reference": "code",
+    "Quantity": "number",
+    "DueDate": "timestamp",
+    "Notes": "free_text",
+    "CreatedAt": "timestamp",
+    "UpdatedAt": "timestamp"
+   }
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "isbn-lookup",
+   "kind": "http"
+  },
+  {
+   "name": "database",
+   "kind": "sql"
+  }
+ ],
+ "settings": [
+  "Library:IsbnEndpoint",
+  "LibraryDesk:DefaultSiteLimits"
+ ],
+ "components": [
+  "MailRenderer",
+  "DocumentExporter"
+ ],
+ "logs": [
+  {
+   "fault": "access",
+   "key": "loans.lend.access_lost",
+   "level": "Warning",
+   "area": "loans",
+   "story": "US-LOAN-01",
+   "test_case": "LOAN-LEND-005",
+   "category": "LibraryDesk.Application.Services.LoansService",
+   "template": "Task not completed: user {UserId} has no access to site {SiteId}",
+   "cause_category": "access",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_missing",
+   "key": "loans.lend.not_found",
+   "level": "Warning",
+   "area": "loans",
+   "story": "US-LOAN-02",
+   "test_case": "LOAN-LEND-006",
+   "category": "LibraryDesk.Application.Services.LoansService",
+   "template": "loan {RecordId} was not found when it was saved",
+   "cause_category": "data_missing",
+   "severity": "Warning"
+  },
+  {
+   "fault": "data_conflict",
+   "key": "catalog.catalog.duplicate_entry",
+   "level": "Warning",
+   "area": "catalog",
+   "story": "US-CATA-01",
+   "test_case": "CATA-CATALOG-007",
+   "category": "LibraryDesk.Application.Services.CatalogService",
+   "template": "loan {RecordId} conflicts with an existing entry with reference {ExternalRef}",
+   "cause_category": "data_conflict",
+   "severity": "Warning"
+  },
+  {
+   "fault": "dependency",
+   "key": "catalog.catalog.dependency_failed",
+   "level": "Error",
+   "area": "catalog",
+   "story": "US-CATA-02",
+   "test_case": "CATA-CATALOG-008",
+   "category": "LibraryDesk.Application.Services.CatalogService",
+   "template": "Call to {Dependency} failed for loan {RecordId}",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error"
+  },
+  {
+   "fault": "configuration",
+   "key": "patrons.enrol.config_invalid",
+   "level": "Error",
+   "area": "patrons",
+   "story": "US-PATR-01",
+   "test_case": "PATR-ENROL-009",
+   "category": "LibraryDesk.Application.Services.PatronsService",
+   "template": "Setting {Setting} is missing or invalid for site {SiteId}",
+   "cause_category": "configuration",
+   "severity": "Error"
+  },
+  {
+   "fault": "capacity",
+   "key": "patrons.enrol.timed_out",
+   "level": "Error",
+   "area": "patrons",
+   "story": "US-PATR-02",
+   "test_case": "PATR-ENROL-010",
+   "category": "LibraryDesk.Application.Services.PatronsService",
+   "template": "Request timed out after {DurationMs} ms for site {SiteId}",
+   "cause_category": "capacity",
+   "severity": "Error"
+  },
+  {
+   "fault": "code_defect",
+   "key": "loans.lend.unhandled_error",
+   "level": "Error",
+   "area": "loans",
+   "story": "US-LOAN-01",
+   "test_case": "LOAN-LEND-011",
+   "category": "LibraryDesk.Application.Services.LoansService",
+   "template": "Unhandled error while handling loan {RecordId}",
+   "cause_category": "code_defect",
+   "severity": "Error"
+  },
+  {
+   "fault": "external_input",
+   "key": "loans.lend.input_rejected",
+   "level": "Warning",
+   "area": "loans",
+   "story": "US-LOAN-02",
+   "test_case": "LOAN-LEND-012",
+   "category": "LibraryDesk.Application.Services.LoansService",
+   "template": "Input from {Source} was rejected for site {SiteId}",
+   "cause_category": "external_input",
+   "severity": "Warning"
+  },
+  {
+   "fault": "expected",
+   "key": "catalog.catalog.high_volume",
+   "level": "Warning",
+   "area": "catalog",
+   "story": "US-CATA-01",
+   "test_case": "CATA-CATALOG-013",
+   "category": "LibraryDesk.Application.Services.CatalogService",
+   "template": "Many requests in a short time for site {SiteId} from {Source}",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning"
+  },
+  {
+   "fault": "component",
+   "key": "catalog.catalog.component_failed",
+   "level": "Error",
+   "area": "catalog",
+   "story": "US-CATA-02",
+   "test_case": "CATA-CATALOG-014",
+   "category": "LibraryDesk.Application.Services.CatalogService",
+   "template": "Component {Component} failed for loan {RecordId}",
+   "cause_category": "unknown",
+   "severity": "Error"
+  }
+ ],
+ "runbooks": [
+  {
+   "anchor": "loans-lend-access-lost",
+   "log_key": "loans.lend.access_lost",
+   "cause_category": "access",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Task not completed: user {UserId} has no access to site {SiteId}. See story US-LOAN-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "loans-lend-not-found",
+   "log_key": "loans.lend.not_found",
+   "cause_category": "data_missing",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "loan {RecordId} was not found when it was saved. See story US-LOAN-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "catalog-catalog-duplicate-entry",
+   "log_key": "catalog.catalog.duplicate_entry",
+   "cause_category": "data_conflict",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "loan {RecordId} conflicts with an existing entry with reference {ExternalRef}. See story US-CATA-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "catalog-catalog-dependency-failed",
+   "log_key": "catalog.catalog.dependency_failed",
+   "cause_category": "dependency_unavailable",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Call to {Dependency} failed for loan {RecordId}. See story US-CATA-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "patrons-enrol-config-invalid",
+   "log_key": "patrons.enrol.config_invalid",
+   "cause_category": "configuration",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Setting {Setting} is missing or invalid for site {SiteId}. See story US-PATR-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "patrons-enrol-timed-out",
+   "log_key": "patrons.enrol.timed_out",
+   "cause_category": "capacity",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Request timed out after {DurationMs} ms for site {SiteId}. See story US-PATR-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "loans-lend-unhandled-error",
+   "log_key": "loans.lend.unhandled_error",
+   "cause_category": "code_defect",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Unhandled error while handling loan {RecordId}. See story US-LOAN-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "loans-lend-input-rejected",
+   "log_key": "loans.lend.input_rejected",
+   "cause_category": "external_input",
+   "severity": "Warning",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Input from {Source} was rejected for site {SiteId}. See story US-LOAN-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "catalog-catalog-high-volume",
+   "log_key": "catalog.catalog.high_volume",
+   "cause_category": "expected_behaviour",
+   "severity": "Warning",
+   "status": "noise",
+   "expected_rate_per_hour": 120,
+   "meaning": "Many requests in a short time for site {SiteId} from {Source}. See story US-CATA-01.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  },
+  {
+   "anchor": "catalog-catalog-component-failed",
+   "log_key": "catalog.catalog.component_failed",
+   "cause_category": "unknown",
+   "severity": "Error",
+   "status": "active",
+   "expected_rate_per_hour": 0,
+   "meaning": "Component {Component} failed for loan {RecordId}. See story US-CATA-02.",
+   "fingerprint_by": [
+    "SiteId"
+   ]
+  }
+ ]
+}

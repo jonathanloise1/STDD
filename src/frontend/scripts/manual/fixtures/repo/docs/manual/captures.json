@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "images": [
+    {
+      "path": "docs/manual/en/tasks/images/task-list-new-task-form-open.png",
+      "lang": "en",
+      "capture": "Tasks/TaskListCapture.NewTaskFormOpen",
+      "viewport": "1280x800",
+      "sha256": "b26679c9006f519b516401e0a0d2351bac2d3377ca99d83ad56135e1c4f9970d"
+    },
+    {
+      "path": "docs/manual/it/tasks/images/task-list-new-task-form-open.png",
+      "lang": "it",
+      "capture": "Tasks/TaskListCapture.NewTaskFormOpen",
+      "viewport": "1280x800",
+      "sha256": "b26679c9006f519b516401e0a0d2351bac2d3377ca99d83ad56135e1c4f9970d"
+    }
+  ]
+}

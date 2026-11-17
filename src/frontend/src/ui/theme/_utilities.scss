@@ -1,0 +1,75 @@
+.app-tabular {
+	font-variant-numeric: tabular-nums;
+}
+
+.app-clickable {
+	cursor: pointer;
+}
+
+// Search field with an icon inside (the team page)
+.app-search-input {
+	border-radius: 1.25rem;
+	padding-left: 2.5rem;
+	min-width: 15.625rem;
+}
+
+.app-search-icon {
+	position: absolute;
+	left: 0.75rem;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+// Table columns
+.app-col-sm {
+	min-width: 7.5rem;
+}
+
+.app-col-md {
+	min-width: 9.375rem;
+}
+
+.app-col-lg {
+	min-width: 12.5rem;
+}
+
+.table .app-cell-start {
+	padding-left: 1.25rem;
+}
+
+.table .app-cell-end {
+	padding-right: 1.25rem;
+}
+
+.app-col-actions {
+	width: 7.5rem;
+}
+
+.app-col-shortcut {
+	width: 8.75rem;
+}
+
+.app-truncate-wide {
+	max-width: 25rem;
+}
+
+// Organization logo and its fallback
+.app-org-logo {
+	max-width: 9.375rem;
+	max-height: 9.375rem;
+	object-fit: cover;
+}
+
+.app-org-logo-fallback {
+	width: 7.5rem;
+	height: 7.5rem;
+	background: var(--bs-primary);
+	color: var(--bs-white);
+	font-size: 2.5rem;
+	font-weight: 600;
+}
+
+// The large number of the page for an address that matches nothing
+.app-not-found-code {
+	font-size: calc(3rem + 3vw);
+}

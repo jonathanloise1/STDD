@@ -1,0 +1,34 @@
+# Context of the frontend image (src/frontend/Dockerfile): the repository root, filtered to what the build reads:
+# the frontend, the docs (the manual and what help:build reads), the assistant's protocol files and model.lock.
+# BuildKit uses this file instead of the root .dockerignore for this Dockerfile.
+**/.git
+**/.DS_Store
+**/node_modules
+**/__pycache__
+**/bin
+**/obj
+.github
+.vscode
+artifacts
+src/backend
+src/support
+tests
+tools
+scripts
+training/*
+!training/assistant
+models/*
+!models/model.lock*
+src/frontend/build
+src/frontend/dist
+src/frontend/.vite
+src/frontend/coverage
+src/frontend/*.tsbuildinfo
+src/frontend/.env.local
+src/frontend/.env.*.local
+# the pack is built inside the image from docs/manual
+src/frontend/public/help
+**/appsettings.Development.json
+executionplan_temp*.md
+.env
+backend.local.env
